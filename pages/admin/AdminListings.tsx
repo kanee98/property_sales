@@ -9,67 +9,77 @@ import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-interface Listing {
+interface Property {
   id: number;
-  title: string;
+  name: string;
   description: string;
   price: number;
+  image: string;
+  latitude: number;
+  longitude: number;
+  type: string;
 }
 
 const AdminListings = () => {
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [newListing, setNewListing] = useState({ title: "", description: "", price: 0 });
-  const [editingListing, setEditingListing] = useState<Listing | null>(null);
-
-  const [properties, setProperties] = useState([
-    { id: 1, name: "Luxury Villa", location: "New York, NY", images: 5 },
-    { id: 2, name: "Modern Apartment", location: "Los Angeles, CA", images: 3 },
-  ]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [newProperty, setNewProperty] = useState({ name: "", description: "", price: 0, type: "" });
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Fetch Listings
   useEffect(() => {
-    axios.get("/api/listings")
-      .then((res) => setListings(res.data))
-      .catch((err) => console.error(err));
+    fetchProperties();
   }, []);
 
-  // Create Listing
-  const createListing = async () => {
+  const fetchProperties = async () => {
+    setLoading(true);
     try {
-      const res = await axios.post("/api/listings", newListing);
-      setListings([...listings, res.data]);
-      setNewListing({ title: "", description: "", price: 0 });
+      const res = await axios.get("/api/properties");
+      setProperties(res.data);
     } catch (error) {
-      console.error("Error creating listing", error);
+      console.error("Error fetching properties", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Update Listing
-  const updateListing = async () => {
-    if (!editingListing) return;
+  // Create Property
+  const createProperty = async () => {
     try {
-      const res = await axios.put(`/api/listings/${editingListing.id}`, editingListing);
-      setListings(listings.map((l) => (l.id === editingListing.id ? res.data : l)));
-      setEditingListing(null);
+      const res = await axios.post("/api/properties", newProperty);
+      setProperties([...properties, res.data]);
+      setNewProperty({ name: "", description: "", price: 0, type: "" });
     } catch (error) {
-      console.error("Error updating listing", error);
+      console.error("Error creating property", error);
     }
   };
 
-  // Delete Listing
-  const deleteListing = async (id: number) => {
+  // Update Property
+  const updateProperty = async () => {
+    if (!editingProperty) return;
     try {
-      await axios.delete(`/api/listings/${id}`);
-      setListings(listings.filter((l) => l.id !== id));
+      const res = await axios.put(`/api/properties/${editingProperty.id}`, editingProperty);
+      setProperties(properties.map((p) => (p.id === editingProperty.id ? res.data : p)));
+      setEditingProperty(null);
     } catch (error) {
-      console.error("Error deleting listing", error);
+      console.error("Error updating property", error);
+    }
+  };
+
+  // Delete Property
+  const deleteProperty = async (id: number) => {
+    try {
+      await axios.delete(`/api/properties/${id}`);
+      setProperties(properties.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error("Error deleting property", error);
     }
   };
 
   return (
     <div className="p-6">
-    <AdminSidebar />
-    <div className="flex justify-between items-center">
+      <AdminSidebar />
+      <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Property Management</h1>
         <Dialog>
           <DialogTrigger>
@@ -77,43 +87,69 @@ const AdminListings = () => {
           </DialogTrigger>
           <DialogContent>
             <h2 className="text-xl font-semibold">Create New Property</h2>
-            <Input placeholder="Property Name" />
-            <Input placeholder="Location" />
-            <Textarea placeholder="Description" />
-            <Button className="flex items-center gap-2">
-              <Upload size={16} /> Upload Images
+            <Input 
+              placeholder="Property Name" 
+              value={newProperty.name} 
+              onChange={(e) => setNewProperty({ ...newProperty, name: e.target.value })} 
+            />
+            <Input 
+              placeholder="Location Type" 
+              value={newProperty.type} 
+              onChange={(e) => setNewProperty({ ...newProperty, type: e.target.value })} 
+            />
+            <Textarea 
+              placeholder="Description" 
+              value={newProperty.description} 
+              onChange={(e) => setNewProperty({ ...newProperty, description: e.target.value })} 
+            />
+            <Input 
+              type="number" 
+              placeholder="Price" 
+              value={newProperty.price} 
+              onChange={(e) => setNewProperty({ ...newProperty, price: Number(e.target.value) })} 
+            />
+            <Button onClick={createProperty} className="flex items-center gap-2">
+              <Upload size={16} /> Create Property
             </Button>
-            <Button>Create Property</Button>
           </DialogContent>
         </Dialog>
       </div>
-      <Card>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Images</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {properties.map((property) => (
-                <TableRow key={property.id}>
-                  <TableCell>{property.name}</TableCell>
-                  <TableCell>{property.location}</TableCell>
-                  <TableCell>{property.images} images</TableCell>
-                  <TableCell className="space-x-2">
-                    <Button variant="outline">Edit</Button>
-                    <Button variant="destructive">Delete</Button>
-                  </TableCell>
+
+      {loading ? <p>Loading properties...</p> : (
+        <Card>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Latitude</TableHead>
+                  <TableHead>Longitude</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {properties.map((property) => (
+                  <TableRow key={property.id}>
+                    <TableCell>{property.name}</TableCell>
+                    <TableCell>{property.description}</TableCell>
+                    <TableCell>${property.price}</TableCell>
+                    <TableCell>{property.latitude}</TableCell>
+                    <TableCell>{property.longitude}</TableCell>
+                    <TableCell>{property.type}</TableCell>
+                    <TableCell className="space-x-2">
+                      <Button variant="outline" onClick={() => setEditingProperty(property)}>Edit</Button>
+                      <Button variant="destructive" onClick={() => deleteProperty(property.id)}>Delete</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

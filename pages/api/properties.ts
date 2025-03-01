@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 // Mock data for now (Replace with Database call)
-const properties = [
+let properties = [
   {
     id: 1,
     name: "Downtown Office",
@@ -45,5 +45,29 @@ const properties = [
 ];
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json(properties);
+  if (req.method === "GET") {
+    return res.status(200).json(properties);
+  }
+
+  if (req.method === "POST") {
+    const { name, description, price, image, latitude, longitude, type } = req.body;
+    const newProperty = { id: properties.length + 1, name, description, price, image, latitude, longitude, type };
+    properties.push(newProperty);
+    return res.status(201).json(newProperty);
+  }
+
+  if (req.method === "PUT") {
+    const { id, name, description, price, image, latitude, longitude, type } = req.body;
+    properties = properties.map((p) => (p.id === id ? { ...p, name, description, price, image, latitude, longitude, type } : p));
+    return res.status(200).json({ id, name, description, price, type });
+  }
+
+  if (req.method === "DELETE") {
+    const { id } = req.body;
+    properties = properties.filter((p) => p.id !== id);
+    return res.status(200).json({ message: "Property deleted" });
+  }
+
+  res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+  res.status(405).end(`Method ${req.method} Not Allowed`);
 }

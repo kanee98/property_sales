@@ -21,7 +21,10 @@ export default function AdminSidebar() {
           <Users className="w-5 h-5" /> Users
         </Link>
         <Link href="/admin/AdminListings" className="flex items-center gap-2 hover:text-gray-300">
-          <Users className="w-5 h-5" /> Properties
+          <Users className="w-5 h-5" /> Active Properties
+        </Link>
+        <Link href="/admin/AdminListings" className="flex items-center gap-2 hover:text-gray-300">
+          <Users className="w-5 h-5" /> Pending Inquiries
         </Link>
       </nav>
       <button onClick={handleLogout} className="mt-auto flex items-center gap-2 bg-red-600 px-4 py-2 rounded">
