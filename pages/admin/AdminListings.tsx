@@ -121,6 +121,7 @@ const AdminListings = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Description</TableHead>
                   <TableHead>Price</TableHead>
@@ -133,6 +134,7 @@ const AdminListings = () => {
               <TableBody>
                 {properties.map((property) => (
                   <TableRow key={property.id}>
+                    <TableCell>{property.id}</TableCell>
                     <TableCell>{property.name}</TableCell>
                     <TableCell>{property.description}</TableCell>
                     <TableCell>${property.price}</TableCell>
