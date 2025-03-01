@@ -5,3 +5,15 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/listings',
+        destination: '/',
+        permanent: true, // This makes it a permanent redirect
+      },
+    ];
+  },
+};
