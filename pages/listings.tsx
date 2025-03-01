@@ -31,7 +31,7 @@ export default function ListingsPage() {
   );
 
   const redirectToLogin = () => {
-    window.location.href = "/login"; // Change to the correct login page route
+    window.location.href = "/login";
   };
 
   return (

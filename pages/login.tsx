@@ -23,8 +23,16 @@ export default function AdminLogin() {
     }
   }
 
+  const redirectToListings = () => {
+    window.location.href = "/listings";
+  };
   return (
     <div>
+      <form>
+        <button type="button" onClick={redirectToListings}>
+          Listings
+        </button>
+      </form>
       <h2>Admin Login</h2>
       <form onSubmit={handleLogin}>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
