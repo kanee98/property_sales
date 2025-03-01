@@ -20,6 +20,9 @@ export default function AdminSidebar() {
         <Link href="/admin/users" className="flex items-center gap-2 hover:text-gray-300">
           <Users className="w-5 h-5" /> Users
         </Link>
+        <Link href="/admin/AdminListings" className="flex items-center gap-2 hover:text-gray-300">
+          <Users className="w-5 h-5" /> Properties
+        </Link>
       </nav>
       <button onClick={handleLogout} className="mt-auto flex items-center gap-2 bg-red-600 px-4 py-2 rounded">
         <LogOut className="w-5 h-5" /> Logout

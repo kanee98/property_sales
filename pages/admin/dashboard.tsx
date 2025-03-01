@@ -53,35 +53,16 @@
 //   );
 // }
 
-// // Protect route with getServerSideProps
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const cookies = parseCookies(ctx);
-//   if (!cookies.adminToken) {
-//     return { redirect: { destination: "/admin/login", permanent: false } };
-//   }
-//   return { props: {} };
-// };
+
 
 import AdminSidebar from "../../components/AdminSidebar";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
-import AdminListings from "../admin/AdminListings";
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Upload } from "lucide-react";
+
 
 export default function PropertyDashboard() {
-  const [properties, setProperties] = useState([
-    { id: 1, name: "Luxury Villa", location: "New York, NY", images: 5 },
-    { id: 2, name: "Modern Apartment", location: "Los Angeles, CA", images: 3 },
-  ]);
-
   const router = useRouter();
 
   async function handleLogout() {
@@ -109,52 +90,15 @@ export default function PropertyDashboard() {
           </div>
         </div>
       </div>
-
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Property Management</h1>
-        <Dialog>
-          <DialogTrigger>
-            <Button>Add New Property</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <h2 className="text-xl font-semibold">Create New Property</h2>
-            <Input placeholder="Property Name" />
-            <Input placeholder="Location" />
-            <Textarea placeholder="Description" />
-            <Button className="flex items-center gap-2">
-              <Upload size={16} /> Upload Images
-            </Button>
-            <Button>Create Property</Button>
-          </DialogContent>
-        </Dialog>
-      </div>
-      <Card>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Images</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {properties.map((property) => (
-                <TableRow key={property.id}>
-                  <TableCell>{property.name}</TableCell>
-                  <TableCell>{property.location}</TableCell>
-                  <TableCell>{property.images} images</TableCell>
-                  <TableCell className="space-x-2">
-                    <Button variant="outline">Edit</Button>
-                    <Button variant="destructive">Delete</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
     </div>
   );
 }
+
+// Protect route with getServerSideProps
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx);
+  if (!cookies.adminToken) {
+    return { redirect: { destination: "/admin/login", permanent: false } };
+  }
+  return { props: {} };
+};
