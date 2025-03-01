@@ -22,6 +22,26 @@ const properties = [
     longitude: -118.2437,
     type: "Retail",
   },
+  {
+    id: 3,
+    name: "Mall Retail Space",
+    description: "Prime retail space inside a popular mall.",
+    price: 300000,
+    image: "https://via.placeholder.com/400",
+    latitude: 34.0522,
+    longitude: -118.2437,
+    type: "Retail",
+  },
+  {
+    id: 4,
+    name: "Mall Retail Space",
+    description: "Prime retail space inside a popular mall.",
+    price: 300000,
+    image: "https://via.placeholder.com/400",
+    latitude: 34.0522,
+    longitude: -118.2437,
+    type: "Retail",
+  },
 ];
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {

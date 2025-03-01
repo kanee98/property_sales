@@ -30,10 +30,18 @@ export default function ListingsPage() {
       (selectedType === "" || property.type === selectedType)
   );
 
+  const redirectToLogin = () => {
+    window.location.href = "/login"; // Change to the correct login page route
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Property Listings</h1>
-
+      <form>
+        <button type="button" onClick={redirectToLogin}>
+          Login
+        </button>
+      </form>
       {/* Search & Filter */}
       <div className="flex gap-4 mb-6">
         <input
