@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import "../components/login.css"
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -33,12 +34,14 @@ export default function AdminLogin() {
           Listings
         </button>
       </form>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit">Login</button>
-      </form>
+      <div className="login">
+        <h1>Admin Login</h1>
+        <form onSubmit={handleLogin}>
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <button type="submit" className="btn btn-primary btn-block btn-large">Login.</button>
+        </form>
+      </div>
       {/* <h2>Corporate Login</h2>
       <form onSubmit={handleLogin}>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
