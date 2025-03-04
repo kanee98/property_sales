@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           phone,
           requirements,
           budget,
-          attachment,
-          status: "New",
+          // attachment,
+          // status: "New",
         },
       });
       

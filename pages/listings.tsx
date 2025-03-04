@@ -38,7 +38,7 @@ export default function ListingsPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Property Listings</h1>
       <form>
-        <button type="button" onClick={redirectToLogin}>
+        <button type="button" className="border p-2 rounded w-15" onClick={redirectToLogin}>
           Login
         </button>
       </form>
