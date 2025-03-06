@@ -8,12 +8,13 @@ import '../../components/dashboard.css';
 import SidebarScript from "../../components/SidebarScript"; 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { User } from "../api/users";
 
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
