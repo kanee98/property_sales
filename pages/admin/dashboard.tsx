@@ -10,12 +10,41 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../api/users";
 
+interface Property {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  latitude: number;
+  longitude: number;
+  type: string;
+}
+
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = async () => {
+    try {
+      const response = await fetch("/api/properties");
+      if (!response.ok) {
+        throw new Error("Failed to fetch properties");
+      }
+      const data: Property[] = await response.json();
+      setProperties(data);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
 
   useEffect(() => {
     axios.get("/api/properties")
@@ -37,6 +66,25 @@ export default function PropertyDashboard() {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/admin/login");
   }
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("darkMode") === "true";
+    setDarkMode(storedTheme);
+  }, []);
+  
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("darkMode", "true");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("darkMode", "false");
+    }
+  }, [darkMode]);
+  
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+  };
   
   return (  
     <>
@@ -92,12 +140,12 @@ export default function PropertyDashboard() {
                 <i className='bx bx-search'></i>
               </button>
             </div>
-            {/* <label className="switch-lm">
-              <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(!darkMode)} hidden />
+            <input type="checkbox" className="checkbox" id="switch-mode" hidden />
+            <label className="swith-lm" htmlFor="switch-mode" onClick={toggleDarkMode}>
               <i className="bx bxs-moon"></i>
               <i className="bx bx-sun"></i>
               <div className="ball"></div>
-            </label> */}
+            </label>
             <Link href="#" className="profile">
               <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile" />
             </Link>
@@ -133,6 +181,37 @@ export default function PropertyDashboard() {
                 </div>
               )}
 
+              {activeTab === "properties" && (
+                <div className="p-6">
+                  <h1 className="text-3xl font-bold mb-6">Properties List</h1>
+                    <table className="w-full border border-gray-300">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Price</th>
+                          <th>Type</th>
+                          <th>Image</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {properties.map((property) => (
+                          <tr key={property.id}>
+                            <td>{property.id}</td>
+                            <td>{property.name}</td>
+                            <td>{property.description}</td>
+                            <td>${property.price.toLocaleString()}</td>
+                            <td>{property.type}</td>
+                            <td>
+                              <img src={property.image} alt={property.name} width="100" />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+              )}
               {activeTab === "users" && (
                 <div className="p-6">
                   <h1 className="text-3xl font-bold mb-6">Manage Users</h1>
