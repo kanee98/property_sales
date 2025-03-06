@@ -1,4 +1,3 @@
-import AdminSidebar from "../../components/AdminSidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
@@ -8,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import SidebarScript from "../../components/SidebarScript"; 
 
 interface Property {
   id: number;
@@ -78,7 +78,7 @@ const AdminListings = () => {
 
   return (
     <div className="p-6">
-      <AdminSidebar />
+      <SidebarScript />
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Property Management</h1>
         <Dialog>
