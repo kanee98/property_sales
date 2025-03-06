@@ -8,9 +8,13 @@ export default function SidebarScript() {
 
     allSideMenu.forEach((item) => {
       const li = item.parentElement;
+      if (!li) return;
+
       item.addEventListener("click", function () {
         allSideMenu.forEach((i) => {
-          i.parentElement.classList.remove("active");
+          if (i.parentElement) {
+            i.parentElement.classList.remove("active");
+          }
         });
         li.classList.add("active");
       });
