@@ -127,6 +127,12 @@ export default function PropertyDashboard() {
                 <span className="text">Settings</span>
               </Link>
             </li>
+            <li>
+              <a href="/login" onClick={handleLogout} className="logout">
+                <i className='bx bx-power-off bx-sm bx-burst-hover' ></i>
+                <span className="text">Logout</span>
+              </a>
+            </li>
           </ul>
         </section>
 
@@ -134,51 +140,100 @@ export default function PropertyDashboard() {
           <nav className="navbar">
             <i className='bx bx-menu bx-sm'></i>
             <Link href="#" className="nav-link">Categories</Link>
+            <form action="">
             <div className="form-input">
               <input type="search" placeholder="Search..." />
               <button className="search-btn">
                 <i className='bx bx-search'></i>
               </button>
             </div>
+            </form>
             <input type="checkbox" className="checkbox" id="switch-mode" hidden />
             <label className="swith-lm" htmlFor="switch-mode" onClick={toggleDarkMode}>
               <i className="bx bxs-moon"></i>
               <i className="bx bx-sun"></i>
               <div className="ball"></div>
             </label>
+            {/* <li>
+              <button className="logout nav-link" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <i className='bx bx-power-off bx-sm bx-burst-hover'></i>
+                <span className="text">Logout</span>
+              </button>
+            </li> */}
+
+            {/* Notification Bell */}
+            <a href="#" className="notification" id="notificationIcon">
+                <i className='bx bxs-bell bx-tada-hover' ></i>
+                <span className="num">8</span>
+            </a>
+            <div className="notification-menu" id="notificationMenu">
+                <ul>
+                    <li>New message from John</li>
+                    <li>Your order has been shipped</li>
+                    <li>New comment on your post</li>
+                    <li>Update available for your app</li>
+                    <li>Reminder: Meeting at 3PM</li>
+                </ul>
+            </div>
+
+            {/* Profile Menu */}
             <Link href="#" className="profile">
               <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile" />
             </Link>
-            <li>
-              <button className="logout" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <i className='bx bx-power-off bx-sm bx-burst-hover'></i>
-                {/* <span className="text">Logout</span> */}
-              </button>
-            </li>
+            <div className="profile-menu" id="profileMenu">
+                <ul>
+                    <li><a href="#">My Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="/login" onClick={handleLogout}>Log Out</a></li>
+                </ul>
+            </div>
           </nav>
 
           <main>
             {activeTab === "dashboard" && (
+              <>
                 <div className="head-title">
-                  <h1>Dashboard</h1>
-                  <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-semibold">Total Users</h3>
-                    <p className="text-3xl">{users.length}</p>
-                    <h3 className="text-xl font-semibold">Active Listings</h3>
-                    <p className="text-3xl">{activeListings}</p>
-                    <h3 className="text-xl font-semibold">Pending Approvals</h3>
-                    <p className="text-3xl">8</p>
+                  <div className="left">
+                    <h1>Dashboard</h1>
+                    <ul className="breadcrumb">
+                      <li>
+                        <Link href="#">Dashboard</Link>
+                      </li>
+                      <li><i className='bx bx-chevron-right'></i></li>
+                      <li>
+                        <Link href="#" className="active">Home</Link>
+                      </li>
+                    </ul>
                   </div>
-                  <ul className="breadcrumb">
-                    <li>
-                      <Link href="#">Dashboard</Link>
-                    </li>
-                    <li><i className='bx bx-chevron-right'></i></li>
-                    <li>
-                      <Link href="#" className="active">Home</Link>
-                    </li>
-                  </ul>
+                  <a href="#" className="btn-download">
+                    <i className='bx bxs-cloud-download bx-fade-down-hover' ></i>
+                    <span className="text">Get PDF</span>
+                  </a>          
                 </div>
+                <ul className="box-info">
+                  <li>
+                    <i className='bx bxs-calendar-check' ></i>
+                    <span className="text">
+                      <h3>Active Listings</h3>
+                      <p>{activeListings}</p>
+                    </span>
+                  </li>
+                  <li>
+                    <i className='bx bxs-group' ></i>
+                    <span className="text">
+                      <h3>Total Users</h3>
+                      <p>{users.length}</p>
+                    </span>
+                  </li>
+                  <li>
+                    <i className='bx bxs-dollar-circle' ></i>
+                    <span className="text">
+                      <h3>Pending Approvals</h3>
+                      <p>1</p>
+                    </span>
+                  </li>
+                </ul>
+              </>
               )}
 
               {activeTab === "properties" && (
