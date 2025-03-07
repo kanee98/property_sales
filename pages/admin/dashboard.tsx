@@ -219,83 +219,132 @@ export default function PropertyDashboard() {
                     </span>
                   </li>
                   <li>
-                    <i className='bx bxs-group' ></i>
-                    <span className="text">
-                      <h3>Total Users</h3>
-                      <p>{users.length}</p>
-                    </span>
-                  </li>
-                  <li>
                     <i className='bx bxs-dollar-circle' ></i>
                     <span className="text">
                       <h3>Pending Approvals</h3>
                       <p>1</p>
                     </span>
                   </li>
+                  <li>
+                    <i className='bx bxs-group' ></i>
+                    <span className="text">
+                      <h3>Total Users</h3>
+                      <p>{users.length}</p>
+                    </span>
+                  </li>
                 </ul>
+                <div className="table-data">
+                  <div className="todo">
+                    <div className="head">
+                      <h3>Todos</h3>
+                      <i className='bx bx-plus icon'></i>
+                      <i className='bx bx-filter' ></i>
+                    </div>
+                    <ul className="todo-list">
+                      <li className="completed">
+                        <p>Check Inventory</p>
+                        <i className='bx bx-dots-vertical-rounded' ></i>
+                      </li>
+                      <li className="completed">
+                        <p>Manage Delivery Team</p>
+                        <i className='bx bx-dots-vertical-rounded' ></i>
+                      </li>
+                      <li className="not-completed">
+                        <p>Contact Selma: Confirm Delivery</p>
+                        <i className='bx bx-dots-vertical-rounded' ></i>
+                      </li>
+                      <li className="completed">
+                        <p>Update Shop Catalogue</p>
+                        <i className='bx bx-dots-vertical-rounded' ></i>
+                      </li>
+                      <li className="not-completed">
+                        <p>Count Profit Analytics</p>
+                        <i className='bx bx-dots-vertical-rounded' ></i>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </>
               )}
 
               {activeTab === "properties" && (
                 <div className="p-6">
-                  <h1 className="text-3xl font-bold mb-6">Properties List</h1>
-                    <table className="w-full border border-gray-300">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Name</th>
-                          <th>Description</th>
-                          <th>Price</th>
-                          <th>Type</th>
-                          <th>Image</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {properties.map((property) => (
-                          <tr key={property.id}>
-                            <td>{property.id}</td>
-                            <td>{property.name}</td>
-                            <td>{property.description}</td>
-                            <td>${property.price.toLocaleString()}</td>
-                            <td>{property.type}</td>
-                            <td>
-                              <img src={property.image} alt={property.name} width="100" />
-                            </td>
+                  <div className="table-data">
+                    <div className="order">
+                      <div className="head">
+                        <h3>Properties List</h3>
+                        <i className='bx bx-search' ></i>
+                        <i className='bx bx-filter' ></i>
+                      </div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Type</th>
+                            <th>Image</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {properties.map((property) => (
+                            <tr key={property.id}>
+                              <td>{property.id}</td>
+                              <td>{property.name}</td>
+                              <td>{property.description}</td>
+                              <td>${property.price.toLocaleString()}</td>
+                              <td>{property.type}</td>
+                              <td>
+                                <img src={property.image} alt={property.name} width="100" />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
+                </div>
               )}
               {activeTab === "users" && (
                 <div className="p-6">
-                  <h1 className="text-3xl font-bold mb-6">Manage Users</h1>
-                  <table className="w-full border border-gray-300">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="py-2 px-4">ID</th>
-                        <th className="py-2 px-4">Name</th>
-                        <th className="py-2 px-4">Email</th>
-                        <th className="py-2 px-4">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.length > 0 ? (
-                        users.map((user) => (
-                          <tr key={user.id} className="border-t">
-                            <td className="py-2 px-4">{user.id}</td>
-                            <td className="py-2 px-4">{user.name}</td>
-                            <td className="py-2 px-4">{user.email}</td>
-                            <td className="py-2 px-4">{user.role}</td>
+                  <div className="table-data">
+                    <div className="order">
+                      <div className="head">
+                        <h3>Manage Users</h3>
+                        <i className='bx bx-search' ></i>
+                        <i className='bx bx-filter' ></i>
+                      </div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className="py-2 px-4"></th>
+                            <th className="py-2 px-4">ID</th>
+                            <th className="py-2 px-4">Name</th>
+                            <th className="py-2 px-4">Email</th>
+                            <th className="py-2 px-4">Role</th>
                           </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={4} className="py-4 text-center">No users found</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                          {users.length > 0 ? (
+                            users.map((user) => (
+                              <tr key={user.id} className="border-t">
+                                <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile"/>
+                                <td className="py-2 px-4">{user.id}</td>
+                                <td className="py-2 px-4">{user.name}</td>
+                                <td className="py-2 px-4">{user.email}</td>
+                                <td className="py-2 px-4">{user.role}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={4} className="py-4 text-center">No users found</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               )}
           </main>
