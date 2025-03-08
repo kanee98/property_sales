@@ -1,54 +1,99 @@
+"use client";
+
 import { useState } from "react";
-import { useRouter } from "next/router";
-import "../components/login.css"
+import { useRouter } from "next/navigation"; // useRouter() in App Router
+import Image from 'next/image';
+import "antd/dist/reset.css";
+import { Form, Input, Button, message, Checkbox } from "antd";
+import "../components/login.css";
+import Logo from "../src/img/Prime Ceylon Logo.jpeg";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-
+  async function handleLogin(values: { email: string; password: string }) {
+    setLoading(true);
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(values),
     });
 
     if (res.ok) {
+      message.success("Login successful! Redirecting...");
       router.push("/admin/dashboard"); // Redirect to admin dashboard
     } else {
-      setError("Invalid email or password");
+      message.error("Invalid email or password");
     }
+    setLoading(false);
   }
 
-  const redirectToListings = () => {
-    window.location.href = "/listings";
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
   };
+
   return (
-    <div>
-      <form>
-        <button type="button" onClick={redirectToListings}>
-          Listings
-        </button>
-      </form>
-      <div className="login">
-        <h1>Admin Login</h1>
-        <form onSubmit={handleLogin}>
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" className="btn btn-primary btn-block btn-large">Login.</button>
-        </form>
+    <div className="login-page">
+      <div className="login-box">
+        {/* Login Form */}
+        <Form
+          name="login-form"
+          initialValues={{ remember: true }}
+          onFinish={handleLogin}
+          onFinishFailed={onFinishFailed}
+        >
+          <p className="form-title">Welcome back</p>
+          <p>Login to the Dashboard</p>
+
+          {/* Email Input */}
+           <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Enter a valid email!" },
+            ]}
+          >
+            <Input placeholder="Email" />
+          </Form.Item>
+
+          {/* Password Input */}
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+
+          {/* Remember Me Checkbox */}
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+
+          {/* Submit Button */}
+           <Form.Item>
+             <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              loading={loading}
+              block
+            >
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+        {/* Illustration Image */}
+        <div className="illustration-wrapper">
+          <Image
+            src={Logo}
+            alt="Login Illustration"
+            width={800}
+            height={600}
+            priority
+          />
+        </div>
       </div>
-      {/* <h2>Corporate Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit">Login</button>
-      </form> */}
-      {error && <p>{error}</p>}
     </div>
   );
 }
