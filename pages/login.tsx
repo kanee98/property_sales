@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // useRouter() in App Router
 import Image from 'next/image';
 import "antd/dist/reset.css";
@@ -11,6 +11,13 @@ import Logo from "../src/img/Prime Ceylon Logo.jpeg";
 export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Ensure styles are loaded before rendering
+  }, []);
+
+  if (!isClient) return null;
 
   async function handleLogin(values: { email: string; password: string }) {
     setLoading(true);
@@ -82,6 +89,10 @@ export default function AdminLogin() {
               Login
             </Button>
           </Form.Item>
+        {/* Redirect Button */}
+         <Button type="default" onClick={() => router.push("/")} block>
+           Go back to Listings
+         </Button>
         </Form>
         {/* Illustration Image */}
         <div className="illustration-wrapper">
