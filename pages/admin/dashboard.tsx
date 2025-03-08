@@ -9,6 +9,7 @@ import SidebarScript from "../../components/SidebarScript";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../api/users";
+import Logo from "../../src/img/Prime Ceylon Logo.jpeg";
 
 interface Property {
   id: number;
@@ -91,8 +92,9 @@ export default function PropertyDashboard() {
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
         <section id="sidebar" className="sidebar">
           <Link href="#" className="brand">
-            <i className='bx bxs-smile bx-lg'></i>
-            <span className="text">AdminHub</span>
+            {/* <i className='bx bxs-smile bx-lg'></i> */}
+            <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
+            <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Prime Ceylon</span>
           </Link>
           <ul className="side-menu top">
             <li className={activeTab === "dashboard" ? "active" : ""}>
