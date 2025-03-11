@@ -1,22 +1,22 @@
-.landing-message{
+.landing-message {
     text-align: center;
     height: auto;
-    margin: 10% 0 10% 0;
+    margin: 10% 0;
     font-size: 1em;
   }
-  .landing-message h3{
+  
+  .landing-message h3, .landing-message p {
     color: white;
   }
-  .landing-message p{
-    color: white;
-  }
-  .landing{
+  
+  .landing {
     position: relative;
     z-index: 0;
     color: rgb(255, 255, 255);
     background-color: black;
   }
-  .landing-bg{
+  
+  .landing-bg {
     background: black url('https://images.pexels.com/photos/548084/pexels-photo-548084.jpeg?auto=compress&cs=tinysrgb&h=350');
     background-repeat: no-repeat;
     background-size: cover;
@@ -28,10 +28,11 @@
     filter: blur(2px);
     opacity: .5;
   }
-  .stats{
+  
+  /* Stats Section */
+  .stats {
     display: flex;
     width: 80%;
-    background-color: red;
     position: absolute;
     justify-content: center;
     margin: 0 auto;
@@ -39,8 +40,10 @@
     left: 10%;
     height: 150px;
     border-radius: 10px;
+    flex-wrap: wrap; /* Allow the items to wrap on smaller screens */
   }
-  .stat{
+  
+  .stat {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,50 +53,127 @@
     min-width: 150px;
     width: 25%;
     border: 1px solid lightgray;
+    padding: 10px;
   }
-  .whyChooseUs{
+  
+  @media (max-width: 768px) {
+    .stats {
+      width: 90%;
+      bottom: -60px; /* Adjust bottom position for smaller screens */
+      left: 5%; /* Adjust left position */
+    }
+  
+    .stat {
+      width: 45%; /* 2 items per row on medium-sized screens */
+      min-width: 100px; /* Reduce the minimum width */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .stats {
+      width: 100%;
+      bottom: -50px; /* Adjust bottom position for small screens */
+      left: 0;
+    }
+  
+    .stat {
+      width: 100%; /* Full width for each item on small screens */
+      min-width: 100%; /* Ensure each item takes full width */
+      margin-bottom: 10px; /* Add some space between the items */
+    }
+  }
+  
+  /* Why Choose Us Section */
+  .whyChooseUs {
     padding-top: 100px;
     padding-bottom: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .reasons{
+  
+  .reasons {
     width: 80%;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
     padding-top: 50px;
   }
-  .reason{
+  
+  .reason {
     width: 40%;
     min-width: 200px;
     display: flex;
     margin: 20px 5%;
   }
-  .reason-text{
+  
+  .reason-text {
     display: flex;
     flex-direction: column;
     margin-left: 10%;
   }
-  .reason i{
+  
+  .reason i {
     margin: 0 40px 0 0;
   }
-  .fa-check{
+  
+  .fa-check {
     color: #66cc91;
   }
-  .fa-tag{
+  
+  .fa-tag {
     color: royalblue;
   }
-  .fa-sync-alt{
+  
+  .fa-sync-alt {
     color: orange;
   }
-  .fa-user{
+  
+  .fa-user {
     color: mediumorchid;
   }
-  .fa-clipboard-list{
+  
+  .fa-clipboard-list {
     color: #ff6666;
   }
-  .fa-thumbs-up{
+  
+  .fa-thumbs-up {
     color: orangered;
   }
+  
+  /* Mobile Responsive Styles for Why Choose Us */
+  @media (max-width: 768px) {
+    .reason {
+      width: 80%; /* Make reasons take more space on smaller screens */
+      margin: 10px 0; /* Reduce margins */
+    }
+  
+    .reason-text {
+      margin-left: 5%; /* Reduce the left margin for better spacing */
+    }
+  
+    .reason i {
+      margin: 0 20px 0 0; /* Reduce icon margin for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .whyChooseUs {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  
+    .reasons {
+      width: 100%; /* Take full width on mobile */
+      flex-direction: column; /* Stack items vertically */
+    }
+  
+    .reason {
+      width: 100%; /* Make each reason item full width */
+      margin: 10px 0; /* Stack reasons with spacing */
+    }
+  
+    .reason-text {
+      margin-left: 0; /* Remove margin on mobile */
+    }
+  }  

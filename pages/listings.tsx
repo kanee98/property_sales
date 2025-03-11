@@ -1,9 +1,11 @@
 "use client"; 
 
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 import "../components/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTag, faSyncAlt, faUser, faClipboardList, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import Logo from "../src/img/Prime Ceylon Logo No BG.png";
 
 interface Property {
   id: number;
@@ -42,18 +44,25 @@ export default function ListingsPage() {
     <section className="landing">
       <div className="landing-bg"></div>     
       <header className="relative z-10 flex justify-between items-center px-10 py-5">
-        <h1 className="text-3xl font-bold">Prime Ceylon</h1>
+        {/* Logo + Name container */}
+        <div className="flex items-center space-x-3">
+          <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
+          <h1 className="text-3xl font-bold">Prime Ceylon</h1>
+        </div>
+
+        {/* Navigation */}
         <nav className="space-x-4">
           <button type="button" className="border p-2 rounded w-15" onClick={redirectToLogin}>
             Login
           </button>
         </nav>
-      </header>    
+      </header>
+    
       <div className="landing-message">
         <h3 className="text-2xl font-semibold">Relax, Finding Properties Just Got Easier</h3>
         <p className="text-lg mt-2">Discover the best properties for sale or rent</p>
-        <form className="mt-5 flex justify-center pb-[8%]">
-          <div className="flex gap-4 mb-6">
+        <form className="mt-5 flex justify-center pb-[10%]">
+          <div className="flex mb-6 space-x-1 w-[500px]">
             <input
               type="text"
               placeholder="Search properties..."
