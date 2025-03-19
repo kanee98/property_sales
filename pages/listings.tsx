@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from 'next/image';
@@ -18,16 +18,41 @@ interface Property {
   type: string; // Corporate or Retail
 }
 
+const itemsPerPage = 6;
+
 export default function ListingsPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [stats, setStats] = useState({
+    totalProperties: 0,
+    corporate: 0,
+    retail: 0,
+    lands: 0,
+  });
 
   useEffect(() => {
     fetch("/api/properties")
       .then((res) => res.json())
-      .then((data) => setProperties(data));
+      .then((data) => {
+        setProperties(data);
+        calculateStats(data);
+      });
   }, []);
+
+  const calculateStats = (data: Property[]) => {
+    const totalProperties = data.length;
+    const corporate = data.filter(property => property.type === "Corporate").length;
+    const retail = data.filter(property => property.type === "Retail").length;
+    const lands = data.filter(property => property.type === "Land").length;
+
+    setStats({
+      totalProperties,
+      corporate,
+      retail,
+      lands,
+    });
+  };
 
   const filteredProperties = properties.filter(
     (property) =>
@@ -37,6 +62,22 @@ export default function ListingsPage() {
 
   const redirectToLogin = () => {
     window.location.href = "/login";
+  };
+
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+
+  // Calculate the start and end indices for slicing the properties array
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const propertiesToDisplay = filteredProperties.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   return (
@@ -83,28 +124,62 @@ export default function ListingsPage() {
       
       <div className="stats">
         <div className="stat left-corner">
-          <h2 className="text-3xl font-bold">6</h2>
+          <h2 className="text-3xl font-bold">{stats.totalProperties}</h2>
           <p>Total Properties</p>
         </div>
         <div className="stat">
-          <h2 className="text-3xl font-bold">3</h2>
-          <p>Coporate</p>
+          <h2 className="text-3xl font-bold">{stats.corporate}</h2>
+          <p>Corporate</p>
         </div>
         <div className="stat">
-          <h2 className="text-3xl font-bold">1</h2>
+          <h2 className="text-3xl font-bold">{stats.retail}</h2>
           <p>Retail</p>
         </div>
         <div className="stat right-corner">
-          <h2 className="text-3xl font-bold">2</h2>
+          <h2 className="text-3xl font-bold">{stats.lands}</h2>
           <p>Lands</p>
         </div>
       </div>
     </section>
 
-    <div className="container mx-auto p-4">
-      {/* Property Cards */}
-      <div className="grid grid-cols-3 gap-6">
-        {filteredProperties.map((property) => (
+    <div className="container mx-auto p-4 flex">
+      {/* Filters Section */}
+      <div className="w-1/4 p-4 border-r">
+        <h2 className="text-xl font-bold"><i className="fa fa-filter"></i> Filters</h2>
+        <hr className="mb-4"/>
+
+        {/* Filter by Category */}
+        <h4 className="font-semibold">By category:</h4>
+        <div className="space-y-2">
+          {["For Sale", "For Rent", "Wanted"].map((category) => (
+            <div className="flex items-center space-x-2" key={category}>
+              <input type="checkbox" className="icheck"/>
+              <label>{category}</label>
+            </div>
+          ))}
+        </div>
+
+        {/* Filter by Location */}
+        <h4 className="mt-4 font-semibold">By location</h4>
+        <label className="block">Select District</label>
+        <select className="w-full border p-2 rounded">
+          <option value="">All Districts</option>
+          {[ "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya" ].map((district) => (
+            <option key={district} value={district}>
+              {district}
+            </option>
+          ))}
+        </select>
+
+        {/* Filter by Price */}
+        <h4 className="mt-4 font-semibold">By price:</h4>
+        <p>Between <span className="font-bold">Rs.1,000</span> to <span className="font-bold">Rs.100,000,000</span></p>
+        <input type="range" className="w-full mt-2" min="0" max="1000" step="1"/>
+      </div>
+      
+      {/* Property Cards Section */}
+      <div className="w-3/4 grid grid-cols-2 gap-6 p-4">
+        {propertiesToDisplay.map((property) => (
           <div key={property.id} className="border p-4 rounded-lg shadow-lg">
             <img
               src={property.image}
@@ -124,10 +199,48 @@ export default function ListingsPage() {
             ></iframe>
           </div>
         ))}
+        
+        {/* BEGIN PAGINATION */}
+        <ul className="pagination flex space-x-2">
+          <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded"
+            >
+              «
+            </button>
+          </li>
+          
+          {[...Array(totalPages).keys()].map((page) => (
+            <li key={page} className={`pagination-item ${currentPage === page + 1 ? 'active' : ''}`}>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                className={`px-3 py-1 border rounded ${currentPage === page + 1 ? 'bg-blue-500 text-white' : ''}`}
+              >
+                {page + 1}
+              </button>
+            </li>
+          ))}
+          
+          <li className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border rounded"
+            >
+              »
+            </button>
+          </li>
+        </ul>
+        {/* END PAGINATION */}
       </div>
     </div>
+    </>
+  );
+}
 
-    {/* <section className="whyChooseUs">
+{/* <section className="whyChooseUs">
       <h4 className="title">Why Choose Us?</h4>
       <hr className="titleMark"/>
       <div className="reasons">
@@ -169,6 +282,3 @@ export default function ListingsPage() {
         </div>
       </div>
     </section> */}
-    </>
-  );
-}

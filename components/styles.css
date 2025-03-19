@@ -177,3 +177,55 @@
       margin-left: 0; /* Remove margin on mobile */
     }
   }  
+
+  @media (max-width: 768px) {
+    /* Adjust header layout */
+    header {
+      flex-direction: column;
+      text-align: center;
+      padding: 10px;
+    }
+  
+    /* Stack stats in one column */
+    .stats {
+      flex-direction: column;
+      position: relative;
+      width: 90%;
+      margin-top: 20px;
+      left: auto;
+    }
+  
+    .stat {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    /* Responsive search bar */
+    .landing-message form {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .landing-message input,
+    .landing-message select {
+      width: 90%;
+      margin-bottom: 10px;
+    }
+  
+    @media (max-width: 768px) {
+      .w-3\/4 {
+        width: 100%;
+      }
+    }    
+  
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
+  
+    /* Ensure images don't overflow */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
