@@ -98,16 +98,27 @@ export default function PropertyDashboard() {
     property.description.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
   );
 
+  // Filter users based on search term
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Calculate the start and end indices for slicing the properties array
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
+  const usersToDisplay = filteredUsers.slice(startIndex, endIndex);
+
   const propertiesToDisplay = filteredProperties.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+  const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
+  const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
 
+  // Handle page change for both users and properties
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
+    if (page >= 1 && page <= totalPagesForUsers && page <= totalPagesForProperties) {
       setCurrentPage(page);
     }
   };
@@ -362,7 +373,7 @@ export default function PropertyDashboard() {
                             ))
                             ): (
                               <tr>
-                                <td colSpan={4}>No properties found</td>
+                                <td colSpan={4} className="py-4 text-center">No properties found</td>
                               </tr>
                           )}
                         </tbody>
@@ -377,11 +388,11 @@ export default function PropertyDashboard() {
                           « Previous
                         </button>
 
-                        <span>Page {currentPage} of {totalPages}</span>
+                        <span>Page {currentPage} of {totalPagesForProperties}</span>
 
                         <button
                           onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
+                          disabled={currentPage === totalPagesForProperties}
                           className="pagination-btn"
                         >
                           Next »
@@ -398,8 +409,6 @@ export default function PropertyDashboard() {
                     <div className="order">
                       <div className="head">
                         <h3>Manage Users</h3>
-                        <i className='bx bx-search' ></i>
-                        <i className='bx bx-filter' ></i>
                       </div>
                       <table>
                         <thead>
@@ -413,8 +422,8 @@ export default function PropertyDashboard() {
                           </tr>
                         </thead>
                         <tbody>
-                          {users.length > 0 ? (
-                            users.map((user) => (
+                          {usersToDisplay.length > 0 ? (
+                            usersToDisplay.map((user) => (
                               <tr key={user.id} className="border-t">
                                 <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile"/>
                                 <td className="py-2 px-4">{user.id}</td>
@@ -446,6 +455,26 @@ export default function PropertyDashboard() {
                           )}
                         </tbody>
                       </table>
+                      {/* Pagination Controls */}
+                      <div className="pagination-controls">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="pagination-btn"
+                        >
+                          « Previous
+                        </button>
+
+                        <span>Page {currentPage} of {totalPagesForUsers}</span>
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPagesForUsers}
+                          className="pagination-btn"
+                        >
+                          Next »
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
