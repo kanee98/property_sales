@@ -180,11 +180,14 @@ export default function PropertyDashboard() {
             {/* <Link href="#" className="nav-link">Categories</Link> */}
             <form action="">
               <div className="form-input">
-                {/* <input 
+                 <input 
                   type="search" 
                   placeholder="Search..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
                 />
-                <button className="search-btn">
+                {/* <button className="search-btn">
                   <i className='bx bx-search'></i>
                 </button> */}
               </div>
@@ -314,16 +317,6 @@ export default function PropertyDashboard() {
                     <div className="order">
                     <div className="head">
                       <h3>Properties List</h3>
-                      {/* Search Input */}
-                      <div className="form-input">
-                        <input
-                          type="search"
-                          placeholder="Search..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="search-input"
-                        />
-                      </div>
                     </div>
                       <table>
                         <thead>
