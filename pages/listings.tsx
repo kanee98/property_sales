@@ -64,6 +64,10 @@ export default function ListingsPage() {
     window.location.href = "/login";
   };
 
+  const redirectToInquiries = () => {
+    window.location.href = "/inquiries";
+  };
+
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
 
   // Calculate the start and end indices for slicing the properties array
@@ -93,6 +97,9 @@ export default function ListingsPage() {
 
         {/* Navigation */}
         <nav className="space-x-4">
+          <button type="button" className="border p-2 rounded w-20" onClick={redirectToInquiries}>
+            Inquiries
+          </button>
           <button type="button" className="border p-2 rounded w-15" onClick={redirectToLogin}>
             Login
           </button>
@@ -117,6 +124,7 @@ export default function ListingsPage() {
               <option value="" style={{ color: "black" }}>All Types</option>
               <option value="Corporate" style={{ color: "black" }}>Corporate</option>
               <option value="Retail" style={{ color: "black" }}>Retail</option>
+              <option value="Residential" style={{ color: "black" }}>Residential</option>
             </select>
           </div>
         </form>
@@ -137,7 +145,7 @@ export default function ListingsPage() {
         </div>
         <div className="stat right-corner">
           <h2 className="text-3xl font-bold">{stats.residential}</h2>
-          <p>Lands</p>
+          <p>Residential</p>
         </div>
       </div>
     </section>
