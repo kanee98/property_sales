@@ -1,71 +1,78 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 
-// Mock data for now (Replace with Database call)
-let properties = [
-  {
-    id: 1,
-    name: "Downtown Office",
-    description: "Spacious corporate office in the heart of the city.",
-    price: 500000,
-    image: "https://via.placeholder.com/400",
-    latitude: 40.7128,
-    longitude: -74.006,
-    type: "Corporate",
-  },
-  {
-    id: 2,
-    name: "Mall Retail Space",
-    description: "Prime retail space inside a popular mall.",
-    price: 300000,
-    image: "https://via.placeholder.com/400",
-    latitude: 34.0522,
-    longitude: -118.2437,
-    type: "Retail",
-  },
-  {
-    id: 3,
-    name: "Mall Retail Space",
-    description: "Prime retail space inside a popular mall.",
-    price: 300000,
-    image: "https://via.placeholder.com/400",
-    latitude: 34.0522,
-    longitude: -118.2437,
-    type: "Retail",
-  },
-  {
-    id: 4,
-    name: "Mall Retail Space",
-    description: "Prime retail space inside a popular mall.",
-    price: 300000,
-    image: "https://via.placeholder.com/400",
-    latitude: 34.0522,
-    longitude: -118.2437,
-    type: "Retail",
-  },
-];
+const prisma = new PrismaClient();
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    return res.status(200).json(properties);
+    try {
+      const properties = await prisma.property.findMany();
+      return res.status(200).json(properties);
+    } catch (error) {
+      return res.status(500).json({ error: "Error fetching properties" });
+    }
   }
 
   if (req.method === "POST") {
-    const { name, description, price, image, latitude, longitude, type } = req.body;
-    const newProperty = { id: properties.length + 1, name, description, price, image, latitude, longitude, type };
-    properties.push(newProperty);
-    return res.status(201).json(newProperty);
+    const { title, description, price, category, images, latitude, longitude, type, manager, status } = req.body;
+
+    try {
+      const newProperty = await prisma.property.create({
+        data: {
+          title,
+          description,
+          price: price ?? null, // Handle nullable price
+          category,
+          images: JSON.stringify(images), // Store images as JSON
+          latitude,
+          longitude,
+          type,
+          manager,
+          status,
+        },
+      });
+      return res.status(201).json(newProperty);
+    } catch (error) {
+      return res.status(500).json({ error: "Error creating property" });
+    }
   }
 
   if (req.method === "PUT") {
-    const { id, name, description, price, image, latitude, longitude, type } = req.body;
-    properties = properties.map((p) => (p.id === id ? { ...p, name, description, price, image, latitude, longitude, type } : p));
-    return res.status(200).json({ id, name, description, price, type });
+    const { id, title, description, price, category, images, latitude, longitude, type, manager, status } = req.body;
+
+    try {
+      const updatedProperty = await prisma.property.update({
+        where: { id },
+        data: {
+          title,
+          description,
+          price: price ?? null,
+          category,
+          images: JSON.stringify(images),
+          latitude,
+          longitude,
+          type,
+          manager,
+          status,
+        },
+      });
+      return res.status(200).json(updatedProperty);
+    } catch (error) {
+      return res.status(500).json({ error: "Error updating property" });
+    }
   }
 
   if (req.method === "DELETE") {
     const { id } = req.body;
-    properties = properties.filter((p) => p.id !== id);
-    return res.status(200).json({ message: "Property deleted" });
+
+    try {
+      await prisma.property.delete({
+        where: { id },
+      });
+      return res.status(200).json({ message: "Property deleted" });
+    } catch (error) {
+      return res.status(500).json({ error: "Error deleting property" });
+    }
   }
 
   res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);

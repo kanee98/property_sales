@@ -13,7 +13,7 @@ import Logo from "../../src/img/Prime Ceylon Logo No BG.png";
 
 interface Property {
   id: number;
-  name: string;
+  title: string;
   description: string;
   price: number;
   image: string;
@@ -94,7 +94,7 @@ export default function PropertyDashboard() {
 
   // Filter properties based on search term
   const filteredProperties = properties.filter(property =>
-    property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     property.description.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
   );
 
@@ -347,7 +347,7 @@ export default function PropertyDashboard() {
                             propertiesToDisplay.map((property) => (
                               <tr key={property.id}>
                                 <td>{property.id}</td>
-                                <td>{property.name}</td>
+                                <td>{property.title}</td>
                                 <td>{property.description}</td>
                                 <td>${property.price.toLocaleString()}</td>
                                 <td>{property.type}</td>
@@ -415,7 +415,7 @@ export default function PropertyDashboard() {
                       <table>
                         <thead>
                           <tr>
-                            <th className="py-2 px-4"></th>
+                            {/* <th className="py-2 px-4"></th> */}
                             <th className="py-2 px-4">ID</th>
                             <th className="py-2 px-4">Name</th>
                             <th className="py-2 px-4">Email</th>
@@ -427,7 +427,7 @@ export default function PropertyDashboard() {
                           {usersToDisplay.length > 0 ? (
                             usersToDisplay.map((user) => (
                               <tr key={user.id} className="border-t">
-                                <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile"/>
+                                {/* <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile"/> */}
                                 <td className="py-2 px-4">{user.id}</td>
                                 <td className="py-2 px-4">{user.name}</td>
                                 <td className="py-2 px-4">{user.email}</td>

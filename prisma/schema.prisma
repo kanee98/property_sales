@@ -30,7 +30,9 @@ model Property {
   price       Float?
   category    String // "Corporate" or "Retail"
   images      Json
-  location    String
+  latitude    Float
+  longitude   Float
+  type        String
   createdAt   DateTime @default(now())
   manager     String // Contact details of property manager
   status      Int
