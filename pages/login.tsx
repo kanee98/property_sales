@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // useRouter() in App Router
 import Image from 'next/image';
 import "antd/dist/reset.css";
-import { Form, Input, Button, message, Checkbox } from "antd";
+import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import "../components/login.css";
 import Logo from "../src/img/Prime Ceylon Logo.jpeg";
 
@@ -36,6 +36,12 @@ export default function AdminLogin() {
       // Failure: extract error message and show it
       const errorData = await res.json(); // Assuming the error response is JSON
       message.error(errorData?.message || "Invalid email or password");
+      Modal.error({
+        title: "Authentication Failed",
+        content: "Invalid email or password. Please check your credentials and try again.",
+        okText: "Got it!",
+        centered: true,
+      });
     }
   
     setLoading(false);

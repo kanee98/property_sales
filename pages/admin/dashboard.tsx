@@ -100,7 +100,8 @@ export default function PropertyDashboard() {
   // Filter properties based on search term
   const filteredProperties = properties.filter(property =>
     property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.description.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
+    property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    property.type.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
   );
 
   // Filter users based on search term

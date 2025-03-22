@@ -28,7 +28,7 @@ export default function ListingsPage() {
     totalProperties: 0,
     corporate: 0,
     retail: 0,
-    lands: 0,
+    residential: 0,
   });
 
   useEffect(() => {
@@ -44,13 +44,13 @@ export default function ListingsPage() {
     const totalProperties = data.length;
     const corporate = data.filter(property => property.type === "Corporate").length;
     const retail = data.filter(property => property.type === "Retail").length;
-    const lands = data.filter(property => property.type === "Land").length;
+    const residential = data.filter(property => property.type === "Residential").length;
 
     setStats({
       totalProperties,
       corporate,
       retail,
-      lands,
+      residential,
     });
   };
 
@@ -136,7 +136,7 @@ export default function ListingsPage() {
           <p>Retail</p>
         </div>
         <div className="stat right-corner">
-          <h2 className="text-3xl font-bold">{stats.lands}</h2>
+          <h2 className="text-3xl font-bold">{stats.residential}</h2>
           <p>Lands</p>
         </div>
       </div>
