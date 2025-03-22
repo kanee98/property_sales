@@ -329,6 +329,116 @@ export default function PropertyDashboard() {
 
               {activeTab === "properties" && (
                 <div className="p-6">
+                  <div className="head-title">
+                    <div className="left">
+                      <h1>Properties</h1>
+                      <ul className="breadcrumb">
+                        <li>
+                          <Link href="#">Properties</Link>
+                        </li>
+                        <li><i className='bx bx-chevron-right'></i></li>
+                        <li>
+                          <Link href="#" className="active">Active Properties</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="table-data">
+                    <div className="order">
+                    <div className="head">
+                      <h3>Properties List</h3>
+                      <i className='bx bx-plus icon'></i>
+                    </div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Type</th>
+                            {/* <th>Image</th> */}
+                            <th>Actions</th> 
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {propertiesToDisplay.length > 0 ? (
+                            propertiesToDisplay.map((property) => (
+                              <tr key={property.id}>
+                                <td>{property.id}</td>
+                                <td>{property.title}</td>
+                                <td>{property.description}</td>
+                                <td>${property.price.toLocaleString()}</td>
+                                <td>{property.type}</td>
+                                {/* <td>
+                                  <img src={property.image} alt={property.name} width="100" />
+                                </td> */}
+                                <td>
+                                  {/* Edit and Delete buttons */}
+                                  <button
+                                    onClick={() => handleEdit(property.id)}
+                                    className="edit-btn"
+                                    style={{ marginRight: '10px' }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(property.id)}
+                                    className="delete-btn"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                            ): (
+                              <tr>
+                                <td colSpan={4} className="py-4 text-center">No properties found</td>
+                              </tr>
+                          )}
+                        </tbody>
+                      </table>
+                      {/* Pagination Controls */}
+                      <div className="pagination-controls">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="pagination-btn"
+                        >
+                          « Previous
+                        </button>
+
+                        <span>Page {currentPage} of {totalPagesForProperties}</span>
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPagesForProperties}
+                          className="pagination-btn"
+                        >
+                          Next »
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "inquiries" && (
+                <div className="p-6">
+                  <div className="head-title">
+                    <div className="left">
+                      <h1>Inquiries</h1>
+                      <ul className="breadcrumb">
+                        <li>
+                          <Link href="#">Inquiries</Link>
+                        </li>
+                        <li><i className='bx bx-chevron-right'></i></li>
+                        <li>
+                          <Link href="#" className="active">Pending Inquiries</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                   <div className="table-data">
                     <div className="order">
                     <div className="head">
@@ -411,6 +521,20 @@ export default function PropertyDashboard() {
 
               {activeTab === "users" && (
                 <div className="p-6">
+                  <div className="head-title">
+                    <div className="left">
+                      <h1>Users</h1>
+                      <ul className="breadcrumb">
+                        <li>
+                          <Link href="#">Users</Link>
+                        </li>
+                        <li><i className='bx bx-chevron-right'></i></li>
+                        <li>
+                          <Link href="#" className="active">Manage Users</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                   <div className="table-data">
                     <div className="order">
                       <div className="head">
