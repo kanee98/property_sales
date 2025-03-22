@@ -697,10 +697,6 @@ body.dark #content nav .profile-menu li a {
     text-decoration: underline;
 }
 
-
-
-
-
 /* Media Query for Smaller Screens */
 @media screen and (max-width: 768px) {
     /* Reduce width of notification and profile menu */
@@ -721,9 +717,6 @@ body.dark #content nav .profile-menu li a {
 		display: none;
 	}
 }
-
-
-
 
 @media screen and (max-width: 576px) {
     #content nav .notification-menu,
@@ -820,12 +813,12 @@ body.dark #content nav .profile-menu li a {
 	margin: 0 10px;
 	cursor: pointer;
 	background-color: #007bff;
-	color: white;
+	color: var(--dark);
 	border: none;
   }
   
   .pagination-btn:disabled {
-	background-color: #ccc;
+	background-color: var(--light);
 	cursor: not-allowed;
   }
   

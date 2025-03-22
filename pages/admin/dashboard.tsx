@@ -118,7 +118,7 @@ export default function PropertyDashboard() {
 
   // Handle page change for both users and properties
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPagesForUsers && page <= totalPagesForProperties) {
+    if (page >= 1 && page <= totalPagesForProperties) {
       setCurrentPage(page);
     }
   };
@@ -260,10 +260,10 @@ export default function PropertyDashboard() {
                       </li>
                     </ul>
                   </div>
-                  <a href="#" className="btn-download">
+                  {/* <a href="#" className="btn-download">
                     <i className='bx bxs-cloud-download bx-fade-down-hover' ></i>
                     <span className="text">Get PDF</span>
-                  </a>          
+                  </a>           */}
                 </div>
                 <ul className="box-info">
                   <li>
@@ -293,7 +293,7 @@ export default function PropertyDashboard() {
                     <div className="head">
                       <h3>Todos</h3>
                       <i className='bx bx-plus icon'></i>
-                      <i className='bx bx-filter' ></i>
+                      {/* <i className='bx bx-filter' ></i> */}
                     </div>
                     <ul className="todo-list">
                       <li className="completed">
@@ -328,6 +328,7 @@ export default function PropertyDashboard() {
                     <div className="order">
                     <div className="head">
                       <h3>Properties List</h3>
+                      <i className='bx bx-plus icon'></i>
                     </div>
                       <table>
                         <thead>
@@ -409,6 +410,7 @@ export default function PropertyDashboard() {
                     <div className="order">
                       <div className="head">
                         <h3>Manage Users</h3>
+                        <i className='bx bx-plus icon'></i>
                       </div>
                       <table>
                         <thead>

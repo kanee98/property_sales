@@ -32,14 +32,17 @@ export default NextAuth({
           throw new Error("Invalid password");
         }
 
-        return { id: admin.id, name: admin.name, email: admin.email };
+        // Ensure `id` is returned as a string
+        return { id: String(admin.id), name: admin.name, email: admin.email };
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ session, token }) {
-      session.user.id = token.sub;
+      if (session.user) {
+        session.user.id = token.sub as string; // Ensure 'sub' is cast as a string
+      }
       return session;
     },
   },
