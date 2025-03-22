@@ -57,12 +57,17 @@ export default function PropertyDashboard() {
       .catch((error) => console.error("Error fetching properties:", error));
   }, []);
 
-  const fetchUsers = () => {
-    axios.get("/api/users") // Assuming you have an API endpoint
-      .then((response) => {
-        setUsers(response.data);
-      })
-      .catch((error) => console.error("Error fetching users:", error));
+  useEffect(() => {
+    fetchUsers(); 
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/api/users"); 
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   };
 
   async function handleLogout() {
