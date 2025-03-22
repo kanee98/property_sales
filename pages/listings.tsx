@@ -9,10 +9,10 @@ import Logo from "../src/img/Prime Ceylon Logo No BG.png";
 
 interface Property {
   id: number;
-  name: string;
+  title: string;
   description: string;
   price: number;
-  image: string;
+  images: string;
   latitude: number;
   longitude: number;
   type: string; // Corporate or Retail
@@ -56,7 +56,7 @@ export default function ListingsPage() {
 
   const filteredProperties = properties.filter(
     (property) =>
-      property.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      property.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (selectedType === "" || property.type === selectedType)
   );
 
@@ -182,11 +182,11 @@ export default function ListingsPage() {
         {propertiesToDisplay.map((property) => (
           <div key={property.id} className="border p-4 rounded-lg shadow-lg">
             <img
-              src={property.image}
-              alt={property.name}
+              src={property.images}
+              alt={property.title}
               className="w-full h-48 object-cover rounded-md"
             />
-            <h2 className="text-lg font-semibold mt-2">{property.name}</h2>
+            <h2 className="text-lg font-semibold mt-2">{property.title}</h2>
             <p>{property.description}</p>
             <p className="font-bold text-green-600">${property.price}</p>
 
@@ -199,9 +199,10 @@ export default function ListingsPage() {
             ></iframe>
           </div>
         ))}
-        
-        {/* BEGIN PAGINATION */}
-        <ul className="pagination flex space-x-2">
+      </div>
+    </div>
+    {/* BEGIN PAGINATION */}
+    <ul className="pagination flex space-x-2">
           <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -234,8 +235,6 @@ export default function ListingsPage() {
           </li>
         </ul>
         {/* END PAGINATION */}
-      </div>
-    </div>
     </>
   );
 }

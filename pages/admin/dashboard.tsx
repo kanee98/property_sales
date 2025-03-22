@@ -442,7 +442,7 @@ export default function PropertyDashboard() {
                   <div className="table-data">
                     <div className="order">
                     <div className="head">
-                      <h3>Properties List</h3>
+                      <h3>Pending Inquiries</h3>
                       <i className='bx bx-plus icon'></i>
                     </div>
                       <table>
