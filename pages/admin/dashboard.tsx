@@ -9,7 +9,7 @@ import SidebarScript from "../../components/SidebarScript";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../api/users";
-import Logo from "../../src/img/Prime Ceylon Logo.jpeg";
+import Logo from "../../src/img/Prime Ceylon Logo No BG.png";
 
 interface Property {
   id: number;
@@ -21,6 +21,8 @@ interface Property {
   longitude: number;
   type: string;
 }
+
+const itemsPerPage = 6;
 
 export default function PropertyDashboard() {
   const router = useRouter();
@@ -86,6 +88,40 @@ export default function PropertyDashboard() {
   const toggleDarkMode = () => {
     setDarkMode((prev) => !prev);
   };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+
+  // Filter properties based on search term
+  const filteredProperties = properties.filter(property =>
+    property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    property.description.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
+  );
+
+  // Calculate the start and end indices for slicing the properties array
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const propertiesToDisplay = filteredProperties.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Example handlers for Edit and Delete
+  const handleEdit = (id: number) => {
+    console.log("Edit property with ID:", id);
+    // Perform the edit action here (e.g., show a modal to edit the property)
+  };
+
+  const handleDelete = (id: number) => {
+    console.log("Delete property with ID:", id);
+    // Perform the delete action here (e.g., remove from the properties array)
+  };
   
   return (  
     <>
@@ -123,12 +159,12 @@ export default function PropertyDashboard() {
             </li>
           </ul>
           <ul className="side-menu bottom">
-            <li>
+            {/* <li>
               <Link href="#">
                 <i className='bx bxs-cog bx-sm bx-spin-hover'></i>
                 <span className="text">Settings</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <a href="/login" onClick={handleLogout} className="logout">
                 <i className='bx bx-power-off bx-sm bx-burst-hover' ></i>
@@ -141,14 +177,17 @@ export default function PropertyDashboard() {
         <section id="content">
           <nav className="navbar">
             <i className='bx bx-menu bx-sm'></i>
-            <Link href="#" className="nav-link">Categories</Link>
+            {/* <Link href="#" className="nav-link">Categories</Link> */}
             <form action="">
-            <div className="form-input">
-              <input type="search" placeholder="Search..." />
-              <button className="search-btn">
-                <i className='bx bx-search'></i>
-              </button>
-            </div>
+              <div className="form-input">
+                {/* <input 
+                  type="search" 
+                  placeholder="Search..." 
+                />
+                <button className="search-btn">
+                  <i className='bx bx-search'></i>
+                </button> */}
+              </div>
             </form>
             <input type="checkbox" className="checkbox" id="switch-mode" hidden />
             <label className="swith-lm" htmlFor="switch-mode" onClick={toggleDarkMode}>
@@ -185,7 +224,7 @@ export default function PropertyDashboard() {
             <div className="profile-menu" id="profileMenu">
                 <ul>
                     <li><a href="#">My Profile</a></li>
-                    <li><a href="#">Settings</a></li>
+                    {/* <li><a href="#">Settings</a></li> */}
                     <li><a href="/login" onClick={handleLogout}>Log Out</a></li>
                 </ul>
             </div>
@@ -273,11 +312,19 @@ export default function PropertyDashboard() {
                 <div className="p-6">
                   <div className="table-data">
                     <div className="order">
-                      <div className="head">
-                        <h3>Properties List</h3>
-                        <i className='bx bx-search' ></i>
-                        <i className='bx bx-filter' ></i>
+                    <div className="head">
+                      <h3>Properties List</h3>
+                      {/* Search Input */}
+                      <div className="form-input">
+                        <input
+                          type="search"
+                          placeholder="Search..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="search-input"
+                        />
                       </div>
+                    </div>
                       <table>
                         <thead>
                           <tr>
@@ -286,28 +333,72 @@ export default function PropertyDashboard() {
                             <th>Description</th>
                             <th>Price</th>
                             <th>Type</th>
-                            <th>Image</th>
+                            {/* <th>Image</th> */}
+                            <th>Actions</th> 
                           </tr>
                         </thead>
                         <tbody>
-                          {properties.map((property) => (
-                            <tr key={property.id}>
-                              <td>{property.id}</td>
-                              <td>{property.name}</td>
-                              <td>{property.description}</td>
-                              <td>${property.price.toLocaleString()}</td>
-                              <td>{property.type}</td>
-                              <td>
-                                <img src={property.image} alt={property.name} width="100" />
-                              </td>
-                            </tr>
-                          ))}
+                          {propertiesToDisplay.length > 0 ? (
+                            propertiesToDisplay.map((property) => (
+                              <tr key={property.id}>
+                                <td>{property.id}</td>
+                                <td>{property.name}</td>
+                                <td>{property.description}</td>
+                                <td>${property.price.toLocaleString()}</td>
+                                <td>{property.type}</td>
+                                {/* <td>
+                                  <img src={property.image} alt={property.name} width="100" />
+                                </td> */}
+                                <td>
+                                  {/* Edit and Delete buttons */}
+                                  <button
+                                    onClick={() => handleEdit(property.id)}
+                                    className="edit-btn"
+                                    style={{ marginRight: '10px' }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(property.id)}
+                                    className="delete-btn"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                            ): (
+                              <tr>
+                                <td colSpan={4}>No properties found</td>
+                              </tr>
+                          )}
                         </tbody>
                       </table>
+                      {/* Pagination Controls */}
+                      <div className="pagination-controls">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="pagination-btn"
+                        >
+                          « Previous
+                        </button>
+
+                        <span>Page {currentPage} of {totalPages}</span>
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="pagination-btn"
+                        >
+                          Next »
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
+
               {activeTab === "users" && (
                 <div className="p-6">
                   <div className="table-data">
@@ -325,6 +416,7 @@ export default function PropertyDashboard() {
                             <th className="py-2 px-4">Name</th>
                             <th className="py-2 px-4">Email</th>
                             <th className="py-2 px-4">Role</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -336,6 +428,22 @@ export default function PropertyDashboard() {
                                 <td className="py-2 px-4">{user.name}</td>
                                 <td className="py-2 px-4">{user.email}</td>
                                 <td className="py-2 px-4">{user.role}</td>
+                                <td>
+                                  {/* Edit and Delete buttons */}
+                                  <button
+                                    onClick={() => handleEdit(user.id)}
+                                    className="edit-btn"
+                                    style={{ marginRight: '10px' }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(user.id)}
+                                    className="delete-btn"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
                               </tr>
                             ))
                           ) : (

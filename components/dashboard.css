@@ -18,10 +18,10 @@ li {
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;
 
-	--light: #F9F9F9;
+	--light: #eee;
 	--blue: #3C91E6;
 	--light-blue: #CFE8FF;
-	--grey: #eee;
+	--grey: #ddd;
 	--dark-grey: #AAAAAA;
 	--dark: #342E37;
 	--red: #DB504A;
@@ -502,9 +502,6 @@ body.dark #content nav .profile-menu li a {
 	font-weight: 500;
 }
 
-
-
-
 #content main .box-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -776,3 +773,59 @@ body.dark #content nav .profile-menu li a {
 		min-width: 420px;
 	}
 }
+
+.edit-btn {
+	background-color: #4caf50;
+	color: white;
+	padding: 5px 10px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+  }
+  
+  .edit-btn:hover {
+	background-color: #45a049;
+  }
+  
+  .delete-btn {
+	background-color: #f44336;
+	color: white;
+	padding: 5px 10px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+  }
+  
+  .delete-btn:hover {
+	background-color: #e53935;
+  }
+  
+  .search-input {
+	padding: 8px;
+	margin-right: 10px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+  }
+  
+  .pagination-controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }
+  
+  .pagination-btn {
+	padding: 8px 12px;
+	border-radius: 4px;
+	margin: 0 10px;
+	cursor: pointer;
+	background-color: #007bff;
+	color: white;
+	border: none;
+  }
+  
+  .pagination-btn:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+  }
+  

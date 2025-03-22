@@ -21,20 +21,25 @@ export default function AdminLogin() {
 
   async function handleLogin(values: { email: string; password: string }) {
     setLoading(true);
+    
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
-
+  
     if (res.ok) {
+      // Success: show success message and redirect
       message.success("Login successful! Redirecting...");
-      router.push("/admin/dashboard"); // Redirect to admin dashboard
+      router.push("/admin/dashboard");
     } else {
-      message.error("Invalid email or password");
+      // Failure: extract error message and show it
+      const errorData = await res.json(); // Assuming the error response is JSON
+      message.error(errorData?.message || "Invalid email or password");
     }
+  
     setLoading(false);
-  }
+  }  
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
