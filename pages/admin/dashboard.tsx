@@ -211,8 +211,8 @@ export default function PropertyDashboard() {
             </form>
             <input type="checkbox" className="checkbox" id="switch-mode" hidden />
             <label className="swith-lm" htmlFor="switch-mode" onClick={toggleDarkMode}>
-              <i className="bx bxs-moon"></i>
               <i className="bx bx-sun"></i>
+              <i className="bx bxs-moon"></i>
               <div className="ball"></div>
             </label>
             {/* <li>
@@ -613,7 +613,13 @@ export default function PropertyDashboard() {
               )}
           </main>
         </section>
-      </div></>
+      </div>
+      <footer className="footer">
+        <p>
+            &copy; {new Date().getFullYear()} <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer">FusionLabz</a>. All Rights Reserved.
+        </p>
+      </footer>
+      </>
     
   );
 }

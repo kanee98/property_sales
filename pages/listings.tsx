@@ -241,6 +241,11 @@ export default function ListingsPage() {
           </li>
         </ul>
         {/* END PAGINATION */}
+        <footer className="footer">
+          <p>
+              &copy; {new Date().getFullYear()} <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer">FusionLabz</a>. All Rights Reserved.
+          </p>
+        </footer>
     </>
   );
 }

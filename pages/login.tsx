@@ -52,6 +52,7 @@ export default function AdminLogin() {
   };
 
   return (
+    <>
     <div className="login-page">
       <div className="login-box">
         {/* Login Form */}
@@ -117,5 +118,11 @@ export default function AdminLogin() {
         </div>
       </div>
     </div>
+    <footer className="footer">
+      <p>
+          &copy; {new Date().getFullYear()} <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer">FusionLabz</a>. All Rights Reserved.
+      </p>
+    </footer>
+    </>
   );
 }
