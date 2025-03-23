@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import "../components/styles.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTag, faSyncAlt, faUser, faClipboardList, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import Logo from "../src/img/Prime Ceylon Logo No BG.png";
 
 interface Property {
@@ -246,46 +244,3 @@ export default function ListingsPage() {
     </>
   );
 }
-
-{/* <section className="whyChooseUs">
-      <h4 className="title">Why Choose Us?</h4>
-      <hr className="titleMark"/>
-      <div className="reasons">
-        <div className="reason">
-          <FontAwesomeIcon icon={faCheck} size="2x" />
-          <div className="reason-text">
-            <h3>Quick</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsa, a fuga sed maxime beatae earum tenetur possimus dignissimos ea.</p>
-          </div>
-        </div>
-        <div className="reason">
-          <FontAwesomeIcon icon={faTag} size="2x" />
-          <div className="reason-text">
-            <h3>Free</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum obcaecati sit nihil porro molestias consectetur dolore, laudantium recusandae iure quasi!</p>
-          </div>
-        </div>
-        <div className="reason">
-          <FontAwesomeIcon icon={faSyncAlt} size="2x" />
-          <div className="reason-text">
-            <h3>Easy</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda veritatis commodi officia tempore nulla doloribus officiis cupiditate ducimus consequatur ut?</p>
-          </div>
-        </div>
-        <div className="reason">
-          <FontAwesomeIcon icon={faUser} size="2x" />
-          <div className="reason-text">
-            <h3>Independent</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptate culpa sunt itaque minima harum explicabo placeat dolores maiores consequuntur?</p>
-          </div>
-        </div>
-    
-        <div className="reason">
-          <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-          <div className="reason-text">
-            <h3>Awesome</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi quia, illum et deserunt temporibus omnis neque similique aut inventore in!</p>
-          </div>
-        </div>
-      </div>
-    </section> */}

@@ -1,0 +1,94 @@
+/* Why Choose Us Section */
+.whyChooseUs {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .reasons {
+    width: 80%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding-top: 50px;
+  }
+  
+  .reason {
+    width: 40%;
+    min-width: 200px;
+    display: flex;
+    margin: 20px 5%;
+  }
+  
+  .reason-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+  }
+  
+  .reason i {
+    margin: 0 40px 0 0;
+  }
+  
+  .fa-check {
+    color: #66cc91;
+  }
+  
+  .fa-tag {
+    color: royalblue;
+  }
+  
+  .fa-sync-alt {
+    color: orange;
+  }
+  
+  .fa-user {
+    color: mediumorchid;
+  }
+  
+  .fa-clipboard-list {
+    color: #ff6666;
+  }
+  
+  .fa-thumbs-up {
+    color: orangered;
+  }
+  
+  /* Mobile Responsive Styles for Why Choose Us */
+  @media (max-width: 768px) {
+    .reason {
+      width: 80%; /* Make reasons take more space on smaller screens */
+      margin: 10px 0; /* Reduce margins */
+    }
+  
+    .reason-text {
+      margin-left: 5%; /* Reduce the left margin for better spacing */
+    }
+  
+    .reason i {
+      margin: 0 20px 0 0; /* Reduce icon margin for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .whyChooseUs {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  
+    .reasons {
+      width: 100%; /* Take full width on mobile */
+      flex-direction: column; /* Stack items vertically */
+    }
+  
+    .reason {
+      width: 100%; /* Make each reason item full width */
+      margin: 10px 0; /* Stack reasons with spacing */
+    }
+  
+    .reason-text {
+      margin-left: 0; /* Remove margin on mobile */
+    }
+  }  
