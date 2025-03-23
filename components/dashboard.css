@@ -78,7 +78,7 @@ body {
 	align-items: center;
 	color: var(--blue);
 	position: sticky;
-	top: 0;
+	top: 2%;
 	left: 0;
 	background: var(--light);
 	z-index: 500;
@@ -631,6 +631,7 @@ body.dark #content nav .profile-menu li a {
 #content main .table-data .todo {
 	flex-grow: 1;
 	flex-basis: 300px;
+	margin-bottom: 3%;
 }
 #content main .table-data .todo .todo-list {
 	width: 100%;

@@ -141,19 +141,19 @@ export default function InquiriesPage() {
           <ul className="side-menu top">
             <li className={activeTab === "inquiries" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("inquiries")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className='bx bxs-phone-incoming bx-sm'></i>
                 <span className="text">Inquiries</span>
               </Link>
             </li>
             <li className={activeTab === "whyus" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("whyus")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className='bx bxs-star bx-sm'></i>
                 <span className="text">Why Choose Us</span>
               </Link>
             </li>
             <li className={activeTab === "aboutus" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("aboutus")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className='bx bxs-info-circle bx-sm'></i>
                 <span className="text">About Us</span>
               </Link>
             </li>
