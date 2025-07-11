@@ -36,6 +36,7 @@ model Property {
   type        String
   createdAt   DateTime @default(now())
   manager     String // Contact details of property manager
+  contact     String
   status      Int
 }
 

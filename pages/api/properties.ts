@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === "POST") {
-    const { title, description, price, category, images, latitude, longitude, type, manager, status } = req.body;
+    const { title, description, price, category, images, latitude, longitude, district, type, manager, contact, status } = req.body;
 
     try {
       const newProperty = await prisma.property.create({
@@ -26,8 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           images: JSON.stringify(images), // Store images as JSON
           latitude,
           longitude,
+          district,
           type,
           manager,
+          contact,
           status,
         },
       });
@@ -38,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === "PUT") {
-    const { id, title, description, price, category, images, latitude, longitude, type, manager, status } = req.body;
+    const { id, title, description, price, category, images, latitude, longitude, district, type, manager, contact, status } = req.body;
 
     try {
       const updatedProperty = await prisma.property.update({
@@ -51,8 +53,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           images: JSON.stringify(images),
           latitude,
           longitude,
+          district,
           type,
           manager,
+          contact,
           status,
         },
       });

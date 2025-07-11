@@ -19,7 +19,11 @@ interface Property {
   image: string;
   latitude: number;
   longitude: number;
+  category: string;
+  district: string;
   type: string;
+  manager: string;
+  contact: number;
 }
 
 export interface Inquiry {
@@ -156,6 +160,9 @@ export default function PropertyDashboard() {
   const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
   const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+
   // Handle page change for both users and properties
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPagesForProperties) {
@@ -163,11 +170,15 @@ export default function PropertyDashboard() {
     }
   };
 
-  // Example handlers for Edit and Delete
-  const handleEdit = (id: number) => {
-    console.log("Edit property with ID:", id);
-    // Perform the edit action here (e.g., show a modal to edit the property)
+  // Handle Edit
+  const handleEdit = (propertyId: number) => {
+    const property = properties.find(p => p.id === propertyId);
+    if (property) {
+      setEditingProperty(property);
+      setIsEditModalOpen(true);
+    }
   };
+  
 
   const handleDelete = (id: number) => {
     console.log("Delete property with ID:", id);
@@ -378,21 +389,26 @@ export default function PropertyDashboard() {
                       </ul>
                     </div>
                   </div>
+
                   <div className="table-data">
                     <div className="order">
-                    <div className="head">
-                      <h3>Properties List</h3>
-                      <i className='bx bx-plus icon'></i>
-                    </div>
+                      <div className="head">
+                        <h3>Properties List</h3>
+                        <i className='bx bx-plus icon'></i>
+                      </div>
+
                       <table>
                         <thead>
                           <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Title</th>
                             <th>Description</th>
                             <th>Price</th>
+                            <th>Category</th>
+                            <th>Manager</th>
+                            <th>Contact Number</th>
+                            <th>District</th>
                             <th>Type</th>
-                            {/* <th>Image</th> */}
                             <th>Actions</th> 
                           </tr>
                         </thead>
@@ -403,20 +419,28 @@ export default function PropertyDashboard() {
                                 <td>{property.id}</td>
                                 <td>{property.title}</td>
                                 <td>{property.description}</td>
-                                <td>${property.price.toLocaleString()}</td>
-                                <td>{property.type}</td>
-                                {/* <td>
-                                  <img src={property.image} alt={property.name} width="100" />
-                                </td> */}
                                 <td>
-                                  {/* Edit and Delete buttons */}
-                                  <button
-                                    onClick={() => handleEdit(property.id)}
+                                  {property.price != null
+                                    ? `Rs. ${property.price.toLocaleString()}`
+                                    : "N/A"}
+                                </td>
+                                <td>{property.category}</td>
+                                <td>{property.manager}</td>
+                                <td>{property.contact}</td>
+                                <td>{property.district}</td>
+                                <td>{property.type}</td>
+                                <td>
+                                <button
+                                    onClick={() => {
+                                      setEditingProperty(property);
+                                      setIsEditModalOpen(true);
+                                    }}
                                     className="edit-btn"
-                                    style={{ marginRight: '10px' }}
+                                    style={{ marginRight: "10px" }}
                                   >
                                     Edit
                                   </button>
+
                                   <button
                                     onClick={() => handleDelete(property.id)}
                                     className="delete-btn"
@@ -426,13 +450,16 @@ export default function PropertyDashboard() {
                                 </td>
                               </tr>
                             ))
-                            ): (
-                              <tr>
-                                <td colSpan={4} className="py-4 text-center">No properties found</td>
-                              </tr>
+                          ) : (
+                            <tr>
+                              <td colSpan={6} className="py-4 text-center">
+                                No properties found
+                              </td>
+                            </tr>
                           )}
                         </tbody>
                       </table>
+
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
                         <button
@@ -455,6 +482,137 @@ export default function PropertyDashboard() {
                       </div>
                     </div>
                   </div>
+                  {isEditModalOpen && editingProperty && (
+                    <div className="table-data">
+                    <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+                      <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-3xl">
+                        <h2 className="text-2xl font-semibold mb-4">Edit Property</h2>
+
+                        <form
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            try {
+                              const res = await fetch("/api/properties", {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(editingProperty),
+                              });
+
+                              if (res.ok) {
+                                const updated = await res.json();
+                                setProperties((prev) =>
+                                  prev.map((p) => (p.id === updated.id ? updated : p))
+                                );
+                                setIsEditModalOpen(false);
+                              } else {
+                                const err = await res.json();
+                                alert("Update failed: " + err.message);
+                              }
+                            } catch (err) {
+                              console.error(err);
+                              alert("Something went wrong");
+                            }
+                          }}
+                        >
+                          <div className="grid grid-cols-2 gap-4">
+                            <input
+                              type="text"
+                              placeholder="Title"
+                              value={editingProperty.title}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, title: e.target.value })}
+                              required
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Category"
+                              value={editingProperty.category}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
+                              required
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="number"
+                              placeholder="Price"
+                              value={editingProperty.price ?? ""}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, price: Number(e.target.value) })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="text"
+                              placeholder="District"
+                              value={editingProperty.district}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, district: e.target.value })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Manager"
+                              value={editingProperty.manager}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, manager: e.target.value })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Type (e.g., For Sale)"
+                              value={editingProperty.type}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="number"
+                              placeholder="Latitude"
+                              value={editingProperty.latitude}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, latitude: Number(e.target.value) })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="number"
+                              placeholder="Longitude"
+                              value={editingProperty.longitude}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, longitude: Number(e.target.value) })}
+                              className="border p-2 rounded"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Contact Number"
+                              value={editingProperty.contact ?? ""}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, contact: e.target.value })}
+                              className="border p-2 rounded"
+                            />
+                          </div>
+
+                          <textarea
+                            placeholder="Description"
+                            value={editingProperty.description}
+                            onChange={(e) =>
+                              setEditingProperty({ ...editingProperty, description: e.target.value })
+                            }
+                            required
+                            className="border p-2 rounded mt-4 w-full"
+                          />
+
+                          <div className="flex justify-end mt-6 space-x-2">
+                            <button
+                              type="button"
+                              onClick={() => setIsEditModalOpen(false)}
+                              className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                            >
+                              Save Changes
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    </div>
+                  )}
+
                 </div>
               )}
 
