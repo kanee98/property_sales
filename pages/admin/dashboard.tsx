@@ -215,6 +215,8 @@ export default function PropertyDashboard() {
     status: 1,
   });
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   function showMessage(message: string) {
     setModalMessage(message);
     setIsMessageModalOpen(true);
@@ -684,8 +686,12 @@ export default function PropertyDashboard() {
                                   }
 
                                   const formData = new FormData();
-                                  formData.append("file", selectedFile);
-                                  formData.append("propertyId", String(selectedPropertyId));
+                                  formData.append("file", file); // `file` is from input[type="file"]
+
+                                  const res = await fetch("/api/upload-image", {
+                                    method: "POST",
+                                    body: formData,
+                                  });
 
                                   try {
                                     const res = await fetch("/api/upload", {
@@ -844,27 +850,67 @@ export default function PropertyDashboard() {
                               className="border p-2 rounded mt-4 w-full"
                             />
 
+                            <div className="mt-4">
+                              <label className="block mb-1 font-semibold">Upload Image</label>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    setImageFile(file);
+                                  }
+                                }}
+                                className="border border-gray-300 rounded px-4 py-2"
+                              />
+                            </div>
+
                             <div className="button-container">
                               <button
                                 onClick={async () => {
                                   try {
+                                    let uploadedImagePath = "";
+                                
+                                    // 1. If image is selected, upload it first
+                                    if (imageFile) {
+                                      const formData = new FormData();
+                                      formData.append("file", imageFile);
+                                      formData.append("propertyId", "new"); // optional, for future use
+                                
+                                      const uploadRes = await fetch("/api/upload-image", {
+                                        method: "POST",
+                                        body: formData,
+                                      });
+                                
+                                      if (!uploadRes.ok) {
+                                        throw new Error("Image upload failed");
+                                      }
+                                
+                                      const uploadData = await uploadRes.json();
+                                      uploadedImagePath = uploadData.newImagePath;
+                                    }
+                                
+                                    // 2. Now submit the property creation
                                     const res = await fetch("/api/properties", {
                                       method: "POST",
                                       headers: { "Content-Type": "application/json" },
-                                      body: JSON.stringify(newProperty),
+                                      body: JSON.stringify({
+                                        ...newProperty,
+                                        images: uploadedImagePath ? [uploadedImagePath] : [],
+                                      }),
                                     });
-
+                                
                                     if (res.ok) {
                                       const created = await res.json();
                                       setProperties((prev) => [...prev, created]);
                                       setIsAddModalOpen(false);
-                                      // reset form
+                                
+                                      // Reset form
                                       setNewProperty({
                                         title: "",
                                         description: "",
                                         price: null,
                                         category: "",
-                                        images: [],
                                         latitude: null,
                                         longitude: null,
                                         district: "",
@@ -872,7 +918,9 @@ export default function PropertyDashboard() {
                                         manager: "",
                                         contact: "",
                                         status: 1,
+                                        images: [],
                                       });
+                                      setImageFile(null);
                                     } else {
                                       const err = await res.json();
                                       alert("Failed to create property: " + err.message);
@@ -881,7 +929,7 @@ export default function PropertyDashboard() {
                                     console.error(err);
                                     alert("Something went wrong while adding the property.");
                                   }
-                                }}
+                                }}                                
                                 className="button-save"
                               >
                                 Add Property
