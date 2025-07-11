@@ -540,9 +540,8 @@ export default function PropertyDashboard() {
                     </div>
                   </div>
                   {isEditModalOpen && editingProperty && (
-                    <div className="table-data">
-                    <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-                      <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-3xl">
+                    <div className="modal-container">
+                      <div className="modal-content">
                         <h2 className="text-2xl font-semibold mb-4">Edit Property</h2>
 
                         <form
@@ -667,9 +666,7 @@ export default function PropertyDashboard() {
                         </form>
                       </div>
                     </div>
-                    </div>
                   )}
-
                 </div>
               )}
 
