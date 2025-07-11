@@ -160,6 +160,10 @@ export default function PropertyDashboard() {
   const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
   const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
 
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
 
@@ -409,6 +413,7 @@ export default function PropertyDashboard() {
                             <th>Contact Number</th>
                             <th>District</th>
                             <th>Type</th>
+                            <th>Images</th>
                             <th>Actions</th> 
                           </tr>
                         </thead>
@@ -429,6 +434,27 @@ export default function PropertyDashboard() {
                                 <td>{property.contact}</td>
                                 <td>{property.district}</td>
                                 <td>{property.type}</td>
+                                <td>
+                                  <button
+                                    className="view-btn"
+                                    onClick={() => {
+                                      const images = (() => {
+                                        try {
+                                          const parsed = JSON.parse(property.image);
+                                          return Array.isArray(parsed) ? parsed : [property.image];
+                                        } catch {
+                                          return property.image ? [property.image] : [];
+                                        }
+                                      })();
+                                    
+                                      setSelectedImages(images);
+                                      setIsImageModalOpen(true);
+                                    }}                                    
+                                  >
+                                    View
+                                  </button>
+                                </td>
+
                                 <td>
                                 <button
                                     onClick={() => {
@@ -459,6 +485,37 @@ export default function PropertyDashboard() {
                           )}
                         </tbody>
                       </table>
+
+                      {isImageModalOpen && (                                       
+                        <div className="modal-container" onClick={() => setIsImageModalOpen(false)}>
+                          <div className="modal-content" onClick={e => e.stopPropagation()}>
+                            <h2 className="text-xl font-semibold mb-4">Property Images</h2>
+                              <button
+                                onClick={() => setIsImageModalOpen(false)}
+                                className="modal-close-btn"
+                                aria-label="Close"
+                              >
+                                &times; {/* or "Close" text if you prefer */}
+                              </button>
+                              {/* Your modal content like image carousel here */}
+                          {selectedImages.length > 0 ? (
+                            <div className="flex overflow-x-scroll space-x-4">
+                              {selectedImages.map((img, idx) => (
+                                <img
+                                  key={idx}
+                                  src={img}
+                                  alt={`Property image ${idx + 1}`}
+                                  className="w-64 h-40 object-cover rounded border"
+                                />
+                              ))}
+                            </div>
+                          ) : (
+                            <p>No images available</p>
+                          )}
+                          </div>
+                        </div>
+                      )}
+
 
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
@@ -577,7 +634,7 @@ export default function PropertyDashboard() {
                               type="text"
                               placeholder="Contact Number"
                               value={editingProperty.contact ?? ""}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, contact: e.target.value })}
+                              onChange={(e) => setEditingProperty({ ...editingProperty, contact: Number(e.target.value) })}
                               className="border p-2 rounded"
                             />
                           </div>
