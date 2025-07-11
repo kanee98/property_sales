@@ -247,6 +247,7 @@ export default function PropertyDashboard() {
             <form action="">
               <div className="form-input">
                  <input 
+                  id="search"
                   type="search" 
                   placeholder="Search..." 
                   value={searchTerm}
@@ -421,7 +422,18 @@ export default function PropertyDashboard() {
                           {propertiesToDisplay.length > 0 ? (
                             propertiesToDisplay.map((property) => (
                               <tr key={property.id}>
-                                <td>{property.id}</td>
+                                <td style={{ padding: "16px" }}>
+                                  <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: "100%",
+                                    minHeight: "50px", // Adjust if needed
+                                    textAlign: "center",
+                                  }}>
+                                    {property.id}
+                                  </div>
+                                </td>
                                 <td>{property.title}</td>
                                 <td>{property.description}</td>
                                 <td>
@@ -434,25 +446,34 @@ export default function PropertyDashboard() {
                                 <td>{property.contact}</td>
                                 <td>{property.district}</td>
                                 <td>{property.type}</td>
-                                <td>
-                                  <button
-                                    className="view-btn"
-                                    onClick={() => {
-                                      const images = (() => {
-                                        try {
-                                          const parsed = JSON.parse(property.image);
-                                          return Array.isArray(parsed) ? parsed : [property.image];
-                                        } catch {
-                                          return property.image ? [property.image] : [];
-                                        }
-                                      })();
-                                    
-                                      setSelectedImages(images);
-                                      setIsImageModalOpen(true);
-                                    }}                                    
-                                  >
-                                    View
-                                  </button>
+                                <td style={{ padding: "16px" }}>
+                                  <div style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      height: "100%",
+                                      minHeight: "50px", // Adjust if needed
+                                      textAlign: "center",
+                                    }}>
+                                    <button
+                                      className="view-btn"
+                                      onClick={() => {
+                                        const images = (() => {
+                                          try {
+                                            const parsed = JSON.parse(property.image);
+                                            return Array.isArray(parsed) ? parsed : [property.image];
+                                          } catch {
+                                            return property.image ? [property.image] : [];
+                                          }
+                                        })();
+                                      
+                                        setSelectedImages(images);
+                                        setIsImageModalOpen(true);
+                                      }}                                    
+                                    >
+                                      View
+                                    </button>
+                                  </div>
                                 </td>
 
                                 <td>
@@ -597,6 +618,7 @@ export default function PropertyDashboard() {
                                 Category
                               </label>
                               <input
+                                id="category"
                                 type="text"
                                 placeholder="Category"
                                 value={editingProperty.category}
@@ -610,6 +632,7 @@ export default function PropertyDashboard() {
                                 Price (Rs.)
                               </label>
                               <input
+                                id="price"
                                 type="number"
                                 placeholder="Price"
                                 value={editingProperty.price ?? ""}
@@ -622,6 +645,7 @@ export default function PropertyDashboard() {
                                 District
                               </label>
                               <select
+                                id="district"
                                 value={editingProperty.district}
                                 onChange={(e) => setEditingProperty({ ...editingProperty, district: e.target.value })}
                                 className="border border-gray-300 p-2 rounded focus:border-blue-600 focus:ring-2 focus:ring-blue-400"
@@ -658,6 +682,7 @@ export default function PropertyDashboard() {
                                 Manager
                               </label>
                               <input
+                                id="manager"
                                 type="text"
                                 placeholder="Manager"
                                 value={editingProperty.manager}
@@ -666,10 +691,11 @@ export default function PropertyDashboard() {
                               />
                             </div>
                             <div className="form-row">
-                              <label htmlFor="typr" style={{ fontWeight: "600" }}>
+                              <label htmlFor="type" style={{ fontWeight: "600" }}>
                                 Type
                               </label>
                               <select
+                                id="type"
                                 value={editingProperty.type}
                                 onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
                                 className="border p-2 rounded"
@@ -687,6 +713,7 @@ export default function PropertyDashboard() {
                                 Latitude
                               </label>
                               <input
+                                id="latitude"
                                 type="number"
                                 placeholder="Latitude"
                                 value={editingProperty.latitude}
@@ -699,6 +726,7 @@ export default function PropertyDashboard() {
                                 Longitude
                               </label>
                               <input
+                                id="longitude"
                                 type="number"
                                 placeholder="Longitude"
                                 value={editingProperty.longitude}
@@ -711,6 +739,7 @@ export default function PropertyDashboard() {
                                 Contact Number
                               </label>
                               <input
+                                id="contact"
                                 type="text"
                                 placeholder="Contact Number"
                                 value={editingProperty.contact ?? ""}
@@ -724,6 +753,7 @@ export default function PropertyDashboard() {
                             Description
                             </label>
                             <textarea
+                              id="description"
                               placeholder="Description"
                               value={editingProperty.description}
                               onChange={(e) =>
