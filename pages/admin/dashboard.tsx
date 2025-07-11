@@ -181,6 +181,7 @@ export default function PropertyDashboard() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
 
   // Handle page change for both users and properties
@@ -555,16 +556,18 @@ export default function PropertyDashboard() {
                                       onClick={() => {
                                         const images = (() => {
                                           try {
-                                            const parsed = JSON.parse(property.images); // fixed from property.image to property.images
-                                            return Array.isArray(parsed) ? parsed : [parsed];
+                                            const parsed = JSON.parse(property.images);
+                                            return Array.isArray(parsed) ? parsed : [];
                                           } catch {
-                                            return property.images ? [property.images] : [];
+                                            return [];
                                           }
                                         })();
-
+                                      
+                                        setSelectedPropertyId(property.id); // Set this for upload logic
                                         setSelectedImages(images);
+                                        setCurrentImageIndex(0); // Reset index on open
                                         setIsImageModalOpen(true);
-                                      }}
+                                      }}                                      
                                     >
                                       View
                                     </button>
@@ -646,11 +649,22 @@ export default function PropertyDashboard() {
                                     onClick={() => {
                                       const updatedImages = [...selectedImages];
                                       updatedImages.splice(currentImageIndex, 1);
+                                    
                                       setSelectedImages(updatedImages);
                                       setCurrentImageIndex((prev) =>
                                         prev >= updatedImages.length ? updatedImages.length - 1 : prev
                                       );
-                                    }}
+                                    
+                                      // Immediately update DB
+                                      fetch("/api/properties", {
+                                        method: "PUT",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                          ...properties.find((p) => p.id === selectedPropertyId),
+                                          images: updatedImages,
+                                        }),
+                                      });
+                                    }}                                    
                                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                   >
                                     Delete
@@ -678,62 +692,63 @@ export default function PropertyDashboard() {
                               />
 
                               <button
-                                className="bg-blue-600 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700"
+                                className="bg-blue-600 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700 disabled:opacity-50"
+                                disabled={isUploading}
                                 onClick={async () => {
                                   if (!selectedFile || !selectedPropertyId) {
                                     alert("Please choose a file.");
                                     return;
                                   }
 
-                                  const formData = new FormData();
-                                  formData.append("file", file); // `file` is from input[type="file"]
-
-                                  const res = await fetch("/api/upload-image", {
-                                    method: "POST",
-                                    body: formData,
-                                  });
+                                  setIsUploading(true);
 
                                   try {
-                                    const res = await fetch("/api/upload", {
+                                    const formData = new FormData();
+                                    formData.append("file", selectedFile);
+                                    formData.append("propertyId", selectedPropertyId.toString());
+
+                                    const res = await fetch("/api/upload-image", {
                                       method: "POST",
                                       body: formData,
                                     });
-
-                                    if (res.ok) {
-                                      const { newImagePath } = await res.json();
-
-                                      // Append new image to the selectedImages array
-                                      setSelectedImages((prev) => [...prev, newImagePath]);
-
-                                      // Also update the property in the DB
+                                    
+                                    if (!res.ok) {
+                                      const error = await res.json();
+                                      alert("Upload failed: " + error.message);
+                                      return;
+                                    }
+                                    
+                                    const { newImagePath } = await res.json(); 
+                                    
+                                    if (newImagePath) {
+                                      // Now update DB
                                       const updatedProperty = {
                                         ...properties.find(p => p.id === selectedPropertyId),
-                                        images: JSON.stringify([...selectedImages, newImagePath]),
+                                        images: [...selectedImages, newImagePath]
                                       };
-
+                                    
                                       await fetch("/api/properties", {
                                         method: "PUT",
                                         headers: { "Content-Type": "application/json" },
                                         body: JSON.stringify(updatedProperty),
                                       });
-
-                                      alert("Image added successfully!");
-                                    } else {
-                                      const err = await res.json();
-                                      alert("Upload failed: " + err.message);
-                                    }
+                                    
+                                      setSelectedImages((prev) => [...prev, newImagePath]);
+                                      alert("Image uploaded successfully!");
+                                    }                                    
                                   } catch (err) {
-                                    console.error(err);
+                                    console.error("Upload error:", err);
                                     alert("Something went wrong.");
+                                  } finally {
+                                    setIsUploading(false);
                                   }
                                 }}
                               >
-                                Add Image
+                                {isUploading ? "Uploading..." : "Add Image"}
                               </button>
 
                               <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
                             </div>
-
                           </div>
                         </div>
                       )}
