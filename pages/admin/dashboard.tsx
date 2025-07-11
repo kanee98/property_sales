@@ -24,6 +24,7 @@ interface Property {
   type: string;
   manager: string;
   contact: number;
+  status: number;
 }
 
 export interface Inquiry {
@@ -127,10 +128,13 @@ export default function PropertyDashboard() {
 
   // Filter properties based on search term
   const filteredProperties = properties.filter(property =>
-    property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.type.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
-  );
+    property.status === 1 && (
+      property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      property.type.toLowerCase().includes(searchTerm.toLowerCase())
+      // add other search criteria if needed
+    )
+  );  
 
   // Filter inquires based on search term
   const filteredInquiries = inquiries.filter(inquiry =>
@@ -163,9 +167,17 @@ export default function PropertyDashboard() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
+
 
   // Handle page change for both users and properties
   const handlePageChange = (page: number) => {
@@ -183,10 +195,61 @@ export default function PropertyDashboard() {
     }
   };
   
-
-  const handleDelete = (id: number) => {
-    console.log("Delete property with ID:", id);
-    // Perform the delete action here (e.g., remove from the properties array)
+  function showMessage(message: string) {
+    setModalMessage(message);
+    setIsMessageModalOpen(true);
+    setIsFadingOut(false); // start fully visible
+  
+    // After 2.5 seconds, start fade-out
+    setTimeout(() => {
+      setIsFadingOut(true);
+    }, 2500);
+  
+    // After 3 seconds total, close modal completely
+    setTimeout(() => {
+      setIsMessageModalOpen(false);
+      setModalMessage(null);
+      setIsFadingOut(false);
+    }, 3000);
+  }
+  
+  const handleDelete = async (propertyId: number) => {
+    try {
+      const propertyToUpdate = properties.find((p) => p.id === propertyId);
+      if (!propertyToUpdate) {
+        alert("Property not found.");
+        return;
+      }
+  
+      // Destructure to exclude 'images'
+      const { images, ...propertyDataWithoutImages } = propertyToUpdate;
+  
+      // Update only the status
+      const updatedProperty = {
+        ...propertyDataWithoutImages,
+        status: 0,
+      };
+  
+      const res = await fetch("/api/properties", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProperty),
+      });
+  
+      if (res.ok) {
+        const updated = await res.json();
+        setProperties((prev) =>
+          prev.map((p) => (p.id === updated.id ? updated : p))
+        );
+        showMessage("Property successfully marked as inactive.");
+      } else {
+        const err = await res.json();
+        showMessage("Delete failed: " + err.message);
+      }
+    } catch (err) {
+      console.error(err);
+      showMessage("Something went wrong during delete.");
+    }
   };
   
   return (  
@@ -499,7 +562,10 @@ export default function PropertyDashboard() {
                                   </button>
 
                                   <button
-                                    onClick={() => handleDelete(property.id)}
+                                    onClick={() => {
+                                      setPropertyToDelete(property.id);
+                                      setIsDeleteModalOpen(true);
+                                    }}
                                     className="delete-btn"
                                   >
                                     Delete
@@ -543,6 +609,46 @@ export default function PropertyDashboard() {
                           ) : (
                             <p>No images available</p>
                           )}
+                          </div>
+                        </div>
+                      )}
+
+                      {isDeleteModalOpen && (
+                        <div className="modal-overlay">
+                          <div className="modal-content">
+                            <h3>Confirm Delete</h3>
+                            <p>Are you sure you want to delete this property?</p>
+                            <div className="modal-buttons">
+                              <button
+                                className="button-cancel"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="button-delete"
+                                onClick={() => {
+                                  if (propertyToDelete !== null) {
+                                    handleDelete(propertyToDelete);
+                                  }
+                                  setIsDeleteModalOpen(false);
+                                }}
+                              >
+                                Yes, Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isMessageModalOpen && (
+                        <div
+                          className={`message-modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-500
+                            ${isFadingOut ? "opacity-0" : "opacity-100"}`}
+                          style={{ zIndex: 9999 }}
+                        >
+                          <div className="bg-white p-6 rounded shadow-lg max-w-sm text-center">
+                            {modalMessage}
                           </div>
                         </div>
                       )}
