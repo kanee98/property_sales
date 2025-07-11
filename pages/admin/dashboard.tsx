@@ -191,7 +191,7 @@ export default function PropertyDashboard() {
   };
 
   // Handle Edit
-  const handleEdit = (propertyId: number) => {
+  const handleEditProperties = (propertyId: number) => {
     const property = properties.find(p => p.id === propertyId);
     if (property) {
       setEditingProperty(property);
@@ -235,7 +235,7 @@ export default function PropertyDashboard() {
     }, 3000);
   }
   
-  const handleDelete = async (propertyId: number) => {
+  const handleDeleteProperties = async (propertyId: number) => {
     try {
       const propertyToUpdate = properties.find((p) => p.id === propertyId);
       if (!propertyToUpdate) {
@@ -737,7 +737,7 @@ export default function PropertyDashboard() {
 
                       {isDeleteModalOpen && (
                         <div className="modal-overlay">
-                          <div className="modal-content">
+                          <div className="modal-content-delete">
                             <h3>Confirm Delete</h3>
                             <p>Are you sure you want to delete this property?</p>
                             <div className="modal-buttons">
@@ -751,7 +751,7 @@ export default function PropertyDashboard() {
                                 className="button-delete"
                                 onClick={() => {
                                   if (propertyToDelete !== null) {
-                                    handleDelete(propertyToDelete);
+                                    handleDeleteProperties(propertyToDelete);
                                   }
                                   setIsDeleteModalOpen(false);
                                 }}
@@ -1069,14 +1069,14 @@ export default function PropertyDashboard() {
                                 <td>{inquiry.status === 1 ? "Active" : "Pending"}</td>
                                 <td>
                                   <button
-                                    onClick={() => handleEdit(inquiry.id)}
+                                    // onClick={() => handleEdit(inquiry.id)}
                                     className="edit-btn"
                                     style={{ marginRight: '10px' }}
                                   >
                                     Edit
                                   </button>
                                   <button
-                                    onClick={() => handleDelete(inquiry.id)}
+                                    // onClick={() => handleDelete(inquiry.id)}
                                     className="delete-btn"
                                   >
                                     Delete
@@ -1161,14 +1161,14 @@ export default function PropertyDashboard() {
                                 <td>
                                   {/* Edit and Delete buttons */}
                                   <button
-                                    onClick={() => handleEdit(user.id)}
+                                    // onClick={() => handleEdit(user.id)}
                                     className="edit-btn"
                                     style={{ marginRight: '10px' }}
                                   >
                                     Edit
                                   </button>
                                   <button
-                                    onClick={() => handleDelete(user.id)}
+                                    // onClick={() => handleDelete(user.id)}
                                     className="delete-btn"
                                   >
                                     Delete
