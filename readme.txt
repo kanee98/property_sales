@@ -10,3 +10,6 @@ npx prisma migrate deploy
 node createAdmin.ts
 
 node --loader ts-node/esm createAdmin.ts
+
+yarn prisma migrate dev --name init
+node --loader ts-node/esm prisma/seed.ts
