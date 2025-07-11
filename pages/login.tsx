@@ -6,7 +6,7 @@ import Image from 'next/image';
 import "antd/dist/reset.css";
 import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import "../components/login.css";
-import Logo from "../src/img/Prime Ceylon Logo.jpeg";
+import Logo from "../src/img/Propwise Logo.jpg";
 
 export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
@@ -111,7 +111,7 @@ export default function AdminLogin() {
           <Image
             src={Logo}
             alt="Login Illustration"
-            width={800}
+            width={900}
             height={600}
             priority
           />

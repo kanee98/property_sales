@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import "../components/styles.css";
-import Logo from "../src/img/Prime Ceylon Logo No BG.png";
+import Logo from "../src/img/Propwise Logo No BG.png";
 
 interface Property {
   id: number;
@@ -90,7 +90,7 @@ export default function ListingsPage() {
         {/* Logo + Name container */}
         <div className="flex items-center space-x-3">
           <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-          <h1 className="text-3xl font-bold">Prime Ceylon</h1>
+          <h1 className="text-3xl font-bold">Propwise</h1>
         </div>
 
         {/* Navigation */}
@@ -187,11 +187,26 @@ export default function ListingsPage() {
       <div className="w-3/4 grid grid-cols-2 gap-6 p-4">
         {propertiesToDisplay.map((property) => (
           <div key={property.id} className="border p-4 rounded-lg shadow-lg">
-            <img
-              src={property.images}
-              alt={property.title}
-              className="w-full h-48 object-cover rounded-md"
-            />
+            {(() => {
+              let imageSrc = "";
+              try {
+                const images = JSON.parse(property.images);
+                if (Array.isArray(images) && images.length > 0) {
+                  imageSrc = images[0];
+                }
+              } catch (err) {
+                console.error("Failed to parse images:", err);
+              }
+
+              return (
+                <img
+                  src={imageSrc || "/img/default.jpg"} // fallback image if none found
+                  alt={property.title}
+                  className="w-full h-48 object-cover rounded-md"
+                />
+              );
+            })()}
+
             <h2 className="text-lg font-semibold mt-2">{property.title}</h2>
             <p>{property.description}</p>
             <p className="font-bold text-green-600">${property.price}</p>

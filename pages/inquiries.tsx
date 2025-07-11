@@ -1,103 +1,10 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation"; // useRouter() in App Router
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import "antd/dist/reset.css";
-// import "../components/inquiries.css";
-// import "../components/styles.css";
-// import Logo from "../src/img/Prime Ceylon Logo.jpeg";
-
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCheck, faTag, faSyncAlt, faUser, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-
-// export default function InquiriesPage() {
-//   const [isClient, setIsClient] = useState(false);
-
-//   useEffect(() => {
-//     setIsClient(true); // Ensure styles are loaded before rendering
-//   }, []);
-
-//   if (!isClient) return null;
-
-//   const redirectToListings = () => {
-//     window.location.href = "/";
-//   };
-
-//   return (
-//     <>
-//     {/* <section className="landing">
-//     <div className="landing-bg"></div> 
-//         <header>
-//             <div className="flex items-center space-x-3">
-//                 <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-//                 <h1 className="text-3xl font-bold">Prime Ceylon</h1>
-//             </div>
-        
-//             <nav className="space-x-4">
-//             <button type="button" className="border p-2 rounded w-15" onClick={redirectToListings}>
-//                 Back
-//             </button>
-//             </nav>
-//         </header>
-//     </section> */}
-
-//     <section className="whyChooseUs">
-//       <h4 className="title">Why Choose Us?</h4>
-//       <hr className="titleMark"/>
-//       <div className="reasons">
-//         <div className="reason">
-//           <FontAwesomeIcon icon={faCheck} size="2x" />
-//           <div className="reason-text">
-//             <h3>Quick</h3>
-//             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsa, a fuga sed maxime beatae earum tenetur possimus dignissimos ea.</p>
-//           </div>
-//         </div>
-//         <div className="reason">
-//           <FontAwesomeIcon icon={faTag} size="2x" />
-//           <div className="reason-text">
-//             <h3>Free</h3>
-//             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum obcaecati sit nihil porro molestias consectetur dolore, laudantium recusandae iure quasi!</p>
-//           </div>
-//         </div>
-//         <div className="reason">
-//           <FontAwesomeIcon icon={faSyncAlt} size="2x" />
-//           <div className="reason-text">
-//             <h3>Easy</h3>
-//             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda veritatis commodi officia tempore nulla doloribus officiis cupiditate ducimus consequatur ut?</p>
-//           </div>
-//         </div>
-//         <div className="reason">
-//           <FontAwesomeIcon icon={faUser} size="2x" />
-//           <div className="reason-text">
-//             <h3>Independent</h3>
-//             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptate culpa sunt itaque minima harum explicabo placeat dolores maiores consequuntur?</p>
-//           </div>
-//         </div>
-    
-//         <div className="reason">
-//           <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-//           <div className="reason-text">
-//             <h3>Awesome</h3>
-//             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi quia, illum et deserunt temporibus omnis neque similique aut inventore in!</p>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//     </>
-//   );
-// }
-
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
 import Link from 'next/link';
 import Image from 'next/image';
 import 'boxicons/css/boxicons.min.css';
 import '../components/dashboard.css';
 import SidebarScript from "../components/SidebarScript"; 
 import { useEffect, useState } from "react";
-import Logo from "../src/img/Prime Ceylon Logo No BG.png";
+import Logo from "../src/img/Propwise Logo No BG.png";
 import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTag, faSyncAlt, faUser, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
@@ -136,7 +43,7 @@ export default function InquiriesPage() {
           <Link href="#" className="brand">
             {/* <i className='bx bxs-smile bx-lg'></i> */}
             <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-            <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Prime Ceylon</span>
+            <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Propwise</span>
           </Link>
           <ul className="side-menu top">
             <li className={activeTab === "inquiries" ? "active" : ""}>
