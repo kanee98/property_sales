@@ -263,7 +263,7 @@ export default function PropertyDashboard() {
         setProperties((prev) =>
           prev.map((p) => (p.id === updated.id ? updated : p))
         );
-        showMessage("Property successfully marked as inactive.");
+        showMessage("Property successfully deleted.");
       } else {
         const err = await res.json();
         showMessage("Delete failed: " + err.message);
