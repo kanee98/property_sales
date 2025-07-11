@@ -1,44 +1,78 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import nodemailer from "nodemailer";
-import prisma from "../../lib/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     try {
-      const { companyName, contactPerson, email, phone, requirements, budget, attachment } = req.body;
-      
-      // Store inquiry in the database
-      const inquiry = await prisma.inquiry.create({
+      const inquiries = await prisma.inquiry.findMany();
+      return res.status(200).json(inquiries);
+    } catch (error) {
+      console.error("GET error:", error);
+      return res.status(500).json({ error: "Error fetching inquiries" });
+    }
+  }
+
+  if (req.method === "POST") {
+    const { companyName, contactPerson, email, phone, requirements, budget, attachments, status } = req.body;
+
+    try {
+      const newInquiry = await prisma.inquiry.create({
         data: {
           companyName,
           contactPerson,
           email,
           phone,
           requirements,
-          budget,
-          // attachment,
-          // status: "New",
+          budget: budget ?? null,
+          attachments: attachments ? JSON.stringify(attachments) : null,
+          status,
         },
       });
-      
-      // Send admin notification
-      const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-      });
-      await transporter.sendMail({
-        from: email,
-        to: process.env.ADMIN_EMAIL,
-        subject: "New Corporate Inquiry Received",
-        text: `Company: ${companyName}\nContact: ${contactPerson}\nEmail: ${email}\nPhone: ${phone}\nRequirements: ${requirements}\nBudget: ${budget}`,
-      });
-      
-      res.status(201).json({ message: "Inquiry submitted successfully", inquiry });
+      return res.status(201).json(newInquiry);
     } catch (error) {
-      console.error("Error submitting inquiry:", error);
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST error:", error);
+      return res.status(500).json({ error: "Error creating inquiry" });
     }
-  } else {
-    res.status(405).json({ message: "Method Not Allowed" });
   }
+
+  if (req.method === "PUT") {
+    const { id, companyName, contactPerson, email, phone, requirements, budget, attachments, status } = req.body;
+
+    try {
+      const updatedInquiry = await prisma.inquiry.update({
+        where: { id },
+        data: {
+          companyName,
+          contactPerson,
+          email,
+          phone,
+          requirements,
+          budget: budget ?? null,
+          attachments: attachments ? JSON.stringify(attachments) : null,
+          status,
+        },
+      });
+      return res.status(200).json(updatedInquiry);
+    } catch (error) {
+      console.error("PUT error:", error);
+      return res.status(500).json({ error: "Error updating inquiry" });
+    }
+  }
+
+  if (req.method === "DELETE") {
+    const { id } = req.body;
+
+    try {
+      await prisma.inquiry.delete({ where: { id } });
+      return res.status(200).json({ message: "Inquiry deleted" });
+    } catch (error) {
+      console.error("DELETE error:", error);
+      return res.status(500).json({ error: "Error deleting inquiry" });
+    }
+  }
+
+  res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+  res.status(405).end(`Method ${req.method} Not Allowed`);
 }

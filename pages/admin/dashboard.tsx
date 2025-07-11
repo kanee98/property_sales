@@ -22,15 +22,30 @@ interface Property {
   type: string;
 }
 
+export interface Inquiry {
+  id: number;
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  requirements: string;
+  budget?: number;
+  attachments?: any; // You can make this `string[]` if it's always an array of files
+  createdAt: string; // or Date depending on how you handle it
+  status: number;
+}
+
 const itemsPerPage = 6;
 
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
+  const [activeInquiries, setActiveInquiries] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [properties, setProperties] = useState<Property[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
   useEffect(() => {
     fetchProperties();
@@ -55,6 +70,15 @@ export default function PropertyDashboard() {
         setActiveListings(response.data.length); // Set the count dynamically
       })
       .catch((error) => console.error("Error fetching properties:", error));
+  }, []);
+
+  useEffect(() => {
+    axios.get("/api/inquiries")
+      .then((response) => {
+        setActiveInquiries(response.data.length); // Set the count dynamically
+        setInquiries(response.data);
+      })
+      .catch((error) => console.error("Error fetching inquiries:", error));
   }, []);
 
   useEffect(() => {
@@ -104,6 +128,15 @@ export default function PropertyDashboard() {
     property.type.toLowerCase().includes(searchTerm.toLowerCase()) // You can add more search criteria here
   );
 
+  // Filter inquires based on search term
+  const filteredInquiries = inquiries.filter(inquiry =>
+    inquiry.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    inquiry.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    inquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    inquiry.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    inquiry.requirements.toLowerCase().includes(searchTerm.toLowerCase())
+  );  
+
   // Filter users based on search term
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -118,6 +151,7 @@ export default function PropertyDashboard() {
   const usersToDisplay = filteredUsers.slice(startIndex, endIndex);
 
   const propertiesToDisplay = filteredProperties.slice(startIndex, endIndex);
+  const inquiriesToDisplay = filteredInquiries.slice(startIndex, endIndex);
 
   const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
   const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
@@ -283,7 +317,7 @@ export default function PropertyDashboard() {
                     <i className='bx bxs-dollar-circle' ></i>
                     <span className="text">
                       <h3>Pending Approvals</h3>
-                      <p>1</p>
+                      <p>{activeInquiries}</p>
                     </span>
                   </li>
                   <li>
@@ -450,37 +484,36 @@ export default function PropertyDashboard() {
                         <thead>
                           <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Type</th>
-                            {/* <th>Image</th> */}
-                            <th>Actions</th> 
+                            <th>Company</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Budget</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {propertiesToDisplay.length > 0 ? (
-                            propertiesToDisplay.map((property) => (
-                              <tr key={property.id}>
-                                <td>{property.id}</td>
-                                <td>{property.title}</td>
-                                <td>{property.description}</td>
-                                <td>${property.price.toLocaleString()}</td>
-                                <td>{property.type}</td>
-                                {/* <td>
-                                  <img src={property.image} alt={property.name} width="100" />
-                                </td> */}
+                          {inquiriesToDisplay.length > 0 ? (
+                            inquiriesToDisplay.map((inquiry) => (
+                              <tr key={inquiry.id}>
+                                <td>{inquiry.id}</td>
+                                <td>{inquiry.companyName}</td>
+                                <td>{inquiry.contactPerson}</td>
+                                <td>{inquiry.email}</td>
+                                <td>{inquiry.phone}</td>
+                                <td>{inquiry.budget ? `$${inquiry.budget.toLocaleString()}` : '—'}</td>
+                                <td>{inquiry.status === 1 ? "Active" : "Pending"}</td>
                                 <td>
-                                  {/* Edit and Delete buttons */}
                                   <button
-                                    onClick={() => handleEdit(property.id)}
+                                    onClick={() => handleEdit(inquiry.id)}
                                     className="edit-btn"
                                     style={{ marginRight: '10px' }}
                                   >
                                     Edit
                                   </button>
                                   <button
-                                    onClick={() => handleDelete(property.id)}
+                                    onClick={() => handleDelete(inquiry.id)}
                                     className="delete-btn"
                                   >
                                     Delete
@@ -488,10 +521,10 @@ export default function PropertyDashboard() {
                                 </td>
                               </tr>
                             ))
-                            ): (
-                              <tr>
-                                <td colSpan={4} className="py-4 text-center">No properties found</td>
-                              </tr>
+                          ) : (
+                            <tr>
+                              <td colSpan={8} className="py-4 text-center">No inquiries found</td>
+                            </tr>
                           )}
                         </tbody>
                       </table>
