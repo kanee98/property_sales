@@ -30,6 +30,9 @@ export default function ListingsPage() {
     corporate: 0,
     retail: 0,
     residential: 0,
+    for_sale: 0,
+    for_rent: 0,
+    wanted: 0
   });
 
   useEffect(() => {
@@ -46,12 +49,18 @@ export default function ListingsPage() {
     const corporate = data.filter(property => property.category === "Corporate").length;
     const retail = data.filter(property => property.category === "Retail").length;
     const residential = data.filter(property => property.category === "Residential").length;
+    const for_sale = data.filter(property => property.type === "For Sale").length;
+    const for_rent = data.filter(property => property.type === "For Rent").length;
+    const wanted = data.filter(property => property.type === "Wanted").length;
 
     setStats({
       totalProperties,
       corporate,
       retail,
       residential,
+      for_sale,
+      for_rent,
+      wanted
     });
   };
 
@@ -157,9 +166,24 @@ export default function ListingsPage() {
           <h2 className="text-3xl font-bold">{stats.retail}</h2>
           <p>Retail</p>
         </div>
-        <div className="stat right-corner">
+        <div className="stat">
           <h2 className="text-3xl font-bold">{stats.residential}</h2>
           <p>Residential</p>
+        </div>
+        <div className="stat">
+          <h2 className="text-3xl font-bold">{stats.for_sale}</h2>
+          <p>For Sale</p>
+        </div><div className="stat">
+          <h2 className="text-3xl font-bold">{stats.for_rent}</h2>
+          <p>For Rent</p>
+        </div>
+        <div className="stat">
+          <h2 className="text-3xl font-bold">{stats.wanted}</h2>
+          <p>Wanted</p>
+        </div>
+        <div className="stat right-corner">
+          <h2 className="text-3xl font-bold">20+</h2>
+          <p>Customers</p>
         </div>
       </div>
     </section>
