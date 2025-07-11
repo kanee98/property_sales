@@ -13,7 +13,7 @@ interface Property {
   images: string;
   latitude: number;
   longitude: number;
-  type: string; // Corporate or Retail
+  category: string; // Corporate or Retail
 }
 
 const itemsPerPage = 6;
@@ -40,9 +40,9 @@ export default function ListingsPage() {
 
   const calculateStats = (data: Property[]) => {
     const totalProperties = data.length;
-    const corporate = data.filter(property => property.type === "Corporate").length;
-    const retail = data.filter(property => property.type === "Retail").length;
-    const residential = data.filter(property => property.type === "Residential").length;
+    const corporate = data.filter(property => property.category === "Corporate").length;
+    const retail = data.filter(property => property.category === "Retail").length;
+    const residential = data.filter(property => property.category === "Residential").length;
 
     setStats({
       totalProperties,
@@ -55,7 +55,7 @@ export default function ListingsPage() {
   const filteredProperties = properties.filter(
     (property) =>
       property.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedType === "" || property.type === selectedType)
+      (selectedType === "" || property.category === selectedType)
   );
 
   const redirectToLogin = () => {
@@ -90,7 +90,7 @@ export default function ListingsPage() {
         {/* Logo + Name container */}
         <div className="flex items-center space-x-3">
           <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-          <h1 className="text-3xl font-bold">Propwise</h1>
+          <h1 className="text-3xl font-bold">PROPWISE</h1>
         </div>
 
         {/* Navigation */}
