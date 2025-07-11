@@ -576,7 +576,7 @@ export default function PropertyDashboard() {
                                 </td>
 
                                 <td>
-                                <button
+                                  <button
                                     onClick={() => {
                                       setEditingProperty(property);
                                       setIsEditModalOpen(true);
@@ -592,7 +592,7 @@ export default function PropertyDashboard() {
                                       setPropertyToDelete(property.id);
                                       setIsDeleteModalOpen(true);
                                     }}
-                                    className="delete-btn"
+                                    className="delete-btn" 
                                   >
                                     Delete
                                   </button>
@@ -630,18 +630,18 @@ export default function PropertyDashboard() {
                                   className="w-96 h-60 object-cover rounded border mx-auto"
                                 />
 
-                                <div className="flex justify-center mt-4 space-x-2">
+                                <div className="pagination-controls">
                                   <button
                                     disabled={currentImageIndex === 0}
                                     onClick={() => setCurrentImageIndex((prev) => prev - 1)}
-                                    className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                                    className="pagination-btn"
                                   >
                                     Previous
                                   </button>
                                   <button
                                     disabled={currentImageIndex === selectedImages.length - 1}
                                     onClick={() => setCurrentImageIndex((prev) => prev + 1)}
-                                    className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                                    className="pagination-btn"
                                   >
                                     Next
                                   </button>
@@ -665,7 +665,7 @@ export default function PropertyDashboard() {
                                         }),
                                       });
                                     }}                                    
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                    className="delete-btn"
                                   >
                                     Delete
                                   </button>
@@ -691,8 +691,10 @@ export default function PropertyDashboard() {
                                 className="border border-gray-300 rounded px-4 py-2"
                               />
 
+                              <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
                               <button
-                                className="bg-blue-600 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700 disabled:opacity-50"
+                                className="button-save"
+                                style={{marginTop:"10px",}}
                                 disabled={isUploading}
                                 onClick={async () => {
                                   if (!selectedFile || !selectedPropertyId) {
@@ -746,8 +748,6 @@ export default function PropertyDashboard() {
                               >
                                 {isUploading ? "Uploading..." : "Add Image"}
                               </button>
-
-                              <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
                             </div>
                           </div>
                         </div>
