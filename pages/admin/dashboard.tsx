@@ -199,23 +199,21 @@ export default function PropertyDashboard() {
     }
   };
   
-  // const uploadImage = async (file: File, propertyId: number) => {
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("propertyId", propertyId.toString());
-  
-  //   const res = await fetch("/api/properties", {
-  //     method: "POST",
-  //     body: formData,
-  //   });
-  
-  //   if (!res.ok) {
-  //     const err = await res.json();
-  //     throw new Error(err.message || "Upload failed");
-  //   }
-  
-  //   return res.json(); // returns { newImagePath, property }
-  // };
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newProperty, setNewProperty] = useState({
+    title: "",
+    description: "",
+    price: null,
+    category: "",
+    images: [],
+    latitude: null,
+    longitude: null,
+    district: "",
+    type: "",
+    manager: "",
+    contact: "",
+    status: 1,
+  });
 
   function showMessage(message: string) {
     setModalMessage(message);
@@ -482,10 +480,10 @@ export default function PropertyDashboard() {
 
                   <div className="table-data">
                     <div className="order">
-                      <div className="head">
-                        <h3>Properties List</h3>
-                        <i className='bx bx-plus icon'></i>
-                      </div>
+                    <div className="head">
+                      <h3>Properties List</h3>
+                      <i className="bx bx-plus icon cursor-pointer" onClick={() => setIsAddModalOpen(true)}></i>
+                    </div>
 
                       <table>
                         <thead>
@@ -734,6 +732,111 @@ export default function PropertyDashboard() {
                         </div>
                       )}
 
+                      {isAddModalOpen && (
+                        <div className="modal-container" onClick={() => setIsAddModalOpen(false)}>
+                          <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
+                            <h2 className="text-xl font-semibold mb-4" style={{ marginBottom: "3%" }}>Add New Property</h2>
+
+                            <button
+                              className="modal-close-btn"
+                              onClick={() => setIsAddModalOpen(false)}
+                              aria-label="Close"
+                            >
+                              &times;
+                            </button>
+
+                            {/* Form Fields */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="form-row-add">
+                                <input type="text" placeholder="Title" value={newProperty.title}
+                                  onChange={(e) => setNewProperty({ ...newProperty, title: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="text" placeholder="Category" value={newProperty.category}
+                                  onChange={(e) => setNewProperty({ ...newProperty, category: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="number" placeholder="Price" value={newProperty.price ?? ""}
+                                  onChange={(e) => setNewProperty({ ...newProperty, price: Number(e.target.value) })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="text" placeholder="Manager" value={newProperty.manager}
+                                  onChange={(e) => setNewProperty({ ...newProperty, manager: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="text" placeholder="Contact" value={newProperty.contact}
+                                  onChange={(e) => setNewProperty({ ...newProperty, contact: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="text" placeholder="District" value={newProperty.district}
+                                  onChange={(e) => setNewProperty({ ...newProperty, district: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="text" placeholder="Type" value={newProperty.type}
+                                  onChange={(e) => setNewProperty({ ...newProperty, type: e.target.value })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="number" placeholder="Latitude" value={newProperty.latitude ?? ""}
+                                  onChange={(e) => setNewProperty({ ...newProperty, latitude: Number(e.target.value) })} className="border p-2 rounded" />
+                                </div>
+                                <div className="form-row-add">
+                                <input type="number" placeholder="Longitude" value={newProperty.longitude ?? ""}
+                                  onChange={(e) => setNewProperty({ ...newProperty, longitude: Number(e.target.value) })} className="border p-2 rounded" />
+                              </div>
+                            </div>
+
+                            <textarea placeholder="Description"
+                              value={newProperty.description}
+                              onChange={(e) => setNewProperty({ ...newProperty, description: e.target.value })}
+                              className="border p-2 rounded mt-4 w-full"
+                            />
+
+                            <div className="button-container">
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch("/api/properties", {
+                                      method: "POST",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify(newProperty),
+                                    });
+
+                                    if (res.ok) {
+                                      const created = await res.json();
+                                      setProperties((prev) => [...prev, created]);
+                                      setIsAddModalOpen(false);
+                                      // reset form
+                                      setNewProperty({
+                                        title: "",
+                                        description: "",
+                                        price: null,
+                                        category: "",
+                                        images: [],
+                                        latitude: null,
+                                        longitude: null,
+                                        district: "",
+                                        type: "",
+                                        manager: "",
+                                        contact: "",
+                                        status: 1,
+                                      });
+                                    } else {
+                                      const err = await res.json();
+                                      alert("Failed to create property: " + err.message);
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
+                                    alert("Something went wrong while adding the property.");
+                                  }
+                                }}
+                                className="button-save"
+                              >
+                                Add Property
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {isDeleteModalOpen && (
                         <div className="modal-overlay">
@@ -855,15 +958,18 @@ export default function PropertyDashboard() {
                               <label htmlFor="category" style={{ fontWeight: "600" }}>
                                 Category
                               </label>
-                              <input
+                              <select
                                 id="category"
-                                type="text"
                                 placeholder="Category"
                                 value={editingProperty.category}
                                 onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
                                 required
                                 className="border p-2 rounded"
-                              />
+                              >
+                                <option value="Corporate ">Corporate </option>
+                                <option value="Retail">Retail</option>
+                                <option value="Residential">Residential</option>
+                              </select>
                             </div>
                             <div className="form-row">
                               <label htmlFor="price" style={{ fontWeight: "600" }}>
@@ -938,9 +1044,9 @@ export default function PropertyDashboard() {
                                 onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
                                 className="border p-2 rounded"
                               >
-                                <option value="" disabled>
+                                {/* <option value="" disabled>
                                   Select Type (e.g., For Sale)
-                                </option>
+                                </option> */}
                                 <option value="For Sale">For Sale</option>
                                 <option value="For Rent">For Rent</option>
                                 <option value="Wanted">Wanted</option>
