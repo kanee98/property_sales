@@ -542,124 +542,207 @@ export default function PropertyDashboard() {
                   {isEditModalOpen && editingProperty && (
                     <div className="modal-container">
                       <div className="modal-content">
-                        <h2 className="text-2xl font-semibold mb-4">Edit Property</h2>
+                      <h2 className="text-2xl font-semibold mb-4" style={{ marginBottom: "3%" }}>
+                        Edit Property
+                      </h2>
+                      <form
+                        onSubmit={async (e) => {
+                          e.preventDefault();
 
-                        <form
-                          onSubmit={async (e) => {
-                            e.preventDefault();
-                            try {
-                              const res = await fetch("/api/properties", {
-                                method: "PUT",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(editingProperty),
-                              });
+                          try {
+                            // Create a copy of editingProperty without 'images' field
+                            const { images, ...propertyDataWithoutImages } = editingProperty;
 
-                              if (res.ok) {
-                                const updated = await res.json();
-                                setProperties((prev) =>
-                                  prev.map((p) => (p.id === updated.id ? updated : p))
-                                );
-                                setIsEditModalOpen(false);
-                              } else {
-                                const err = await res.json();
-                                alert("Update failed: " + err.message);
-                              }
-                            } catch (err) {
-                              console.error(err);
-                              alert("Something went wrong");
+                            // Now send propertyDataWithoutImages instead of editingProperty
+                            const res = await fetch("/api/properties", {
+                              method: "PUT",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify(propertyDataWithoutImages),
+                            });
+
+                            if (res.ok) {
+                              const updated = await res.json();
+                              setProperties((prev) =>
+                                prev.map((p) => (p.id === updated.id ? updated : p))
+                              );
+                              setIsEditModalOpen(false);
+                            } else {
+                              const err = await res.json();
+                              alert("Update failed: " + err.message);
                             }
-                          }}
-                        >
+                          } catch (err) {
+                            console.error(err);
+                            alert("Something went wrong");
+                          }
+                        }}
+                      >
+
                           <div className="grid grid-cols-2 gap-4">
-                            <input
-                              type="text"
-                              placeholder="Title"
-                              value={editingProperty.title}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, title: e.target.value })}
+                            <div className="form-row">
+                              <label htmlFor="title" style={{ fontWeight: "600" }}>
+                                Title
+                              </label>
+                              <input
+                                id="title"
+                                type="text"
+                                placeholder="Title"
+                                value={editingProperty.title}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, title: e.target.value })}
+                                required
+                                style={{ padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid #ccc" }}
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="category" style={{ fontWeight: "600" }}>
+                                Category
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Category"
+                                value={editingProperty.category}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
+                                required
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="price" style={{ fontWeight: "600" }}>
+                                Price (Rs.)
+                              </label>
+                              <input
+                                type="number"
+                                placeholder="Price"
+                                value={editingProperty.price ?? ""}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, price: Number(e.target.value) })}
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="district" style={{ fontWeight: "600" }}>
+                                District
+                              </label>
+                              <select
+                                value={editingProperty.district}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, district: e.target.value })}
+                                className="border border-gray-300 p-2 rounded focus:border-blue-600 focus:ring-2 focus:ring-blue-400"
+                              >
+                                <option value="Ampara">Ampara</option>
+                                <option value="Anuradhapura">Anuradhapura</option>
+                                <option value="Badulla">Badulla</option>
+                                <option value="Batticaloa">Batticaloa</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Gampaha">Gampaha</option>
+                                <option value="Hambantota">Hambantota</option>
+                                <option value="Jaffna">Jaffna</option>
+                                <option value="Kalutara">Kalutara</option>
+                                <option value="Kandy">Kandy</option>
+                                <option value="Kegalle">Kegalle</option>
+                                <option value="Kilinochchi">Kilinochchi</option>
+                                <option value="Kurunegala">Kurunegala</option>
+                                <option value="Mannar">Mannar</option>
+                                <option value="Matale">Matale</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Moneragala">Moneragala</option>
+                                <option value="Mullaitivu">Mullaitivu</option>
+                                <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                <option value="Polonnaruwa">Polonnaruwa</option>
+                                <option value="Puttalam">Puttalam</option>
+                                <option value="Ratnapura">Ratnapura</option>
+                                <option value="Trincomalee">Trincomalee</option>
+                                <option value="Vavuniya">Vavuniya</option>
+                              </select>
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="manager" style={{ fontWeight: "600" }}>
+                                Manager
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Manager"
+                                value={editingProperty.manager}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, manager: e.target.value })}
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="typr" style={{ fontWeight: "600" }}>
+                                Type
+                              </label>
+                              <select
+                                value={editingProperty.type}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
+                                className="border p-2 rounded"
+                              >
+                                <option value="" disabled>
+                                  Select Type (e.g., For Sale)
+                                </option>
+                                <option value="For Sale">For Sale</option>
+                                <option value="For Rent">For Rent</option>
+                                <option value="Wanted">Wanted</option>
+                              </select>
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="latitude" style={{ fontWeight: "600" }}>
+                                Latitude
+                              </label>
+                              <input
+                                type="number"
+                                placeholder="Latitude"
+                                value={editingProperty.latitude}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, latitude: Number(e.target.value) })}
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="longitude" style={{ fontWeight: "600" }}>
+                                Longitude
+                              </label>
+                              <input
+                                type="number"
+                                placeholder="Longitude"
+                                value={editingProperty.longitude}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, longitude: Number(e.target.value) })}
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                            <div className="form-row">
+                              <label htmlFor="contact" style={{ fontWeight: "600" }}>
+                                Contact Number
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Contact Number"
+                                value={editingProperty.contact ?? ""}
+                                onChange={(e) => setEditingProperty({ ...editingProperty, contact: e.target.value })}
+                                className="border p-2 rounded"
+                              />
+                            </div>
+                          </div>
+                          <div className="form-row">
+                            <label htmlFor="description" style={{ fontWeight: "600" }}>
+                            Description
+                            </label>
+                            <textarea
+                              placeholder="Description"
+                              value={editingProperty.description}
+                              onChange={(e) =>
+                                setEditingProperty({ ...editingProperty, description: e.target.value })
+                              }
                               required
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Category"
-                              value={editingProperty.category}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
-                              required
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="number"
-                              placeholder="Price"
-                              value={editingProperty.price ?? ""}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, price: Number(e.target.value) })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="text"
-                              placeholder="District"
-                              value={editingProperty.district}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, district: e.target.value })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Manager"
-                              value={editingProperty.manager}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, manager: e.target.value })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Type (e.g., For Sale)"
-                              value={editingProperty.type}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="number"
-                              placeholder="Latitude"
-                              value={editingProperty.latitude}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, latitude: Number(e.target.value) })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="number"
-                              placeholder="Longitude"
-                              value={editingProperty.longitude}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, longitude: Number(e.target.value) })}
-                              className="border p-2 rounded"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Contact Number"
-                              value={editingProperty.contact ?? ""}
-                              onChange={(e) => setEditingProperty({ ...editingProperty, contact: Number(e.target.value) })}
-                              className="border p-2 rounded"
+                              className="border p-2 rounded mt-4 w-full"
                             />
                           </div>
 
-                          <textarea
-                            placeholder="Description"
-                            value={editingProperty.description}
-                            onChange={(e) =>
-                              setEditingProperty({ ...editingProperty, description: e.target.value })
-                            }
-                            required
-                            className="border p-2 rounded mt-4 w-full"
-                          />
-
-                          <div className="flex justify-end mt-6 space-x-2">
+                          <div className="button-container">
                             <button
                               type="button"
                               onClick={() => setIsEditModalOpen(false)}
-                              className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                              className="button-cancel"
                             >
                               Cancel
                             </button>
-                            <button
-                              type="submit"
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                            >
+                            <button type="submit" className="button-save">
                               Save Changes
                             </button>
                           </div>
