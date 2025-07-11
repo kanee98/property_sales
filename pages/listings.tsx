@@ -39,10 +39,11 @@ export default function ListingsPage() {
     fetch("/api/properties")
       .then((res) => res.json())
       .then((data) => {
-        setProperties(data);
-        calculateStats(data);
+        const activeProperties = data.filter((p: any) => p.status === 1); 
+        setProperties(activeProperties);
+        calculateStats(activeProperties);
       });
-  }, []);
+  }, []);  
 
   const calculateStats = (data: Property[]) => {
     const totalProperties = data.length;
