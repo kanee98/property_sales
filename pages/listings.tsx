@@ -13,7 +13,9 @@ interface Property {
   images: string;
   latitude: number;
   longitude: number;
+  district: string;
   category: string; // Corporate or Retail
+  type: string;
 }
 
 const itemsPerPage = 6;
@@ -22,6 +24,7 @@ export default function ListingsPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [stats, setStats] = useState({
     totalProperties: 0,
     corporate: 0,
@@ -52,11 +55,24 @@ export default function ListingsPage() {
     });
   };
 
-  const filteredProperties = properties.filter(
-    (property) =>
-      property.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedType === "" || property.category === selectedType)
-  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState<number | null>(100000000);
+  
+  const filteredProperties = properties.filter((property) => {
+    const matchesTitle = property.title.toLowerCase().includes(searchQuery.toLowerCase());
+  
+    const matchesCategory = selectedType === "" || property.category === selectedType;
+  
+    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(property.type);
+  
+    const matchesDistrict = selectedDistrict === "" || property.district === selectedDistrict;
+  
+    const matchesPrice = (!property.price || (property.price >= minPrice && (maxPrice === null || property.price <= maxPrice)));
+  
+    return matchesTitle && matchesCategory && matchesType && matchesDistrict && matchesPrice;
+  });  
 
   const redirectToLogin = () => {
     window.location.href = "/login";
@@ -157,10 +173,24 @@ export default function ListingsPage() {
         {/* Filter by Category */}
         <h4 className="font-semibold">By category:</h4>
         <div className="space-y-2">
-          {["For Sale", "For Rent", "Wanted"].map((category) => (
-            <div className="flex items-center space-x-2" key={category}>
-              <input type="checkbox" className="icheck"/>
-              <label>{category}</label>
+          {["For Sale", "For Rent", "Wanted"].map((type) => (
+            <div className="flex items-center space-x-2" key={type}>
+              <input
+                type="checkbox"
+                className="icheck"
+                checked={selectedTypes.includes(type)} // FIXED HERE
+                onChange={(e) => {
+                  const newSelection = [...selectedTypes]; // FIXED HERE
+                  if (e.target.checked) {
+                    newSelection.push(type);
+                  } else {
+                    const index = newSelection.indexOf(type);
+                    if (index > -1) newSelection.splice(index, 1);
+                  }
+                  setSelectedTypes(newSelection); // FIXED HERE
+                }}
+              />
+              <label>{type}</label>
             </div>
           ))}
         </div>
@@ -168,9 +198,17 @@ export default function ListingsPage() {
         {/* Filter by Location */}
         <h4 className="mt-4 font-semibold">By location</h4>
         <label className="block">Select District</label>
-        <select className="w-full border p-2 rounded">
+        <select
+          className="w-full border p-2 rounded"
+          value={selectedDistrict}
+          onChange={(e) => setSelectedDistrict(e.target.value)}
+        >
           <option value="">All Districts</option>
-          {[ "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya" ].map((district) => (
+          {[
+            "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota", "Jaffna",
+            "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale", "Matara", "Monaragala",
+            "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
+          ].map((district) => (
             <option key={district} value={district}>
               {district}
             </option>
@@ -179,8 +217,28 @@ export default function ListingsPage() {
 
         {/* Filter by Price */}
         <h4 className="mt-4 font-semibold">By price:</h4>
-        <p>Between <span className="font-bold">Rs.1,000</span> to <span className="font-bold">Rs.100,000,000</span></p>
-        <input type="range" className="w-full mt-2" min="0" max="1000" step="1"/>
+        <div className="flex space-x-2 items-center">
+          <input
+            type="number"
+            min={0}
+            value={minPrice}
+            onChange={(e) => setMinPrice(Number(e.target.value))}
+            placeholder="Min Price"
+            className="border p-2 rounded w-full"
+          />
+          <span>to</span>
+          <input
+            type="number"
+            min={0}
+            value={maxPrice === null ? "" : maxPrice}
+            onChange={(e) => {
+              const value = e.target.value;
+              setMaxPrice(value === "" ? null : Number(value));
+            }}
+            placeholder="Max Price"
+            className="border p-2 rounded w-full"
+          />
+        </div>
       </div>
       
       {/* Property Cards Section */}

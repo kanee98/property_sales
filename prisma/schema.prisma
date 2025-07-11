@@ -32,6 +32,7 @@ model Property {
   images      Json
   latitude    Float
   longitude   Float
+  district    String
   type        String
   createdAt   DateTime @default(now())
   manager     String // Contact details of property manager
