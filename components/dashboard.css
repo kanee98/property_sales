@@ -94,6 +94,17 @@ body {
 	box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   }
 
+  .modal-content-image {
+	background: white;
+	padding: 2rem;
+	border-radius: 8px;
+	max-width: 90%;
+	width: 800px; /* Wider modal */
+	max-height: 90vh;
+	overflow-y: auto;
+	position: relative;
+  }
+
   .modal-buttons {
 	margin-top: 1.5rem;
 	display: flex;

@@ -178,6 +178,10 @@ export default function PropertyDashboard() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+
 
   // Handle page change for both users and properties
   const handlePageChange = (page: number) => {
@@ -195,6 +199,24 @@ export default function PropertyDashboard() {
     }
   };
   
+  // const uploadImage = async (file: File, propertyId: number) => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("propertyId", propertyId.toString());
+  
+  //   const res = await fetch("/api/properties", {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+  
+  //   if (!res.ok) {
+  //     const err = await res.json();
+  //     throw new Error(err.message || "Upload failed");
+  //   }
+  
+  //   return res.json(); // returns { newImagePath, property }
+  // };
+
   function showMessage(message: string) {
     setModalMessage(message);
     setIsMessageModalOpen(true);
@@ -251,7 +273,7 @@ export default function PropertyDashboard() {
       showMessage("Something went wrong during delete.");
     }
   };
-  
+
   return (  
     <>
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
@@ -533,19 +555,20 @@ export default function PropertyDashboard() {
                                       onClick={() => {
                                         const images = (() => {
                                           try {
-                                            const parsed = JSON.parse(property.image);
-                                            return Array.isArray(parsed) ? parsed : [property.image];
+                                            const parsed = JSON.parse(property.images); // fixed from property.image to property.images
+                                            return Array.isArray(parsed) ? parsed : [parsed];
                                           } catch {
-                                            return property.image ? [property.image] : [];
+                                            return property.images ? [property.images] : [];
                                           }
                                         })();
-                                      
+
                                         setSelectedImages(images);
                                         setIsImageModalOpen(true);
-                                      }}                                    
+                                      }}
                                     >
                                       View
                                     </button>
+
                                   </div>
                                 </td>
 
@@ -583,35 +606,134 @@ export default function PropertyDashboard() {
                         </tbody>
                       </table>
 
-                      {isImageModalOpen && (                                       
+                      {isImageModalOpen && (
                         <div className="modal-container" onClick={() => setIsImageModalOpen(false)}>
-                          <div className="modal-content" onClick={e => e.stopPropagation()}>
+                          <div className="modal-content-image" onClick={(e) => e.stopPropagation()}>
                             <h2 className="text-xl font-semibold mb-4">Property Images</h2>
-                              <button
-                                onClick={() => setIsImageModalOpen(false)}
-                                className="modal-close-btn"
-                                aria-label="Close"
-                              >
-                                &times; {/* or "Close" text if you prefer */}
-                              </button>
-                              {/* Your modal content like image carousel here */}
-                          {selectedImages.length > 0 ? (
-                            <div className="flex overflow-x-scroll space-x-4">
-                              {selectedImages.map((img, idx) => (
+
+                            <button
+                              onClick={() => setIsImageModalOpen(false)}
+                              className="modal-close-btn"
+                              aria-label="Close"
+                            >
+                              &times;
+                            </button>
+
+                            {selectedImages.length > 0 ? (
+                              <div className="text-center">
                                 <img
-                                  key={idx}
-                                  src={img}
-                                  alt={`Property image ${idx + 1}`}
-                                  className="w-64 h-40 object-cover rounded border"
+                                  src={selectedImages[currentImageIndex]}
+                                  alt={`Property image ${currentImageIndex + 1}`}
+                                  className="w-96 h-60 object-cover rounded border mx-auto"
                                 />
-                              ))}
+
+                                <div className="flex justify-center mt-4 space-x-2">
+                                  <button
+                                    disabled={currentImageIndex === 0}
+                                    onClick={() => setCurrentImageIndex((prev) => prev - 1)}
+                                    className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                                  >
+                                    Previous
+                                  </button>
+                                  <button
+                                    disabled={currentImageIndex === selectedImages.length - 1}
+                                    onClick={() => setCurrentImageIndex((prev) => prev + 1)}
+                                    className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                                  >
+                                    Next
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      const updatedImages = [...selectedImages];
+                                      updatedImages.splice(currentImageIndex, 1);
+                                      setSelectedImages(updatedImages);
+                                      setCurrentImageIndex((prev) =>
+                                        prev >= updatedImages.length ? updatedImages.length - 1 : prev
+                                      );
+                                    }}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="text-center">No images available</p>
+                            )}
+
+                            {/* Add New Image Section */}
+                            <div className="mt-6 text-center space-y-2">
+                              <p className="text-sm text-gray-700">Add Image from Computer</p>
+
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    setSelectedFile(file);
+                                  }
+                                }}
+                                className="border border-gray-300 rounded px-4 py-2"
+                              />
+
+                              <button
+                                className="bg-blue-600 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700"
+                                onClick={async () => {
+                                  if (!selectedFile || !selectedPropertyId) {
+                                    alert("Please choose a file.");
+                                    return;
+                                  }
+
+                                  const formData = new FormData();
+                                  formData.append("file", selectedFile);
+                                  formData.append("propertyId", String(selectedPropertyId));
+
+                                  try {
+                                    const res = await fetch("/api/upload", {
+                                      method: "POST",
+                                      body: formData,
+                                    });
+
+                                    if (res.ok) {
+                                      const { newImagePath } = await res.json();
+
+                                      // Append new image to the selectedImages array
+                                      setSelectedImages((prev) => [...prev, newImagePath]);
+
+                                      // Also update the property in the DB
+                                      const updatedProperty = {
+                                        ...properties.find(p => p.id === selectedPropertyId),
+                                        images: JSON.stringify([...selectedImages, newImagePath]),
+                                      };
+
+                                      await fetch("/api/properties", {
+                                        method: "PUT",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(updatedProperty),
+                                      });
+
+                                      alert("Image added successfully!");
+                                    } else {
+                                      const err = await res.json();
+                                      alert("Upload failed: " + err.message);
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
+                                    alert("Something went wrong.");
+                                  }
+                                }}
+                              >
+                                Add Image
+                              </button>
+
+                              <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
                             </div>
-                          ) : (
-                            <p>No images available</p>
-                          )}
+
                           </div>
                         </div>
                       )}
+
 
                       {isDeleteModalOpen && (
                         <div className="modal-overlay">
