@@ -752,8 +752,19 @@ export default function PropertyDashboard() {
                                   onChange={(e) => setNewProperty({ ...newProperty, title: e.target.value })} className="border p-2 rounded" />
                                 </div>
                                 <div className="form-row-add">
-                                <input type="text" placeholder="Category" value={newProperty.category}
-                                  onChange={(e) => setNewProperty({ ...newProperty, category: e.target.value })} className="border p-2 rounded" />
+                                <select 
+                                  id="category" 
+                                  value={newProperty.category}
+                                  onChange={(e) => setNewProperty({ ...newProperty, category: e.target.value })} className="border p-2 rounded" 
+                                  required
+                                >
+                                  <option value="" disabled>
+                                  Select Category
+                                  </option>
+                                  <option value="Corporate ">Corporate </option>
+                                  <option value="Retail">Retail</option>
+                                  <option value="Residential">Residential</option>
+                                </select>
                                 </div>
                                 <div className="form-row-add">
                                 <input type="number" placeholder="Price" value={newProperty.price ?? ""}
@@ -768,12 +779,54 @@ export default function PropertyDashboard() {
                                   onChange={(e) => setNewProperty({ ...newProperty, contact: e.target.value })} className="border p-2 rounded" />
                                 </div>
                                 <div className="form-row-add">
-                                <input type="text" placeholder="District" value={newProperty.district}
-                                  onChange={(e) => setNewProperty({ ...newProperty, district: e.target.value })} className="border p-2 rounded" />
+                                  <select 
+                                    id="district"
+                                    value={newProperty.district}
+                                    onChange={(e) => setNewProperty({ ...newProperty, district: e.target.value })} className="border p-2 rounded" 
+                                    >
+                                    <option value="" disabled>
+                                    Select District
+                                    </option>
+                                    <option value="Ampara">Ampara</option>
+                                    <option value="Anuradhapura">Anuradhapura</option>
+                                    <option value="Badulla">Badulla</option>
+                                    <option value="Batticaloa">Batticaloa</option>
+                                    <option value="Colombo">Colombo</option>
+                                    <option value="Galle">Galle</option>
+                                    <option value="Gampaha">Gampaha</option>
+                                    <option value="Hambantota">Hambantota</option>
+                                    <option value="Jaffna">Jaffna</option>
+                                    <option value="Kalutara">Kalutara</option>
+                                    <option value="Kandy">Kandy</option>
+                                    <option value="Kegalle">Kegalle</option>
+                                    <option value="Kilinochchi">Kilinochchi</option>
+                                    <option value="Kurunegala">Kurunegala</option>
+                                    <option value="Mannar">Mannar</option>
+                                    <option value="Matale">Matale</option>
+                                    <option value="Matara">Matara</option>
+                                    <option value="Moneragala">Moneragala</option>
+                                    <option value="Mullaitivu">Mullaitivu</option>
+                                    <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                    <option value="Polonnaruwa">Polonnaruwa</option>
+                                    <option value="Puttalam">Puttalam</option>
+                                    <option value="Ratnapura">Ratnapura</option>
+                                    <option value="Trincomalee">Trincomalee</option>
+                                    <option value="Vavuniya">Vavuniya</option>
+                                  </select>
                                 </div>
                                 <div className="form-row-add">
-                                <input type="text" placeholder="Type" value={newProperty.type}
-                                  onChange={(e) => setNewProperty({ ...newProperty, type: e.target.value })} className="border p-2 rounded" />
+                                <select 
+                                  id="type" 
+                                  value={newProperty.type}
+                                  onChange={(e) => setNewProperty({ ...newProperty, type: e.target.value })} className="border p-2 rounded" 
+                                  >
+                                  <option value="" disabled>
+                                  Select Type
+                                  </option>
+                                  <option value="For Sale">For Sale</option>
+                                  <option value="For Rent">For Rent</option>
+                                  <option value="Wanted">Wanted</option>
+                                </select>
                                 </div>
                                 <div className="form-row-add">
                                 <input type="number" placeholder="Latitude" value={newProperty.latitude ?? ""}
@@ -960,7 +1013,6 @@ export default function PropertyDashboard() {
                               </label>
                               <select
                                 id="category"
-                                placeholder="Category"
                                 value={editingProperty.category}
                                 onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
                                 required
