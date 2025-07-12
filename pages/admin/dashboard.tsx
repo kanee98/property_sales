@@ -563,16 +563,16 @@ export default function PropertyDashboard() {
             </div>
 
             {/* Profile Menu */}
-            <Link href="#" className="profile">
+            {/* <Link href="#" className="profile">
               <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile" />
             </Link>
             <div className="profile-menu" id="profileMenu">
-                <ul>
+                <ul> */}
                     {/* <li><a href="#">My Profile</a></li> */}
                     {/* <li><a href="#">Settings</a></li> */}
-                    <li><a href="/login" onClick={handleLogout}>Log Out</a></li>
+                    {/* <li><a href="/login" onClick={handleLogout}>Log Out</a></li>
                 </ul>
-            </div>
+            </div> */}
           </nav>
 
           <main>
