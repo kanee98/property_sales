@@ -2140,6 +2140,7 @@ export default function PropertyDashboard() {
                                       prev.map((user) => (user.id === updated.id ? updated : user))
                                     );
                                     setIsEditModalOpen(false);
+                                    await fetchUsers();
                                   } else {
                                     const err = await res.json();
                                     alert("Update failed: " + (err.error || "Unknown error"));
