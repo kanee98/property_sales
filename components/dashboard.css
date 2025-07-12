@@ -252,6 +252,8 @@ body {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  color: var(--dark);
+  background-color: var(--light);
 }
 
 .note-input-wrapper button {
