@@ -697,6 +697,7 @@ body.dark #content nav .profile-menu li a {
 	position: relative;
 	height: 21px;
 	width: 45px;
+	margin-right: 1rem;
 	transform: scale(1.5);
 }
 
