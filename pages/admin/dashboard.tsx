@@ -164,6 +164,9 @@ export default function PropertyDashboard() {
 
   const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
   const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
+  const totalPagesForInquiries = Math.ceil(inquiries.length / itemsPerPage);
+
+  const [currentPageForInquiries, setCurrentPageForInquiries] = useState(1);
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -185,12 +188,18 @@ export default function PropertyDashboard() {
   const [isUploading, setIsUploading] = useState(false);
 
 
-  // Handle page change for both users and properties
+  // Handle page change for properties
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPagesForProperties) {
       setCurrentPage(page);
     }
   };
+
+  function handlePageChangeForInquiries(page: number) {
+    if (page < 1 || page > totalPagesForInquiries) 
+      return;
+    setCurrentPageForInquiries(page);
+  }
 
   // Handle Edit
   const handleEditProperties = (propertyId: number) => {
@@ -1542,21 +1551,21 @@ export default function PropertyDashboard() {
                         </div>
                       )}
 
-                      {/* Pagination Controls */}
+                      {/* Pagination Controls for Inquiries */}
                       <div className="pagination-controls">
                         <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
+                          onClick={() => handlePageChangeForInquiries(currentPageForInquiries - 1)}
+                          disabled={currentPageForInquiries === 1}
                           className="pagination-btn"
                         >
                           « Previous
                         </button>
 
-                        <span>Page {currentPage} of {totalPagesForProperties}</span>
+                        <span>Page {currentPageForInquiries} of {totalPagesForInquiries}</span>
 
                         <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPagesForProperties}
+                          onClick={() => handlePageChangeForInquiries(currentPageForInquiries + 1)}
+                          disabled={currentPageForInquiries === totalPagesForInquiries}
                           className="pagination-btn"
                         >
                           Next »
