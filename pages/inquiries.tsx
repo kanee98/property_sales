@@ -340,7 +340,7 @@ export default function InquiriesPage() {
                         </div>
                         <div className="table-data" style={{marginTop:"0"}}>
                           <div className="reason">
-                            <FontAwesomeIcon icon={faUserTie} size="2x" color="#6f42c1" />
+                            <FontAwesomeIcon icon={faUserTie} size="2x" color="#6f42c1"/>
                             <div className="reason-text">
                               <h3>Expert Agents</h3>
                               <p>

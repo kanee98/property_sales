@@ -19,7 +19,7 @@
   .reason-text {
     display: flex;
     flex-direction: column;
-    margin-left: 10%;
+    margin-left: 1rem;
   }
   
   .reason i {
@@ -91,6 +91,7 @@
 
 .leadership {
   border-top: 1px solid var(--dark);
+  margin-top: 2rem;
   padding-top: 2rem;
 }
 
@@ -238,9 +239,15 @@
     flex-direction: column;
   }
 
+  .inquiry-form input, .inquiry-form textarea{
+    font-size: small;
+  }
+
   .inquiry-form-container,
   .contact-info-container {
     max-width: 100%;
+    font-size: small;
+    margin-bottom: 0.8rem;
   }
 }
 
@@ -249,6 +256,7 @@
     .reason {
       width: 80%; /* Make reasons take more space on smaller screens */
       margin: 10px 0; /* Reduce margins */
+      font-size: small;
     }
   
     .reason-text {
@@ -262,8 +270,8 @@
   
   @media (max-width: 480px) {
     .whyChooseUs {
-      padding-top: 50px;
-      padding-bottom: 50px;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
   
     .reasons {
@@ -277,7 +285,7 @@
     }
   
     .reason-text {
-      margin-left: 0; /* Remove margin on mobile */
+      margin-left: 1rem; /* Remove margin on mobile */
     }
   }  
 

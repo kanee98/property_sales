@@ -739,6 +739,7 @@ body.dark #content nav .profile-menu li a {
 	font-family: var(--poppins);
 	max-height: calc(100vh - 56px);
 	overflow-y: auto;
+	padding-bottom: 4rem;
 }
 #content main .head-title {
 	display: flex;
@@ -785,7 +786,6 @@ body.dark #content nav .profile-menu li a {
 #content main .box-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-	grid-gap: 24px;
 	margin-top: 36px;
 }
 #content main .box-info li {
