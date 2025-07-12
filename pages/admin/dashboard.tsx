@@ -162,7 +162,8 @@ export default function PropertyDashboard() {
     property.status === 1 && (
       property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.type.toLowerCase().includes(searchTerm.toLowerCase())
+      property.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      property.category.toLowerCase().includes(searchTerm.toLowerCase())
       // add other search criteria if needed
     )
   );  
