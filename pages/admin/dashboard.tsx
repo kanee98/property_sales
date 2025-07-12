@@ -443,7 +443,7 @@ export default function PropertyDashboard() {
                 <div className="table-data">
                   <div className="todo">
                     <div className="head">
-                      <h3>Todos</h3>
+                      <h3>Notes</h3>
                       <i className='bx bx-plus icon'></i>
                       {/* <i className='bx bx-filter' ></i> */}
                     </div>
