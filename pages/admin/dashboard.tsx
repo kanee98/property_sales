@@ -208,6 +208,7 @@ export default function PropertyDashboard() {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [editingInquiry, setEditingInquiry] = useState<Inquiry | null>(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
@@ -1439,9 +1440,12 @@ export default function PropertyDashboard() {
                                 </td>
                                 <td>
                                   <button
-                                    // onClick={() => handleEdit(inquiry.id)}
+                                    onClick={() => {
+                                      setEditingInquiry(inquiry);
+                                      setIsEditModalOpen(true);
+                                    }}
                                     className="edit-btn"
-                                    style={{ marginRight: '10px' }}
+                                    style={{ marginRight: "10px" }}
                                   >
                                     Edit
                                   </button>
@@ -1824,6 +1828,128 @@ export default function PropertyDashboard() {
                                 Save
                               </button>
                             </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isEditModalOpen && editingInquiry && (
+                        <div className="modal-container">
+                          <div className="modal-content">
+                            <h2 className="text-2xl font-semibold mb-4" style={{ marginBottom: "3%" }}>
+                              Edit Inquiry
+                            </h2>
+                            <form
+                              onSubmit={async (e) => {
+                                e.preventDefault();
+
+                                try {
+                                  const { attachments, ...inquiryDataWithoutAttachments } = editingInquiry;
+
+                                  const res = await fetch("/api/inquiries", {
+                                    method: "PUT",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify(inquiryDataWithoutAttachments),
+                                  });
+
+                                  if (res.ok) {
+                                    const updated = await res.json();
+                                    setInquiries((prev) =>
+                                      prev.map((inq) => (inq.id === updated.id ? updated : inq))
+                                    );
+                                    setIsEditModalOpen(false);
+                                  } else {
+                                    const err = await res.json();
+                                    alert("Update failed: " + err.message);
+                                  }
+                                } catch (err) {
+                                  console.error(err);
+                                  alert("Something went wrong");
+                                }
+                              }}
+                            >
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="form-row">
+                                  <label htmlFor="companyName" style={{ fontWeight: "600" }}>Company Name</label>
+                                  <input
+                                    id="companyName"
+                                    type="text"
+                                    value={editingInquiry.companyName}
+                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, companyName: e.target.value })}
+                                    required
+                                    className="border p-2 rounded"
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="contactPerson" style={{ fontWeight: "600" }}>Contact Person</label>
+                                  <input
+                                    id="contactPerson"
+                                    type="text"
+                                    value={editingInquiry.contactPerson}
+                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, contactPerson: e.target.value })}
+                                    className="border p-2 rounded"
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="email" style={{ fontWeight: "600" }}>Email</label>
+                                  <input
+                                    id="email"
+                                    type="email"
+                                    value={editingInquiry.email}
+                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, email: e.target.value })}
+                                    className="border p-2 rounded"
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="phone" style={{ fontWeight: "600" }}>Phone</label>
+                                  <input
+                                    id="phone"
+                                    type="text"
+                                    value={editingInquiry.phone}
+                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, phone: e.target.value })}
+                                    className="border p-2 rounded"
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="budget" style={{ fontWeight: "600" }}>Budget</label>
+                                  <input
+                                    id="budget"
+                                    type="number"
+                                    value={editingInquiry.budget ?? ""}
+                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, budget: Number(e.target.value) })}
+                                    className="border p-2 rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="form-row">
+                                <label htmlFor="requirements" style={{ fontWeight: "600" }}>Requirements</label>
+                                <textarea
+                                  id="requirements"
+                                  value={editingInquiry.requirements ?? ""}
+                                  onChange={(e) =>
+                                    setEditingInquiry({ ...editingInquiry, requirements: e.target.value })
+                                  }
+                                  className="border p-2 rounded mt-4 w-full"
+                                />
+                              </div>
+
+                              <div className="button-container">
+                                <button
+                                  type="button"
+                                  onClick={() => setIsEditModalOpen(false)}
+                                  className="button-cancel"
+                                >
+                                  Cancel
+                                </button>
+                                <button type="submit" className="button-save">
+                                  Save Changes
+                                </button>
+                              </div>
+                            </form>
                           </div>
                         </div>
                       )}
