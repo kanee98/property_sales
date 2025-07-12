@@ -250,6 +250,18 @@ export default function PropertyDashboard() {
     status: 1,
   });
 
+  const [isAddInqModalOpen, setIsAddInqModalOpen] = useState(false);
+  const [newInquiry, setNewInquiry] = useState({
+    companyName: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    requirements: null,
+    budget: null,
+    attachments: [],
+    status: 1,
+  });
+
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   function showMessage(message: string) {
@@ -324,7 +336,7 @@ export default function PropertyDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedInquiry), 
       });
-      
+
       if (res.ok) {
         const updated = await res.json();
         setInquiries((prev) =>
@@ -1337,7 +1349,7 @@ export default function PropertyDashboard() {
                     <div className="order">
                     <div className="head">
                       <h3>Pending Inquiries</h3>
-                      <i className='bx bx-plus icon'></i>
+                      <i className="bx bx-plus icon cursor-pointer" onClick={() => setIsAddInqModalOpen(true)}></i>
                     </div>
                       <table>
                         <thead>
@@ -1649,6 +1661,156 @@ export default function PropertyDashboard() {
                                 }}
                               >
                                 {isUploading ? "Uploading..." : "Add Image"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isAddInqModalOpen && (
+                        <div className="modal-container" onClick={() => setIsAddInqModalOpen(false)}>
+                          <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
+                            <h2 className="text-xl font-semibold mb-4" style={{ marginBottom: "3%" }}>Add New Inquiry</h2>
+
+                            <button
+                              className="modal-close-btn"
+                              onClick={() => setIsAddInqModalOpen(false)}
+                              aria-label="Close"
+                            >
+                              &times;
+                            </button>
+
+                            {/* Form Fields */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="form-row-add">
+                                <input
+                                  type="text"
+                                  placeholder="Company Name"
+                                  value={newInquiry.companyName}
+                                  onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })}
+                                  className="border p-2 rounded"
+                                />
+                              </div>
+                              <div className="form-row-add">
+                                <input
+                                  type="text"
+                                  placeholder="Contact Person"
+                                  value={newInquiry.contactPerson}
+                                  onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })}
+                                  className="border p-2 rounded"
+                                />
+                              </div>
+                              <div className="form-row-add">
+                                <input
+                                  type="email"
+                                  placeholder="Email"
+                                  value={newInquiry.email}
+                                  onChange={(e) => setNewInquiry({ ...newInquiry, email: e.target.value })}
+                                  className="border p-2 rounded"
+                                />
+                              </div>
+                              <div className="form-row-add">
+                                <input
+                                  type="text"
+                                  placeholder="Phone"
+                                  value={newInquiry.phone}
+                                  onChange={(e) => setNewInquiry({ ...newInquiry, phone: e.target.value })}
+                                  className="border p-2 rounded"
+                                />
+                              </div>
+                              <div className="form-row-add">
+                                <input
+                                  type="number"
+                                  placeholder="Budget"
+                                  value={newInquiry.budget ?? ""}
+                                  onChange={(e) => setNewInquiry({ ...newInquiry, budget: Number(e.target.value) })}
+                                  className="border p-2 rounded"
+                                />
+                              </div>
+                            </div>
+
+                            <textarea
+                              placeholder="Requirements"
+                              value={newInquiry.requirements ?? ""}
+                              onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })}
+                              className="border p-2 rounded mt-4 w-full"
+                            />
+
+                            <div className="mt-4" style={{ marginTop: "10px" }}>
+                              <label className="block mb-1 font-semibold">Upload Image (optional)</label>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) setImageFile(file);
+                                }}
+                                className="border border-gray-300 rounded px-4 py-2"
+                              />
+                            </div>
+
+                            <div className="button-container">
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    let uploadedImagePath = "";
+
+                                    if (imageFile) {
+                                      const formData = new FormData();
+                                      formData.append("file", imageFile);
+                                      formData.append("inquiryId", "new");
+
+                                      const uploadRes = await fetch("/api/upload-image", {
+                                        method: "POST",
+                                        body: formData,
+                                      });
+
+                                      if (!uploadRes.ok) {
+                                        throw new Error("Image upload failed");
+                                      }
+
+                                      const uploadData = await uploadRes.json();
+                                      uploadedImagePath = uploadData.newImagePath;
+                                    }
+
+                                    const res = await fetch("/api/inquiries", {
+                                      method: "POST",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({
+                                        ...newInquiry,
+                                        attachments: uploadedImagePath ? [uploadedImagePath] : [],
+                                      }),
+                                    });
+
+                                    if (res.ok) {
+                                      const created = await res.json();
+                                      setInquiries((prev) => [...prev, created]);
+                                      setIsAddInqModalOpen(false);
+
+                                      // Reset form
+                                      setNewInquiry({
+                                        companyName: "",
+                                        contactPerson: "",
+                                        email: "",
+                                        phone: "",
+                                        requirements: null,
+                                        budget: null,
+                                        attachments: [],
+                                        status: 1,
+                                      });
+                                      setImageFile(null);
+                                    } else {
+                                      const err = await res.json();
+                                      alert("Failed to create inquiry: " + err.message);
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
+                                    alert("Something went wrong while adding the inquiry.");
+                                  }
+                                }}
+                                className="button-save"
+                              >
+                                Save
                               </button>
                             </div>
                           </div>
