@@ -74,6 +74,21 @@ export default function PropertyDashboard() {
     }
   };
 
+  const fetchInquiries = async () => {
+  try {
+    const response = await fetch("/api/inquiries");
+    if (!response.ok) {
+      throw new Error("Failed to fetch inquiries");
+    }
+    const data = await response.json();
+    const activeInqs = data.filter((inq: any) => inq.status === 1);
+    setInquiries(activeInqs);
+    setActiveInquiries(activeInqs.length);
+  } catch (error) {
+    console.error("Error fetching inquiries:", error);
+  }
+};
+
   useEffect(() => {
     axios.get("/api/properties")
       .then((response) => {
@@ -89,8 +104,8 @@ export default function PropertyDashboard() {
         const allInquiries = response.data;
         const activeInqs = allInquiries.filter((inq: any) => inq.status === 1);
 
-        setActiveInquiries(activeInqs.length); // Count only active
-        setInquiries(activeInqs);              // Show only active
+        setActiveInquiries(activeInqs.length);
+        setInquiries(activeInqs);              
       })
       .catch((error) => console.error("Error fetching inquiries:", error));
   }, []);
@@ -309,12 +324,13 @@ export default function PropertyDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedInquiry), 
       });
-
+      
       if (res.ok) {
         const updated = await res.json();
         setInquiries((prev) =>
           prev.filter((inq) => inq.id !== inquiryID)
         );
+        await fetchInquiries();
         showMessage("Inquiry successfully deleted.");
       } else {
         const err = await res.json();
