@@ -40,15 +40,6 @@ export interface Inquiry {
   status: number;
 }
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  status: number;
-}
-
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
@@ -2372,6 +2363,7 @@ export default function PropertyDashboard() {
                                     await handleDeleteProperties(propertyToDelete);
                                   }
                                   setIsDeleteModalOpen(false);
+                                  await fetchUsers();
                                 }}
                               >
                                 Yes, Delete
