@@ -554,21 +554,27 @@ export default function PropertyDashboard() {
                                     }}>
                                     <button
                                       className="view-btn"
-                                      onClick={() => {
-                                        const images = (() => {
+                                      onClick={async () => {
+                                        try {
+                                          const res = await fetch(`/api/properties`);
+                                          const properties = await res.json();
+                                          const updatedProperty = properties.find(p => p.id === property.id);
+
+                                          let images = [];
                                           try {
-                                            const parsed = JSON.parse(property.images);
-                                            return Array.isArray(parsed) ? parsed : [];
-                                          } catch {
-                                            return [];
+                                            images = JSON.parse(updatedProperty.images || "[]");
+                                          } catch (err) {
+                                            console.error("Error parsing images:", err);
                                           }
-                                        })();
-                                      
-                                        setSelectedPropertyId(property.id); // Set this for upload logic
-                                        setSelectedImages(images);
-                                        setCurrentImageIndex(0); // Reset index on open
-                                        setIsImageModalOpen(true);
-                                      }}                                      
+
+                                          setSelectedPropertyId(updatedProperty.id);
+                                          setSelectedImages(images);
+                                          setCurrentImageIndex(0);
+                                          setIsImageModalOpen(true);
+                                        } catch (err) {
+                                          console.error("Failed to reload properties:", err);
+                                        }
+                                      }}   
                                     >
                                       View
                                     </button>
@@ -1243,6 +1249,7 @@ export default function PropertyDashboard() {
                 </div>
               )}
 
+              {/* Inquiries */}
               {activeTab === "inquiries" && (
                 <div className="p-6">
                   <div className="head-title">
@@ -1273,8 +1280,9 @@ export default function PropertyDashboard() {
                             <th>Contact Person</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Requirements</th>
                             <th>Budget</th>
-                            <th>Status</th>
+                            <th>Attachments</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
@@ -1282,13 +1290,56 @@ export default function PropertyDashboard() {
                           {inquiriesToDisplay.length > 0 ? (
                             inquiriesToDisplay.map((inquiry) => (
                               <tr key={inquiry.id}>
-                                <td>{inquiry.id}</td>
+                                <td style={{ padding: "16px" }}>
+                                  <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: "100%",
+                                    minHeight: "50px", // Adjust if needed
+                                    textAlign: "center",
+                                  }}>
+                                    {inquiry.id}
+                                  </div>
+                                </td>
                                 <td>{inquiry.companyName}</td>
                                 <td>{inquiry.contactPerson}</td>
                                 <td>{inquiry.email}</td>
                                 <td>{inquiry.phone}</td>
+                                <td>{inquiry.requirements}</td>
                                 <td>{inquiry.budget ? `$${inquiry.budget.toLocaleString()}` : '—'}</td>
-                                <td>{inquiry.status === 1 ? "Active" : "Pending"}</td>
+                                <td style={{ padding: "16px" }}>
+                                  <div style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      height: "100%",
+                                      minHeight: "50px", // Adjust if needed
+                                      textAlign: "center",
+                                    }}>
+                                    <button
+                                      className="view-btn"
+                                      onClick={() => {
+                                        const images = (() => {
+                                          try {
+                                            const parsed = JSON.parse(inquiry.attachments);
+                                            return Array.isArray(parsed) ? parsed : [];
+                                          } catch {
+                                            return [];
+                                          }
+                                        })();
+                                      
+                                        setSelectedPropertyId(inquiry.id); // Set this for upload logic
+                                        setSelectedImages(images);
+                                        setCurrentImageIndex(0); // Reset index on open
+                                        setIsImageModalOpen(true);
+                                      }}                                      
+                                    >
+                                      View
+                                    </button>
+
+                                  </div>
+                                </td>
                                 <td>
                                   <button
                                     // onClick={() => handleEdit(inquiry.id)}
