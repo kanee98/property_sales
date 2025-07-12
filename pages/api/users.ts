@@ -7,6 +7,7 @@ export type User = {
   id: number;
   name: string;
   email: string;
+  password: string;
   role: string;
   createdAt: Date;
   status: number;
@@ -21,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           id: true,
           name: true,
           email: true,
+          password: true,
           role: true,
           createdAt: true,
           status: true,
@@ -32,6 +34,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
       // Handle any errors that occur while fetching data
       return res.status(500).json({ error: "Error fetching users" });
+    }
+  } else if (req.method === "PUT") {
+    const { id, name, email, role, status } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          email,
+          role,
+          status,
+        },
+      });
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error("Update error:", error);
+      return res.status(500).json({ error: "Error updating user" });
     }
   } else {
     // Handle unsupported request methods

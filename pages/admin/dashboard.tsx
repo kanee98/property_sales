@@ -44,6 +44,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
+  password: string;
   role: string;
   status: number;
 }
@@ -2100,7 +2101,7 @@ export default function PropertyDashboard() {
                                     setIsEditModalOpen(false);
                                   } else {
                                     const err = await res.json();
-                                    alert("Update failed: " + err.message);
+                                    alert("Update failed: " + (err.error || "Unknown error"));
                                   }
                                 } catch (err) {
                                   console.error(err);
@@ -2143,8 +2144,7 @@ export default function PropertyDashboard() {
                                     required
                                   >
                                     <option value="admin">Admin</option>
-                                    <option value="agent">Agent</option>
-                                    <option value="viewer">Viewer</option>
+                                    <option value="staff">Staff</option>
                                   </select>
                                 </div>
 
