@@ -40,6 +40,11 @@ export interface Inquiry {
   status: number;
 }
 
+type Note = {
+  text: string;
+  completed: boolean;
+};
+
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
@@ -50,6 +55,41 @@ export default function PropertyDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [properties, setProperties] = useState<Property[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState("");
+
+  // Load notes from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("userNotes");
+    if (stored) {
+      setNotes(JSON.parse(stored));
+    }
+  }, []);
+
+  // Save notes to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("userNotes", JSON.stringify(notes));
+  }, [notes]);
+
+  const addNote = () => {
+    if (newNote.trim()) {
+      setNotes([{ text: newNote, completed: false }, ...notes]);
+      setNewNote("");
+    }
+  };
+
+  const toggleNote = (index: number) => {
+    const updated = [...notes];
+    updated[index].completed = !updated[index].completed;
+    setNotes(updated);
+  };
+
+  const deleteNote = (index: number) => {
+    const updated = [...notes];
+    updated.splice(index, 1);
+    setNotes(updated);
+  };
 
   useEffect(() => {
     fetchProperties();
@@ -575,30 +615,36 @@ export default function PropertyDashboard() {
                   <div className="todo">
                     <div className="head">
                       <h3>Notes</h3>
-                      <i className='bx bx-plus icon'></i>
-                      {/* <i className='bx bx-filter' ></i> */}
                     </div>
-                    <ul className="todo-list">
-                      <li className="completed">
-                        <p>Check Inventory</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="completed">
-                        <p>Manage Delivery Team</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="not-completed">
-                        <p>Contact Selma: Confirm Delivery</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="completed">
-                        <p>Update Shop Catalogue</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="not-completed">
-                        <p>Count Profit Analytics</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
+                    <div className="note-input-wrapper">
+                      <input
+                        type="text"
+                        placeholder="Add note..."
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                      />
+                      <button onClick={addNote}>+</button>
+                    </div>
+
+                    <ul className="todo-list mt-4">
+                      {notes.map((note, idx) => (
+                        <li
+                          key={idx}
+                          className={note.completed ? "completed" : "not-completed"}
+                          style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                        >
+                          <p
+                            onClick={() => toggleNote(idx)}
+                            style={{ cursor: "pointer", textDecoration: note.completed ? "line-through" : "none" }}
+                          >
+                            {note.text}
+                          </p>
+                          <i
+                            className="bx bx-x text-red-500 cursor-pointer"
+                            onClick={() => deleteNote(idx)}
+                          ></i>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>

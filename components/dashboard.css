@@ -216,6 +216,61 @@ body {
 	background-color: #c50000; 
   }
 
+  .add-note-btn {
+  background: linear-gradient(to right, #3b82f6, #2563eb); /* Blue gradient */
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.add-note-btn:hover {
+  background: linear-gradient(to right, #2563eb, #1e40af); /* Darker blue on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.add-note-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+.note-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between input and button */
+  margin-bottom: 1rem;
+}
+
+.note-input-wrapper input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.note-input-wrapper button {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.note-input-wrapper button:hover {
+  background: linear-gradient(to right, #2563eb, #1e40af);
+}
+
+
   select {
 	border: 1px solid #ccc;
 	color: black;
