@@ -108,6 +108,11 @@ export default function ListingsPage() {
     }
   };
 
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+
   return (
     <>
     <section className="landing">
@@ -282,11 +287,39 @@ export default function ListingsPage() {
               }
 
               return (
-                <img
-                  src={imageSrc || "/img/default.jpg"} // fallback image if none found
-                  alt={property.title}
-                  className="w-full h-48 object-cover rounded-md"
-                />
+                <div
+                  className="relative cursor-pointer group"
+                  onClick={() => {
+                    try {
+                      const imgs = JSON.parse(property.images);
+                      if (Array.isArray(imgs)) {
+                        setSelectedImages(imgs);
+                        setCurrentImageIndex(0); // 🔁 Reset to first image!
+                        setIsImageModalOpen(true);
+                      }
+                    } catch (err) {
+                      console.error("Failed to parse images:", err);
+                    }
+                  }}
+                >
+                  <img
+                    src={
+                      (() => {
+                        try {
+                          const imgs = JSON.parse(property.images);
+                          return imgs?.[0] || "/img/default.jpg";
+                        } catch {
+                          return "/img/default.jpg";
+                        }
+                      })()
+                    }
+                    alt={property.title}
+                    className="w-full h-48 object-cover rounded-md"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-sm font-semibold rounded-md">
+                    Click here to view more
+                  </div>
+                </div>
               );
             })()}
 
@@ -305,6 +338,51 @@ export default function ListingsPage() {
         ))}
       </div>
     </div>
+
+    {isImageModalOpen && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="close-btn" onClick={() => setIsImageModalOpen(false)}>✕</button>
+
+          {selectedImages.length > 0 ? (
+            <div className="slider-container">
+              <button
+                className="nav-btn prev"
+                onClick={() =>
+                  setCurrentImageIndex(
+                    (prev) => (prev - 1 + selectedImages.length) % selectedImages.length
+                  )
+                }
+                disabled={selectedImages.length <= 1}
+                style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
+              >
+                ‹
+              </button>
+
+              <img
+                src={selectedImages[currentImageIndex] || "/img/default.jpg"}
+                alt={`Slide ${currentImageIndex + 1}`}
+                className="slider-image"
+              />
+
+              <button
+                className="nav-btn next"
+                onClick={() =>
+                  setCurrentImageIndex((prev) => (prev + 1) % selectedImages.length)
+                }
+                disabled={selectedImages.length <= 1}
+                style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
+              >
+                ›
+              </button>
+            </div>
+          ) : (
+            <p>No images to display</p>
+          )}
+        </div>
+      </div>
+    )}
+
     {/* BEGIN PAGINATION */}
     <ul className="pagination flex space-x-2">
           <li className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}>
