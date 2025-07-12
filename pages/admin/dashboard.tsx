@@ -1006,6 +1006,8 @@ export default function PropertyDashboard() {
                                       setProperties((prev) => [...prev, created]);
                                       setIsAddModalOpen(false);
                                 
+                                      await fetchProperties();
+
                                       // Reset form
                                       setNewProperty({
                                         title: "",
@@ -1786,6 +1788,8 @@ export default function PropertyDashboard() {
                                       const created = await res.json();
                                       setInquiries((prev) => [...prev, created]);
                                       setIsAddInqModalOpen(false);
+
+                                      await fetchInquiries();
 
                                       // Reset form
                                       setNewInquiry({
