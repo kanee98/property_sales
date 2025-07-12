@@ -286,6 +286,15 @@ export default function PropertyDashboard() {
     status: 1,
   });
 
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    status: 1,
+  });
+
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   function showMessage(message: string) {
@@ -2016,7 +2025,7 @@ export default function PropertyDashboard() {
                     <div className="order">
                       <div className="head">
                         <h3>Manage Users</h3>
-                        <i className='bx bx-plus icon'></i>
+                        <i className="bx bx-plus icon cursor-pointer" onClick={() => setIsAddUserModalOpen(true)}></i>
                       </div>
                       <table>
                         <thead>
@@ -2176,6 +2185,124 @@ export default function PropertyDashboard() {
                                 </button>
                               </div>
                             </form>
+                          </div>
+                        </div>
+                      )}
+
+                      {isAddUserModalOpen && (
+                        <div className="modal-container" onClick={() => setIsAddUserModalOpen(false)}>
+                          <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
+                            <h2 className="text-xl font-semibold mb-4" style={{ marginBottom: "3%" }}>Add New User</h2>
+
+                            <button
+                              className="modal-close-btn"
+                              onClick={() => setIsAddUserModalOpen(false)}
+                              aria-label="Close"
+                            >
+                              &times;
+                            </button>
+
+                            {/* Form Fields */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="form-row-add">
+                                <input
+                                  type="text"
+                                  placeholder="Name"
+                                  value={newUser.name}
+                                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                                  className="border p-2 rounded"
+                                  required
+                                />
+                              </div>
+
+                              <div className="form-row-add">
+                                <input
+                                  type="email"
+                                  placeholder="Email"
+                                  value={newUser.email}
+                                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                                  className="border p-2 rounded"
+                                  required
+                                />
+                              </div>
+
+                              <div className="form-row-add">
+                                <input
+                                  type="password"
+                                  placeholder="Password"
+                                  value={newUser.password}
+                                  onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                                  className="border p-2 rounded"
+                                  required
+                                />
+                              </div>
+
+                              <div className="form-row-add">
+                                <select
+                                  value={newUser.role}
+                                  onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+                                  className="border p-2 rounded"
+                                  required
+                                >
+                                  <option value="" disabled>Select Role</option>
+                                  <option value="admin">Admin</option>
+                                  <option value="staff">Staff</option>
+                                </select>
+                              </div>
+
+                              <div className="form-row-add">
+                                <select
+                                  value={newUser.status}
+                                  onChange={(e) => setNewUser({ ...newUser, status: Number(e.target.value) })}
+                                  className="border p-2 rounded"
+                                >
+                                  <option value={1}>Active</option>
+                                  <option value={0}>Inactive</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Save Button */}
+                            <div className="button-container">
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch("/api/users", {
+                                      method: "POST",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify(newUser),
+                                    });
+
+                                    if (res.ok) {
+                                      const created = await res.json();
+                                      setUsers((prev) => [...prev, created]);
+                                      setIsAddUserModalOpen(false);
+
+                                      // Refresh
+                                      await fetchUsers?.();
+
+                                      // Reset form
+                                      setNewUser({
+                                        name: "",
+                                        email: "",
+                                        password: "",
+                                        role: "",
+                                        status: 1,
+                                      });
+                                    } else {
+                                      const err = await res.json();
+                                      alert("Failed to create user: " + (err.error || "Unknown error"));
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
+                                    alert("Something went wrong while adding the user.");
+                                  }
+                                }}
+                                className="button-save"
+                              >
+                                Save
+                              </button>
+                            </div>
                           </div>
                         </div>
                       )}

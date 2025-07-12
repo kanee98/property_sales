@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
+import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +17,6 @@ export type User = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
-      // Fetch users from the database
       const users = await prisma.user.findMany({
         select: {
           id: true,
@@ -29,13 +29,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
-      // Return the users data as JSON
       return res.status(200).json(users);
     } catch (error) {
-      // Handle any errors that occur while fetching data
+      console.error("Error fetching users:", error);
       return res.status(500).json({ error: "Error fetching users" });
     }
-  } else if (req.method === "PUT") {
+  }
+
+  if (req.method === "PUT") {
     const { id, name, email, role, status } = req.body;
 
     if (!id) {
@@ -58,8 +59,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error("Update error:", error);
       return res.status(500).json({ error: "Error updating user" });
     }
-  } else {
-    // Handle unsupported request methods
-    return res.status(405).json({ error: "Method Not Allowed" });
   }
+
+  if (req.method === "POST") {
+    const { name, email, password, role, status } = req.body;
+
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    try {
+      const hashedPassword = await hash(password, 10);
+
+      const newUser = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          role,
+          status: Number(status),
+        },
+      });
+
+      return res.status(201).json(newUser);
+    } catch (error: any) {
+      console.error("Create error:", error);
+
+      // Handle Prisma duplicate email error
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002" &&
+        (error.meta?.target as string[])?.includes("email")
+      ) {
+        return res.status(409).json({ error: "Email already in use" });
+      }
+
+      return res.status(500).json({ error: "Error creating user" });
+    }
+  }
+
+  return res.status(405).json({ error: "Method Not Allowed" });
 }
