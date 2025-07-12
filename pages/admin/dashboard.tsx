@@ -40,8 +40,6 @@ export interface Inquiry {
   status: number;
 }
 
-const itemsPerPage = 6;
-
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
@@ -179,7 +177,7 @@ export default function PropertyDashboard() {
   const [currentPageForProperties, setCurrentPageForProperties] = useState(1);
   const [currentPageForInquiries, setCurrentPageForInquiries] = useState(1);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
   // Users pagination
   const startIndexUsers = (currentPageForUsers - 1) * itemsPerPage;
