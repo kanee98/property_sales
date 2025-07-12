@@ -3,7 +3,7 @@ import Image from 'next/image';
 import 'boxicons/css/boxicons.min.css';
 import '../components/dashboard.css';
 import SidebarScript from "../components/SidebarScript"; 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logo from "../src/img/Propwise Logo No BG.png";
 import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,6 +35,8 @@ export default function InquiriesPage() {
   const redirectToListings = () => {
     window.location.href = "/";
   };
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [newInquiry, setNewInquiry] = useState({
     companyName: "",
@@ -90,6 +92,10 @@ export default function InquiriesPage() {
           attachments: [],
           status: 1,
         });
+
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
         setImageFile(null);
       } else {
         const err = await res.json();
@@ -181,77 +187,92 @@ export default function InquiriesPage() {
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mt-4">
-                  <h2 className="text-xl font-semibold mb-4">Submit New Inquiry</h2>
+                <div className="inquiry-wrapper">
+                  <div className="inquiry-form-container">
+                    <h2 className="inquiry-title">Submit New Inquiry</h2>
 
-                  <form onSubmit={handleFormSubmit} encType="multipart/form-data">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Company Name"
-                        value={newInquiry.companyName}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })}
-                        className="border p-2 rounded"
-                        required
-                      />
-                      <input
-                        type="text"
-                        placeholder="Contact Person"
-                        value={newInquiry.contactPerson}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })}
-                        className="border p-2 rounded"
-                        required
-                      />
-                      <input
-                        type="email"
-                        placeholder="Email"
-                        value={newInquiry.email}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, email: e.target.value })}
-                        className="border p-2 rounded"
-                        required
-                      />
-                      <input
-                        type="text"
-                        placeholder="Phone"
-                        value={newInquiry.phone}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, phone: e.target.value })}
-                        className="border p-2 rounded"
-                        required
-                      />
-                      <input
-                        type="number"
-                        placeholder="Budget"
-                        value={newInquiry.budget ?? ""}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, budget: Number(e.target.value) })}
-                        className="border p-2 rounded"
-                      />
-                    </div>
+                    <form onSubmit={handleFormSubmit} encType="multipart/form-data" className="inquiry-form">
+                      <div className="form-grid">
+                        <input
+                          type="text"
+                          placeholder="Company Name"
+                          value={newInquiry.companyName}
+                          onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })}
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Contact Person"
+                          value={newInquiry.contactPerson}
+                          onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })}
+                          required
+                        />
+                        <input
+                          type="email"
+                          placeholder="Email"
+                          value={newInquiry.email}
+                          onChange={(e) => setNewInquiry({ ...newInquiry, email: e.target.value })}
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Phone"
+                          value={newInquiry.phone}
+                          onChange={(e) => setNewInquiry({ ...newInquiry, phone: e.target.value })}
+                          required
+                        />
+                        <input
+                          type="number"
+                          placeholder="Budget (Rs.)"
+                          value={newInquiry.budget ?? ""}
+                          onChange={(e) => setNewInquiry({ ...newInquiry, budget: Number(e.target.value) })}
+                        />
+                      </div>
 
-                    <textarea
-                      placeholder="Requirements"
-                      value={newInquiry.requirements ?? ""}
-                      onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })}
-                      className="border p-2 rounded mt-4 w-full"
-                      rows={3}
-                    />
-
-                    <div className="mt-4">
-                      <label className="block font-semibold mb-2">Upload Image (optional)</label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) setImageFile(file);
-                        }}
-                        className="border border-gray-300 rounded px-4 py-2"
+                      <textarea
+                        placeholder="Requirements"
+                        value={newInquiry.requirements ?? ""}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })}
+                        rows={3}
                       />
-                    </div>
 
-                    <button type="submit" className="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                      Submit
-                    </button>
-                  </form>
+                      <div className="file-upload">
+                        <label>Upload Image (optional)</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) setImageFile(file);
+                          }}
+                        />
+                      </div>
+
+                      <button type="submit" className="submit-btn">
+                        Submit
+                      </button>
+                    </form>
+                  </div>
+                   <div className="contact-info-container">
+                    <h3>Contact Us</h3>
+                    <p>
+                      <i className="bx bx-phone"></i>
+                      <strong>Phone:</strong> +94 77 123 4567
+                    </p>
+                    <p>
+                      <i className="bx bx-envelope"></i>
+                      <strong>Email:</strong> info@property.com
+                    </p>
+                    <p>
+                      <i className="bx bx-map"></i>
+                      <strong>Address:</strong> 123 Property Street, Colombo
+                    </p>
+                    <p>
+                      <i className="bx bx-time"></i>
+                      <strong>Office Hours:</strong> Mon - Fri, 9am - 5pm
+                    </p>
+                  </div>
                 </div>
               </>
             )}

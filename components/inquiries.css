@@ -49,7 +49,146 @@
   .fa-thumbs-up {
     color: orangered;
   }
+  /* Inquiry Form Styles */
+
+.inquiry-title {
+   color: var(--dark);
+}
+.inquiry-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* align top */
+  gap: 2rem; /* space between form and contact */
+  max-width: 100%;
+  margin-top: 2rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.inquiry-form-container {
+  background-color: var(--light);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 50%;
+  width: 100%;
+}
+
+.contact-info-container {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  max-width: 40%;
+  width: 100%;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contact-info-container h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.contact-info-container p {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.contact-info-container p i {
+  font-size: 1.3rem;
+  color: #2b6cb0; /* nice blue */
+  min-width: 20px; /* keep icon spacing consistent */
+}
+
+.inquiry-form-container h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.inquiry-form input,
+.inquiry-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: var(--dark);
+  background-color: var(--light);
+  margin-top: 0.5rem;
+}
+
+.inquiry-form input:focus,
+.inquiry-form textarea:focus {
+  border-color: #3182ce;
+  outline: none;
+}
+
+.inquiry-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inquiry-form .file-upload {
+  margin-top: 1rem;
+  color: var(--dark);
+}
+
+.inquiry-form button[type="submit"] {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.inquiry-form button[type="submit"]:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-btn {
+  background: linear-gradient(to right, #3b82f6, #2563eb); /* Blue gradient */
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(to right, #2563eb, #1e40af); /* Darker blue on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
   
+@media (max-width: 768px) {
+  .inquiry-wrapper {
+    flex-direction: column;
+  }
+
+  .inquiry-form-container,
+  .contact-info-container {
+    max-width: 100%;
+  }
+}
+
   /* Mobile Responsive Styles for Why Choose Us */
   @media (max-width: 768px) {
     .reason {
