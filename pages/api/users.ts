@@ -98,5 +98,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
+if (req.method === "DELETE") {
+  const id = Number(req.query.id);
+
+  if (!id) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: { status: 0 },
+    });
+
+    return res.status(200).json({ message: "User status updated to inactive", user: updatedUser });
+  } catch (error) {
+    console.error("Soft delete error:", error);
+    return res.status(500).json({ error: "Error updating user status" });
+  }
+}
+
   return res.status(405).json({ error: "Method Not Allowed" });
 }

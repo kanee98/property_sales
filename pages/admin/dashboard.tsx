@@ -53,6 +53,7 @@ export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
   const [activeInquiries, setActiveInquiries] = useState(0);
+  const [activeUsers, setActiveUsers] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -82,19 +83,37 @@ export default function PropertyDashboard() {
   };
 
   const fetchInquiries = async () => {
-  try {
-    const response = await fetch("/api/inquiries");
-    if (!response.ok) {
-      throw new Error("Failed to fetch inquiries");
+    try {
+      const response = await fetch("/api/inquiries");
+      if (!response.ok) {
+        throw new Error("Failed to fetch inquiries");
+      }
+      const data = await response.json();
+      const activeInqs = data.filter((inq: any) => inq.status === 1);
+      setInquiries(activeInqs);
+      setActiveInquiries(activeInqs.length);
+    } catch (error) {
+      console.error("Error fetching inquiries:", error);
     }
-    const data = await response.json();
-    const activeInqs = data.filter((inq: any) => inq.status === 1);
-    setInquiries(activeInqs);
-    setActiveInquiries(activeInqs.length);
-  } catch (error) {
-    console.error("Error fetching inquiries:", error);
-  }
-};
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const data: User[] = await response.json();
+
+      // Filter only active users (status === 1)
+      const activeUsers = data.filter((user) => user.status === 1);
+
+      setUsers(activeUsers);
+      setActiveUsers(activeUsers.length);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   useEffect(() => {
     axios.get("/api/properties")
@@ -120,15 +139,6 @@ export default function PropertyDashboard() {
   useEffect(() => {
     fetchUsers(); 
   }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get("/api/users"); 
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -223,6 +233,7 @@ export default function PropertyDashboard() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
   const [inquiryToDelete, setInquiryToDelete] = useState<number | null>(null);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -384,6 +395,32 @@ export default function PropertyDashboard() {
     } catch (err) {
       console.error(err);
       showMessage("Something went wrong during delete.");
+    }
+  };
+
+  const handleDeleteUser = async (id: number) => {
+    try {
+      const res = await fetch(`/api/users?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        setUsers((prev) =>
+          prev.map((user) =>
+            user.id === id ? { ...user, status: 0 } : user
+          )
+        );
+        setModalMessage("User marked as inactive.");
+      } else {
+        const err = await res.json();
+        setModalMessage("Failed to deactivate user: " + err.message);
+      }
+    } catch (err) {
+      console.error(err);
+      setModalMessage("Something went wrong while deactivating the user.");
+    } finally {
+      setIsMessageModalOpen(true);
+      setTimeout(() => setIsMessageModalOpen(false), 2000);
     }
   };
 
@@ -2069,7 +2106,11 @@ export default function PropertyDashboard() {
                                     Edit
                                   </button>
                                   <button
-                                    // onClick={() => handleDelete(user.id)}
+                                    onClick={() => {
+                                      setUserToDelete(user.id);
+                                      setPropertyToDelete(null); // clear other type
+                                      setIsDeleteModalOpen(true);
+                                    }}
                                     className="delete-btn"
                                   >
                                     Delete
@@ -2301,6 +2342,39 @@ export default function PropertyDashboard() {
                                 className="button-save"
                               >
                                 Save
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isDeleteModalOpen && (
+                        <div className="modal-overlay">
+                          <div className="modal-content-delete">
+                            <h3>Confirm Delete</h3>
+                            <p>
+                              Are you sure you want to delete this{" "}
+                              {userToDelete ? "user" : "property"}?
+                            </p>
+                            <div className="modal-buttons">
+                              <button
+                                className="button-cancel"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="button-delete"
+                                onClick={async () => {
+                                  if (userToDelete !== null) {
+                                    await handleDeleteUser(userToDelete);
+                                  } else if (propertyToDelete !== null) {
+                                    await handleDeleteProperties(propertyToDelete);
+                                  }
+                                  setIsDeleteModalOpen(false);
+                                }}
+                              >
+                                Yes, Delete
                               </button>
                             </div>
                           </div>
