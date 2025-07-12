@@ -970,7 +970,7 @@ export default function PropertyDashboard() {
                                     setImageFile(file);
                                   }
                                 }}
-                                className="border border-gray-300 rounded px-4 py-2" style={{marginTop:"10px",}}
+                                className="border border-gray-300 rounded px-4 py-2" style={{marginTop:"10px", color: "var(--dark)"}}
                               />
                             </div>
 
@@ -1758,7 +1758,7 @@ export default function PropertyDashboard() {
                                   const file = e.target.files?.[0];
                                   if (file) setImageFile(file);
                                 }}
-                                className="border border-gray-300 rounded px-4 py-2"
+                                className="border border-gray-300 rounded px-4 py-2" style={{marginTop:"10px", color: "var(--dark)"}}
                               />
                             </div>
 
