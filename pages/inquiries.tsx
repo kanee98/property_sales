@@ -35,7 +35,72 @@ export default function InquiriesPage() {
   const redirectToListings = () => {
     window.location.href = "/";
   };
-  
+
+  const [newInquiry, setNewInquiry] = useState({
+    companyName: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    budget: null,
+    requirements: null,
+    attachments: [],
+    status: 1,
+  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      let uploadedImagePath = "";
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("inquiryId", "new");
+
+        const uploadRes = await fetch("/api/upload-image", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadRes.ok) throw new Error("Image upload failed");
+
+        const uploadData = await uploadRes.json();
+        uploadedImagePath = uploadData.newImagePath;
+      }
+
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...newInquiry,
+          attachments: uploadedImagePath ? [uploadedImagePath] : [],
+        }),
+      });
+
+      if (res.ok) {
+        alert("Inquiry submitted successfully");
+        setNewInquiry({
+          companyName: "",
+          contactPerson: "",
+          email: "",
+          phone: "",
+          budget: null,
+          requirements: null,
+          attachments: [],
+          status: 1,
+        });
+        setImageFile(null);
+      } else {
+        const err = await res.json();
+        alert("Failed to create inquiry: " + err.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while adding the inquiry.");
+    }
+  };
+
   return (  
     <>
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
@@ -109,49 +174,87 @@ export default function InquiriesPage() {
                   <div className="left">
                     <h1>Inquiries</h1>
                     <ul className="breadcrumb">
-                      <li>
-                        <Link href="#">Inquiries</Link>
-                      </li>
+                      <li><Link href="#">Inquiries</Link></li>
                       <li><i className='bx bx-chevron-right'></i></li>
-                      <li>
-                        <Link href="#" className="active">New Inquiry</Link>
-                      </li>
+                      <li><Link href="#" className="active">New Inquiry</Link></li>
                     </ul>
                   </div>
                 </div>
-                <div className="table-data">
-                  <div className="todo">
-                    <div className="head">
-                      <h3>Todos</h3>
-                      <i className='bx bx-plus icon'></i>
-                      {/* <i className='bx bx-filter' ></i> */}
+
+                <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mt-4">
+                  <h2 className="text-xl font-semibold mb-4">Submit New Inquiry</h2>
+
+                  <form onSubmit={handleFormSubmit} encType="multipart/form-data">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="Company Name"
+                        value={newInquiry.companyName}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })}
+                        className="border p-2 rounded"
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Contact Person"
+                        value={newInquiry.contactPerson}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })}
+                        className="border p-2 rounded"
+                        required
+                      />
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        value={newInquiry.email}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, email: e.target.value })}
+                        className="border p-2 rounded"
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Phone"
+                        value={newInquiry.phone}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, phone: e.target.value })}
+                        className="border p-2 rounded"
+                        required
+                      />
+                      <input
+                        type="number"
+                        placeholder="Budget"
+                        value={newInquiry.budget ?? ""}
+                        onChange={(e) => setNewInquiry({ ...newInquiry, budget: Number(e.target.value) })}
+                        className="border p-2 rounded"
+                      />
                     </div>
-                    <ul className="todo-list">
-                      <li className="completed">
-                        <p>Check Inventory</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="completed">
-                        <p>Manage Delivery Team</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="not-completed">
-                        <p>Contact Selma: Confirm Delivery</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="completed">
-                        <p>Update Shop Catalogue</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                      <li className="not-completed">
-                        <p>Count Profit Analytics</p>
-                        <i className='bx bx-dots-vertical-rounded' ></i>
-                      </li>
-                    </ul>
-                  </div>
+
+                    <textarea
+                      placeholder="Requirements"
+                      value={newInquiry.requirements ?? ""}
+                      onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })}
+                      className="border p-2 rounded mt-4 w-full"
+                      rows={3}
+                    />
+
+                    <div className="mt-4">
+                      <label className="block font-semibold mb-2">Upload Image (optional)</label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) setImageFile(file);
+                        }}
+                        className="border border-gray-300 rounded px-4 py-2"
+                      />
+                    </div>
+
+                    <button type="submit" className="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                      Submit
+                    </button>
+                  </form>
                 </div>
               </>
-              )}
+            )}
 
               {activeTab === "whyus" && (
                 <div className="p-6">
