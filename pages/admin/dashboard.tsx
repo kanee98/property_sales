@@ -541,17 +541,25 @@ export default function PropertyDashboard() {
 
             {/* Notification Bell */}
             <a href="#" className="notification" id="notificationIcon">
-                <i className='bx bxs-bell bx-tada-hover' ></i>
-                <span className="num">8</span>
+              <i className='bx bxs-bell bx-tada-hover'></i>
+              <span className="num">{notes.length}</span>
             </a>
             <div className="notification-menu" id="notificationMenu">
-                <ul>
-                    <li>New message from John</li>
-                    <li>Your order has been shipped</li>
-                    <li>New comment on your post</li>
-                    <li>Update available for your app</li>
-                    <li>Reminder: Meeting at 3PM</li>
-                </ul>
+              <ul>
+                {notes.length > 0 ? (
+                  notes.map((note, index) => (
+                    <li key={index}>
+                      {note.text}
+                      <i
+                        className="bx bx-trash hover:text-red-500 ml-2 cursor-pointer"
+                        onClick={() => deleteNote(index)}
+                      ></i>
+                    </li>
+                  ))
+                ) : (
+                  <li>No new notes</li>
+                )}
+              </ul>
             </div>
 
             {/* Profile Menu */}
@@ -560,7 +568,7 @@ export default function PropertyDashboard() {
             </Link>
             <div className="profile-menu" id="profileMenu">
                 <ul>
-                    <li><a href="#">My Profile</a></li>
+                    {/* <li><a href="#">My Profile</a></li> */}
                     {/* <li><a href="#">Settings</a></li> */}
                     <li><a href="/login" onClick={handleLogout}>Log Out</a></li>
                 </ul>
