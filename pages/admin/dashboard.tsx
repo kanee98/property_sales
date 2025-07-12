@@ -62,8 +62,13 @@ export default function PropertyDashboard() {
       if (!response.ok) {
         throw new Error("Failed to fetch properties");
       }
+
       const data: Property[] = await response.json();
       setProperties(data);
+
+      const activeProps = data.filter((p) => p.status === 1);
+      setActiveListings(activeProps.length);
+
     } catch (error) {
       console.error("Error fetching properties:", error);
     }
@@ -274,10 +279,7 @@ export default function PropertyDashboard() {
       });
   
       if (res.ok) {
-        const updated = await res.json();
-        setProperties((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p))
-        );
+        await fetchProperties();
         showMessage("Property successfully deleted.");
       } else {
         const err = await res.json();
