@@ -74,14 +74,69 @@
   width: 100%;
 }
 
+.aboutus-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--dark);
+}
+
+.head-title ul.breadcrumb li {
+  font-size: 0.9rem;
+}
+
+.about-us-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+}
+
+.leadership {
+  border-top: 1px solid var(--dark);
+  padding-top: 2rem;
+}
+
+.leaders-grid {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.leader {
+  flex: 1 1 200px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.leader-photo {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #0077cc;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  margin-bottom: 1rem;
+}
+
+.leader-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.leader-title {
+  font-size: 1rem;
+  color: var(--dark);
+  font-style: italic;
+}
+
 .contact-info-container {
-  background-color: #f9f9f9;
+  background-color: var(--light);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   max-width: 40%;
   width: 100%;
-  color: #333;
+  color: var(--dark);
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -89,7 +144,7 @@
 .contact-info-container h3 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #222;
+  color: var(--dark);
 }
 
 .contact-info-container p {

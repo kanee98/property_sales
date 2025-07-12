@@ -387,87 +387,64 @@ export default function InquiriesPage() {
               )}
 
               {activeTab === "aboutus" && (
-                <div className="p-6">
-                  <div className="head-title">
+                <div className="aboutus-container p-6 max-w-4xl mx-auto">
+                  <div className="head-title mb-6">
                     <div className="left">
-                      <h1>About Us</h1>
-                      <ul className="breadcrumb">
+                      <h1 className="text-3xl font-bold mb-2">About Us</h1>
+                      <ul className="breadcrumb flex items-center text-gray-600 space-x-2">
                         <li>
-                          <Link href="#">About Us</Link>
+                          <Link href="#" className="hover:underline">About Us</Link>
                         </li>
                         <li><i className='bx bx-chevron-right'></i></li>
                         <li>
-                          <Link href="#" className="active">Who We Are</Link>
+                          <Link href="#" className="active text-blue-600 font-semibold">Who We Are</Link>
                         </li>
                       </ul>
                     </div>
                   </div>
-                  <div className="table-data">
-                    <div className="order">
-                    <div className="head">
-                      <h3>About Us</h3>
-                      <i className='bx bx-plus icon'></i>
-                    </div>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Type</th>
-                            {/* <th>Image</th> */}
-                            <th>Actions</th> 
-                          </tr>
-                        </thead>
-                        <tbody>
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              )}
 
-              {activeTab === "users" && (
-                <div className="p-6">
-                  <div className="head-title">
-                    <div className="left">
-                      <h1>Users</h1>
-                      <ul className="breadcrumb">
-                        <li>
-                          <Link href="#">Users</Link>
-                        </li>
-                        <li><i className='bx bx-chevron-right'></i></li>
-                        <li>
-                          <Link href="#" className="active">Manage Users</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="table-data">
-                    <div className="order">
-                      <div className="head">
-                        <h3>Manage Users</h3>
-                        <i className='bx bx-plus icon'></i>
+                  <section className="about-us-content space-y-6 text-gray-700 leading-relaxed">
+                    <h2 className="text-2xl font-semibold" style={{ marginBottom: "1rem", marginTop: "1rem" }}>Our Story</h2>
+                    <p>
+                      Welcome to our company! We are dedicated to providing top-notch property services that empower 
+                      you to find your dream home or sell your property with confidence. Our expert team works tirelessly 
+                      to bring you the best listings and personalized support.
+                    </p>
+                    <p>
+                      Founded with the mission to simplify real estate, we leverage cutting-edge technology and deep market 
+                      knowledge to create seamless experiences for our clients. Trust, transparency, and customer satisfaction 
+                      are at the heart of everything we do.
+                    </p>
+                    <p>
+                      Whether you are a first-time buyer, seasoned investor, or just exploring options, we are here to guide you 
+                      every step of the way. Join us as we redefine how real estate should be — easy, reliable, and client-focused.
+                    </p>
+                  </section>
+
+                  <section className="leadership mt-10">
+                    <h2 className="text-2xl font-semibold mb-6" style={{ marginBottom: "1rem"}}>Meet Our Leadership</h2>
+                    <div className="leaders-grid">
+                      <div className="leader">
+                        <img
+                          src="/img/kandy1.jpg"
+                          alt="CEO"
+                          className="leader-photo"
+                        />
+                        <h3 className="leader-name">Jane Doe</h3>
+                        <p className="leader-title">Chief Executive Officer (CEO)</p>
                       </div>
-                      <table>
-                        <thead>
-                          <tr>
-                            {/* <th className="py-2 px-4"></th> */}
-                            <th className="py-2 px-4">ID</th>
-                            <th className="py-2 px-4">Name</th>
-                            <th className="py-2 px-4">Email</th>
-                            <th className="py-2 px-4">Role</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          
-                        </tbody>
-                      </table>
+
+                      <div className="leader">
+                        <img
+                          src="/img/property1.jpg"
+                          alt="COO"
+                          className="leader-photo"
+                        />
+                        <h3 className="leader-name">John Smith</h3>
+                        <p className="leader-title">Chief Operating Officer (COO)</p>
+                      </div>
                     </div>
-                  </div>
+                  </section>
                 </div>
               )}
           </main>
