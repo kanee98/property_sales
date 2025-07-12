@@ -702,7 +702,7 @@ export default function PropertyDashboard() {
                               <button
                                 className="button-save"
                                 style={{marginTop:"10px",}}
-                                disabled={isUploading}
+                                disabled={!selectedFile || isUploading}
                                 onClick={async () => {
                                   if (!selectedFile || !selectedPropertyId) {
                                     alert("Please choose a file.");
@@ -744,6 +744,7 @@ export default function PropertyDashboard() {
                                     
                                       setSelectedImages((prev) => [...prev, newImagePath]);
                                       alert("Image uploaded successfully!");
+                                      setSelectedFile(null); 
                                     }                                    
                                   } catch (err) {
                                     console.error("Upload error:", err);
@@ -1320,20 +1321,25 @@ export default function PropertyDashboard() {
                                     <button
                                       className="view-btn"
                                       onClick={() => {
-                                        const images = (() => {
-                                          try {
+                                        let images = [];
+
+                                        try {
+                                          if (typeof inquiry.attachments === "string") {
                                             const parsed = JSON.parse(inquiry.attachments);
-                                            return Array.isArray(parsed) ? parsed : [];
-                                          } catch {
-                                            return [];
+                                            images = Array.isArray(parsed) ? parsed : [];
+                                          } else if (Array.isArray(inquiry.attachments)) {
+                                            images = inquiry.attachments;
                                           }
-                                        })();
-                                      
+                                        } catch (e) {
+                                          console.error("Failed to parse attachments:", e);
+                                          images = [];
+                                        }
+
                                         setSelectedPropertyId(inquiry.id); // Set this for upload logic
                                         setSelectedImages(images);
                                         setCurrentImageIndex(0); // Reset index on open
                                         setIsImageModalOpen(true);
-                                      }}                                      
+                                      }}    
                                     >
                                       View
                                     </button>
@@ -1364,6 +1370,178 @@ export default function PropertyDashboard() {
                           )}
                         </tbody>
                       </table>
+
+                      {isImageModalOpen && (
+                        <div className="modal-container" onClick={() => setIsImageModalOpen(false)}>
+                          <div className="modal-content-image" onClick={(e) => e.stopPropagation()}>
+                            <h2 className="text-xl font-semibold mb-4">Inquiry Attachments</h2>
+
+                            <button
+                              onClick={() => setIsImageModalOpen(false)}
+                              className="modal-close-btn"
+                              aria-label="Close"
+                            >
+                              &times;
+                            </button>
+
+                            {selectedImages.length > 0 ? (
+                              <div className="text-center">
+                                <img
+                                  src={selectedImages[currentImageIndex]}
+                                  alt={`Attachment ${currentImageIndex + 1}`}
+                                  className="w-96 h-60 object-cover rounded border mx-auto"
+                                />
+
+                                <div className="pagination-controls">
+                                  <button
+                                    disabled={currentImageIndex === 0}
+                                    onClick={() => setCurrentImageIndex((prev) => prev - 1)}
+                                    className="pagination-btn"
+                                  >
+                                    Previous
+                                  </button>
+                                  <button
+                                    disabled={currentImageIndex === selectedImages.length - 1}
+                                    onClick={() => setCurrentImageIndex((prev) => prev + 1)}
+                                    className="pagination-btn"
+                                  >
+                                    Next
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      const updatedImages = [...selectedImages];
+                                      updatedImages.splice(currentImageIndex, 1);
+                                      setSelectedImages(updatedImages);
+                                      setCurrentImageIndex((prev) =>
+                                        prev >= updatedImages.length ? updatedImages.length - 1 : prev
+                                      );
+
+                                      // Update DB
+                                      fetch("/api/inquiries", {
+                                        method: "PUT",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                          ...inquiries.find((i) => i.id === selectedPropertyId),
+                                          attachments: updatedImages,
+                                        }),
+                                      });
+
+                                      setInquiries((prev) =>
+                                        prev.map((inq) =>
+                                          inq.id === selectedPropertyId
+                                            ? { ...inq, attachments: updatedImages }
+                                            : inq
+                                        )
+                                      );
+                                    }}
+                                    className="delete-btn"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="text-center">No attachments available</p>
+                            )}
+
+                            {/* Add New Image Section */}
+                            <div className="mt-6 text-center space-y-2">
+                              <p className="text-sm text-gray-700">Add Image from Computer</p>
+
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    setSelectedFile(file);
+                                  }
+                                }}
+                                className="border border-gray-300 rounded px-4 py-2"
+                              />
+
+                              <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
+                              
+                              <button
+                                className="button-save"
+                                style={{ marginTop: "10px" }}
+                                disabled={!selectedFile || isUploading}  // disable if no file selected or uploading
+                                onClick={async () => {
+                                  if (!selectedFile || !selectedPropertyId) {
+                                    alert("Please choose a file.");
+                                    return;
+                                  }
+
+                                  setIsUploading(true);
+
+                                  try {
+                                    const formData = new FormData();
+                                    formData.append("file", selectedFile);
+                                    formData.append("inquiryId", selectedPropertyId.toString());
+
+                                    const res = await fetch("/api/upload-image", {
+                                      method: "POST",
+                                      body: formData,
+                                    });
+
+                                    if (!res.ok) {
+                                      const error = await res.json();
+                                      alert("Upload failed: " + error.message);
+                                      return;
+                                    }
+
+                                    const { newImagePath } = await res.json();
+
+                                    if (newImagePath) {
+                                      const updatedImages = [...selectedImages, newImagePath];
+
+                                      const existingInquiry = inquiries.find(
+                                        (inq) => inq.id === selectedPropertyId
+                                      );
+                                      if (!existingInquiry) {
+                                        alert("Inquiry not found.");
+                                        return;
+                                      }
+
+                                      const updatedInquiry = {
+                                        ...existingInquiry,
+                                        attachments: updatedImages,
+                                      };
+
+                                      await fetch("/api/inquiries", {
+                                        method: "PUT",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(updatedInquiry),
+                                      });
+
+                                      setSelectedImages(updatedImages);
+
+                                      setInquiries((prev) =>
+                                        prev.map((inq) =>
+                                          inq.id === selectedPropertyId
+                                            ? { ...inq, attachments: updatedImages }
+                                            : inq
+                                        )
+                                      );
+
+                                      alert("Image uploaded successfully!");
+                                      setSelectedFile(null);  // reset file selection after upload
+                                    }
+                                  } catch (err) {
+                                    console.error("Upload error:", err);
+                                    alert("Something went wrong.");
+                                  } finally {
+                                    setIsUploading(false);
+                                  }
+                                }}
+                              >
+                                {isUploading ? "Uploading..." : "Add Image"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
                         <button
