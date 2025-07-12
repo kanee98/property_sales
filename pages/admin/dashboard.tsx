@@ -184,7 +184,7 @@ export default function PropertyDashboard() {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
-   const [inquiryToDelet, setInquiryToDelete] = useState<number | null>(null);
+  const [inquiryToDelete, setInquiryToDelete] = useState<number | null>(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -291,14 +291,13 @@ export default function PropertyDashboard() {
 
   const handleDeleteInquiry = async (inquiryID: number) => {
     try {
-      const inquiryToUpdate = inquiries.find((p) => p.id === inquiryID);
+      const inquiryToUpdate = inquiries.find((inq) => inq.id === inquiryID);
       if (!inquiryToUpdate) {
         alert("Inquiry not found.");
         return;
       }
 
-      // Exclude 'images' if needed (adjust as per your schema)
-      const { images, ...inquiryDataWithoutImages } = inquiryToUpdate;
+      const { attachments, ...inquiryDataWithoutImages } = inquiryToUpdate;
 
       const updatedInquiry = {
         ...inquiryDataWithoutImages,
@@ -312,7 +311,7 @@ export default function PropertyDashboard() {
       });
 
       if (res.ok) {
-        // Remove the inquiry from the state
+        const updated = await res.json();
         setInquiries((prev) => prev.filter((inq) => inq.id !== inquiryID));
         showMessage("Inquiry successfully deleted.");
       } else {
@@ -1404,7 +1403,10 @@ export default function PropertyDashboard() {
                                     Edit
                                   </button>
                                   <button
-                                    onClick={() => handleDeleteInquiry(inquiry.id)}
+                                    onClick={() => {
+                                      setInquiryToDelete(inquiry.id);
+                                      setIsDeleteModalOpen(true);
+                                    }}
                                     className="delete-btn"
                                   >
                                     Delete
