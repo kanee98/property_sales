@@ -16,6 +16,8 @@ interface Property {
   district: string;
   category: string; // Corporate or Retail
   type: string;
+  manager: string;
+  contact: number;
 }
 
 const itemsPerPage = 6;
@@ -111,7 +113,7 @@ export default function ListingsPage() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   return (
     <>
@@ -294,7 +296,8 @@ export default function ListingsPage() {
                       const imgs = JSON.parse(property.images);
                       if (Array.isArray(imgs)) {
                         setSelectedImages(imgs);
-                        setCurrentImageIndex(0); // 🔁 Reset to first image!
+                        setSelectedProperty(property);  
+                        setCurrentImageIndex(0);        
                         setIsImageModalOpen(true);
                       }
                     } catch (err) {
@@ -345,37 +348,50 @@ export default function ListingsPage() {
           <button className="close-btn" onClick={() => setIsImageModalOpen(false)}>✕</button>
 
           {selectedImages.length > 0 ? (
-            <div className="slider-container">
-              <button
-                className="nav-btn prev"
-                onClick={() =>
-                  setCurrentImageIndex(
-                    (prev) => (prev - 1 + selectedImages.length) % selectedImages.length
-                  )
-                }
-                disabled={selectedImages.length <= 1}
-                style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
-              >
-                ‹
-              </button>
+            <>
+              <div className="slider-container">
+                <button
+                  className="nav-btn prev"
+                  onClick={() =>
+                    setCurrentImageIndex(
+                      (prev) => (prev - 1 + selectedImages.length) % selectedImages.length
+                    )
+                  }
+                  disabled={selectedImages.length <= 1}
+                  style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
+                >
+                  ‹
+                </button>
 
-              <img
-                src={selectedImages[currentImageIndex] || "/img/default.jpg"}
-                alt={`Slide ${currentImageIndex + 1}`}
-                className="slider-image"
-              />
+                <img
+                  src={selectedImages[currentImageIndex] || "/img/default.jpg"}
+                  alt={`Slide ${currentImageIndex + 1}`}
+                  className="slider-image"
+                />
 
-              <button
-                className="nav-btn next"
-                onClick={() =>
-                  setCurrentImageIndex((prev) => (prev + 1) % selectedImages.length)
-                }
-                disabled={selectedImages.length <= 1}
-                style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
-              >
-                ›
-              </button>
-            </div>
+                <button
+                  className="nav-btn next"
+                  onClick={() =>
+                    setCurrentImageIndex((prev) => (prev + 1) % selectedImages.length)
+                  }
+                  disabled={selectedImages.length <= 1}
+                  style={{ opacity: selectedImages.length <= 1 ? 0.4 : 1, cursor: selectedImages.length <= 1 ? "not-allowed" : "pointer" }}
+                >
+                  ›
+                </button>
+              </div>
+
+              {/* Property Info Block */}
+              {selectedProperty && (
+                <div className="property-info">
+                  <p><strong>Title:</strong> {selectedProperty.title}</p>
+                  <p><strong>District:</strong> {selectedProperty.district}</p>
+                  <p><strong>Price:</strong> Rs. {selectedProperty.price}</p>
+                  <p><strong>Manager:</strong> {selectedProperty.manager}</p>
+                  <p><strong>Contact:</strong> {selectedProperty.contact}</p>
+                </div>
+              )}
+            </>
           ) : (
             <p>No images to display</p>
           )}
