@@ -233,6 +233,12 @@ export default function PropertyDashboard() {
     setCurrentPageForInquiries(page);
   }
 
+  function handlePageChangeForUsers(page: number) {
+    if (page < 1 || page > totalPagesForUsers) 
+      return;
+    setCurrentPageForUsers(page);
+  }
+
   // Handle Edit
   const handleEditProperties = (propertyId: number) => {
     const property = properties.find(p => p.id === propertyId);
@@ -2049,18 +2055,18 @@ export default function PropertyDashboard() {
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
                         <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
+                          onClick={() => handlePageChangeForUsers(currentPageForUsers - 1)}
+                          disabled={currentPageForUsers === 1}
                           className="pagination-btn"
                         >
                           « Previous
                         </button>
 
-                        <span>Page {currentPage} of {totalPagesForUsers}</span>
+                        <span>Page {currentPageForUsers} of {totalPagesForUsers}</span>
 
                         <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPagesForUsers}
+                          onClick={() => handlePageChangeForUsers(currentPageForUsers + 1)}
+                          disabled={currentPageForUsers === totalPagesForUsers}
                           className="pagination-btn"
                         >
                           Next »
