@@ -217,6 +217,7 @@ export default function PropertyDashboard() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [editingInquiry, setEditingInquiry] = useState<Inquiry | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
@@ -2048,9 +2049,12 @@ export default function PropertyDashboard() {
                                 <td>
                                   {/* Edit and Delete buttons */}
                                   <button
-                                    // onClick={() => handleEdit(user.id)}
+                                    onClick={() => {
+                                      setEditingUser(user);
+                                      setIsEditModalOpen(true);
+                                    }}
                                     className="edit-btn"
-                                    style={{ marginRight: '10px' }}
+                                    style={{ marginRight: "10px" }}
                                   >
                                     Edit
                                   </button>
@@ -2070,6 +2074,112 @@ export default function PropertyDashboard() {
                           )}
                         </tbody>
                       </table>
+
+                      {isEditModalOpen && editingUser && (
+                        <div className="modal-container">
+                          <div className="modal-content">
+                            <h2 className="text-2xl font-semibold mb-4" style={{ marginBottom: "3%" }}>
+                              Edit User
+                            </h2>
+
+                            <form
+                              onSubmit={async (e) => {
+                                e.preventDefault();
+                                try {
+                                  const res = await fetch("/api/users", {
+                                    method: "PUT",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify(editingUser),
+                                  });
+
+                                  if (res.ok) {
+                                    const updated = await res.json();
+                                    setUsers((prev) =>
+                                      prev.map((user) => (user.id === updated.id ? updated : user))
+                                    );
+                                    setIsEditModalOpen(false);
+                                  } else {
+                                    const err = await res.json();
+                                    alert("Update failed: " + err.message);
+                                  }
+                                } catch (err) {
+                                  console.error(err);
+                                  alert("Something went wrong");
+                                }
+                              }}
+                            >
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="form-row">
+                                  <label htmlFor="name" style={{ fontWeight: "600" }}>Name</label>
+                                  <input
+                                    id="name"
+                                    type="text"
+                                    value={editingUser.name}
+                                    onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                                    className="border p-2 rounded"
+                                    required
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="email" style={{ fontWeight: "600" }}>Email</label>
+                                  <input
+                                    id="email"
+                                    type="email"
+                                    value={editingUser.email}
+                                    onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                                    className="border p-2 rounded"
+                                    required
+                                  />
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="role" style={{ fontWeight: "600" }}>Role</label>
+                                  <select
+                                    id="role"
+                                    value={editingUser.role}
+                                    onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
+                                    className="border p-2 rounded"
+                                    required
+                                  >
+                                    <option value="admin">Admin</option>
+                                    <option value="agent">Agent</option>
+                                    <option value="viewer">Viewer</option>
+                                  </select>
+                                </div>
+
+                                <div className="form-row">
+                                  <label htmlFor="status" style={{ fontWeight: "600" }}>Status</label>
+                                  <select
+                                    id="status"
+                                    value={editingUser.status}
+                                    onChange={(e) => setEditingUser({ ...editingUser, status: Number(e.target.value) })}
+                                    className="border p-2 rounded"
+                                    required
+                                  >
+                                    <option value={1}>Active</option>
+                                    <option value={0}>Inactive</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div className="button-container">
+                                <button
+                                  type="button"
+                                  onClick={() => setIsEditModalOpen(false)}
+                                  className="button-cancel"
+                                >
+                                  Cancel
+                                </button>
+                                <button type="submit" className="button-save">
+                                  Save Changes
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
                         <button
