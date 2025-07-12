@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import Logo from "../src/img/Propwise Logo No BG.png";
 import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTag, faSyncAlt, faUser, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function InquiriesPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -295,66 +295,92 @@ export default function InquiriesPage() {
                   </div>
                   <section className="whyChooseUs">              
                     <div className="reasons">
-                        <ul className="box-info" style={{marginTop:"0"}}>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                <FontAwesomeIcon icon={faCheck} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Quick</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsa, a fuga sed maxime beatae earum tenetur possimus dignissimos ea.</p>
-                                    </div>
-                                </div>
+                      <ul className="box-info" style={{marginTop:"0"}}>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faCheckCircle} size="2x" color="#28a745" />
+                            <div className="reason-text">
+                              <h3>Reliable Service</h3>
+                              <p>
+                                We pride ourselves on offering reliable and transparent service. 
+                                Every transaction is handled with utmost professionalism, ensuring your trust is well placed.
+                                Our dedicated support team is always ready to assist you throughout your property journey.
+                              </p>
                             </div>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                    <FontAwesomeIcon icon={faTag} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Free</h3>
-                                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum obcaecati sit nihil porro molestias consectetur dolore, laudantium recusandae iure quasi!</p>
-                                    </div>
-                                </div>
+                          </div>
+                        </div>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faTags} size="2x" color="#ff6600" />
+                            <div className="reason-text">
+                              <h3>Competitive Pricing</h3>
+                              <p>
+                                Find the best deals tailored to your budget. 
+                                We provide transparent pricing with no hidden fees, so you can make informed decisions. 
+                                Our market experts constantly update listings to ensure you get great value.
+                              </p>
                             </div>
-                        </ul>
-                        <ul className="box-info" style={{marginTop:"0"}}>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                    <FontAwesomeIcon icon={faSyncAlt} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Easy</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda veritatis commodi officia tempore nulla doloribus officiis cupiditate ducimus consequatur ut?</p>
-                                    </div>
-                                </div>
+                          </div>
+                        </div>
+                      </ul>
+
+                      <ul className="box-info" style={{marginTop:"0"}}>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faSyncAlt} size="2x" color="#007bff" />
+                            <div className="reason-text">
+                              <h3>Seamless Process</h3>
+                              <p>
+                                Experience a smooth, hassle-free process from start to finish. 
+                                Our platform simplifies inquiries, negotiations, and paperwork. 
+                                We ensure timely updates and efficient communication at every step.
+                              </p>
                             </div>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                    <FontAwesomeIcon icon={faUser} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Independent</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptate culpa sunt itaque minima harum explicabo placeat dolores maiores consequuntur?</p>
-                                    </div>
-                                </div>
+                          </div>
+                        </div>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faUserTie} size="2x" color="#6f42c1" />
+                            <div className="reason-text">
+                              <h3>Expert Agents</h3>
+                              <p>
+                                Work with experienced and professional agents who understand your needs. 
+                                They provide tailored advice and local market insights to help you make smart choices. 
+                                Our agents are committed to delivering personalized, attentive service.
+                              </p>
                             </div>
-                        </ul>
-                        <ul className="box-info" style={{marginTop:"0"}}>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                    <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Awesome</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi quia, illum et deserunt temporibus omnis neque similique aut inventore in!</p>
-                                    </div>
-                                </div>
+                          </div>
+                        </div>
+                      </ul>
+
+                      <ul className="box-info" style={{marginTop:"0"}}>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faThumbsUp} size="2x" color="#17a2b8" />
+                            <div className="reason-text">
+                              <h3>Customer Satisfaction</h3>
+                              <p>
+                                Your satisfaction is our priority. 
+                                We strive to exceed your expectations with quality service and attention to detail. 
+                                Our client testimonials and repeat customers speak volumes about our commitment.
+                              </p>
                             </div>
-                            <div className="table-data" style={{marginTop:"0"}}>
-                                <div className="reason">
-                                    <FontAwesomeIcon icon={faSyncAlt} size="2x" />
-                                    <div className="reason-text">
-                                        <h3>Easy</h3>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda veritatis commodi officia tempore nulla doloribus officiis cupiditate ducimus consequatur ut?</p>
-                                    </div>
-                                </div>
+                          </div>
+                        </div>
+                        <div className="table-data" style={{marginTop:"0"}}>
+                          <div className="reason">
+                            <FontAwesomeIcon icon={faShieldAlt} size="2x" color="#dc3545" />
+                            <div className="reason-text">
+                              <h3>Secure Transactions</h3>
+                              <p>
+                                We prioritize your safety with robust security measures protecting your data and payments. 
+                                Every transaction on our platform follows industry best practices. 
+                                Trust us to keep your information and assets secure at all times.
+                              </p>
                             </div>
-                        </ul>
+                          </div>
+                        </div>
+                      </ul>
                     </div>
                   </section>
                 </div>
