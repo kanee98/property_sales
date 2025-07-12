@@ -40,6 +40,14 @@ export interface Inquiry {
   status: number;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: number;
+}
+
 export default function PropertyDashboard() {
   const router = useRouter();
   const [activeListings, setActiveListings] = useState(0);
@@ -1343,7 +1351,7 @@ export default function PropertyDashboard() {
                   )}
                 </div>
               )}
-
+{/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
               {/* Inquiries */}
               {activeTab === "inquiries" && (
                 <div className="p-6">
@@ -1984,7 +1992,8 @@ export default function PropertyDashboard() {
                   </div>
                 </div>
               )}
-
+{/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+              {/* Users */}
               {activeTab === "users" && (
                 <div className="p-6">
                   <div className="head-title">
@@ -2010,7 +2019,6 @@ export default function PropertyDashboard() {
                       <table>
                         <thead>
                           <tr>
-                            {/* <th className="py-2 px-4"></th> */}
                             <th className="py-2 px-4">ID</th>
                             <th className="py-2 px-4">Name</th>
                             <th className="py-2 px-4">Email</th>
@@ -2021,9 +2029,19 @@ export default function PropertyDashboard() {
                         <tbody>
                           {usersToDisplay.length > 0 ? (
                             usersToDisplay.map((user) => (
-                              <tr key={user.id} className="border-t">
-                                {/* <Image src="https://placehold.co/600x400/png" width={40} height={40} alt="Profile"/> */}
-                                <td className="py-2 px-4">{user.id}</td>
+                              <tr key={user.id} className="border-t" style={{ textAlign: "center" }}>
+                                <td style={{ padding: "16px" }}>
+                                  <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: "100%",
+                                    minHeight: "50px", // Adjust if needed
+                                    textAlign: "center",
+                                  }}>
+                                    {user.id}
+                                  </div>
+                                </td>
                                 <td className="py-2 px-4">{user.name}</td>
                                 <td className="py-2 px-4">{user.email}</td>
                                 <td className="py-2 px-4">{user.role}</td>
