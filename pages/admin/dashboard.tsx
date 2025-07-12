@@ -297,22 +297,22 @@ export default function PropertyDashboard() {
         return;
       }
 
-      const { attachments, ...inquiryDataWithoutImages } = inquiryToUpdate;
-
       const updatedInquiry = {
-        ...inquiryDataWithoutImages,
-        status: 0,
+        ...inquiryToUpdate,       
+        status: 0,              
       };
 
       const res = await fetch("/api/inquiries", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedInquiry),
+        body: JSON.stringify(updatedInquiry), 
       });
 
       if (res.ok) {
         const updated = await res.json();
-        setInquiries((prev) => prev.filter((inq) => inq.id !== inquiryID));
+        setInquiries((prev) =>
+          prev.filter((inq) => inq.id !== inquiryID)
+        );
         showMessage("Inquiry successfully deleted.");
       } else {
         const err = await res.json();
