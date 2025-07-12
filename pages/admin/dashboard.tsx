@@ -1356,7 +1356,11 @@ export default function PropertyDashboard() {
                                 <td>{inquiry.email}</td>
                                 <td>{inquiry.phone}</td>
                                 <td>{inquiry.requirements}</td>
-                                <td>{inquiry.budget ? `$${inquiry.budget.toLocaleString()}` : '—'}</td>
+                                <td>
+                                  {inquiry.budget != null
+                                    ? `Rs. ${inquiry.budget.toLocaleString()}`
+                                    : "N/A"}
+                                </td>
                                 <td style={{ padding: "16px" }}>
                                   <div style={{
                                       display: "flex",
