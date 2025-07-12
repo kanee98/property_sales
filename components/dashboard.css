@@ -218,6 +218,7 @@ body {
 
   select {
 	border: 1px solid #ccc;
+	color: black;
 	padding: 0.5rem 0.75rem;
 	border-radius: 0.375rem; /* matches your rounded class */
 	font-family: var(--poppins);
@@ -255,6 +256,7 @@ body {
 
 input, textarea {
 	border: 1px solid #ccc;
+	color: black;
 	padding: 8px;
 	border-radius: 6px;
 	font-family: var(--poppins);
