@@ -72,7 +72,8 @@ export default function PropertyDashboard() {
   useEffect(() => {
     axios.get("/api/properties")
       .then((response) => {
-        setActiveListings(response.data.length); // Set the count dynamically
+        const activeProps = response.data.filter((p: any) => p.status === 1);
+        setActiveListings(activeProps.length);
       })
       .catch((error) => console.error("Error fetching properties:", error));
   }, []);
@@ -865,7 +866,7 @@ export default function PropertyDashboard() {
                               className="border p-2 rounded mt-4 w-full"
                             />
 
-                            <div className="mt-4">
+                            <div className="mt-4" style={{marginTop:"10px",}}>
                               <label className="block mb-1 font-semibold">Upload Image</label>
                               <input
                                 type="file"
@@ -876,7 +877,7 @@ export default function PropertyDashboard() {
                                     setImageFile(file);
                                   }
                                 }}
-                                className="border border-gray-300 rounded px-4 py-2"
+                                className="border border-gray-300 rounded px-4 py-2" style={{marginTop:"10px",}}
                               />
                             </div>
 
