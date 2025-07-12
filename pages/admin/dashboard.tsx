@@ -468,25 +468,28 @@ export default function PropertyDashboard() {
           <ul className="side-menu top">
             <li className={activeTab === "dashboard" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("dashboard")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className="bx bxs-dashboard bx-sm"></i>
                 <span className="text">Dashboard</span>
               </Link>
             </li>
+
             <li className={activeTab === "properties" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("properties")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className="bx bxs-building-house bx-sm"></i>
                 <span className="text">Active Properties</span>
               </Link>
             </li>
+
             <li className={activeTab === "inquiries" ? "active" : ""}>
               <Link href="#" onClick={() => setActiveTab("inquiries")} className="nav-link">
-                <i className='bx bxs-dashboard bx-sm'></i>
+                <i className="bx bxs-envelope bx-sm"></i>
                 <span className="text">Pending Inquiries</span>
               </Link>
             </li>
+
             <li className={activeTab === "users" ? "active" : ""}>
               <Link href="#" onClick={() => { setActiveTab("users"); fetchUsers(); }} className="nav-link">
-                <i className='bx bxs-user bx-sm'></i>
+                <i className="bx bxs-user bx-sm"></i>
                 <span className="text">Users</span>
               </Link>
             </li>
