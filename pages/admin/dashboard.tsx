@@ -81,8 +81,11 @@ export default function PropertyDashboard() {
   useEffect(() => {
     axios.get("/api/inquiries")
       .then((response) => {
-        setActiveInquiries(response.data.length); // Set the count dynamically
-        setInquiries(response.data);
+        const allInquiries = response.data;
+        const activeInqs = allInquiries.filter((inq: any) => inq.status === 1);
+
+        setActiveInquiries(activeInqs.length); // Count only active
+        setInquiries(activeInqs);              // Show only active
       })
       .catch((error) => console.error("Error fetching inquiries:", error));
   }, []);
@@ -181,6 +184,7 @@ export default function PropertyDashboard() {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
+   const [inquiryToDelet, setInquiryToDelete] = useState<number | null>(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -275,6 +279,42 @@ export default function PropertyDashboard() {
           prev.map((p) => (p.id === updated.id ? updated : p))
         );
         showMessage("Property successfully deleted.");
+      } else {
+        const err = await res.json();
+        showMessage("Delete failed: " + err.message);
+      }
+    } catch (err) {
+      console.error(err);
+      showMessage("Something went wrong during delete.");
+    }
+  };
+
+  const handleDeleteInquiry = async (inquiryID: number) => {
+    try {
+      const inquiryToUpdate = inquiries.find((p) => p.id === inquiryID);
+      if (!inquiryToUpdate) {
+        alert("Inquiry not found.");
+        return;
+      }
+
+      // Exclude 'images' if needed (adjust as per your schema)
+      const { images, ...inquiryDataWithoutImages } = inquiryToUpdate;
+
+      const updatedInquiry = {
+        ...inquiryDataWithoutImages,
+        status: 0,
+      };
+
+      const res = await fetch("/api/inquiries", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedInquiry),
+      });
+
+      if (res.ok) {
+        // Remove the inquiry from the state
+        setInquiries((prev) => prev.filter((inq) => inq.id !== inquiryID));
+        showMessage("Inquiry successfully deleted.");
       } else {
         const err = await res.json();
         showMessage("Delete failed: " + err.message);
@@ -1364,7 +1404,7 @@ export default function PropertyDashboard() {
                                     Edit
                                   </button>
                                   <button
-                                    // onClick={() => handleDelete(inquiry.id)}
+                                    onClick={() => handleDeleteInquiry(inquiry.id)}
                                     className="delete-btn"
                                   >
                                     Delete
@@ -1379,6 +1419,46 @@ export default function PropertyDashboard() {
                           )}
                         </tbody>
                       </table>
+
+                      {isDeleteModalOpen && (
+                        <div className="modal-overlay">
+                          <div className="modal-content-delete">
+                            <h3>Confirm Delete</h3>
+                            <p>Are you sure you want to delete this inquiry?</p>
+                            <div className="modal-buttons">
+                              <button
+                                className="button-cancel"
+                                onClick={() => setIsDeleteModalOpen(false)}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="button-delete"
+                                onClick={() => {
+                                  if (inquiryToDelete !== null) {
+                                    handleDeleteInquiry(inquiryToDelete); // Make sure this function is defined
+                                  }
+                                  setIsDeleteModalOpen(false);
+                                }}
+                              >
+                                Yes, Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isMessageModalOpen && (
+                        <div
+                          className={`message-modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-500
+                            ${isFadingOut ? "opacity-0" : "opacity-100"}`}
+                          style={{ zIndex: 9999 }}
+                        >
+                          <div className="bg-white p-6 rounded shadow-lg max-w-sm text-center">
+                            {modalMessage}
+                          </div>
+                        </div>
+                      )}
 
                       {isImageModalOpen && (
                         <div className="modal-container" onClick={() => setIsImageModalOpen(false)}>
