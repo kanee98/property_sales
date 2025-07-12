@@ -148,7 +148,6 @@ export default function PropertyDashboard() {
   };
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Track the current page
 
   // Filter properties based on search term
   const filteredProperties = properties.filter(property =>
@@ -176,20 +175,30 @@ export default function PropertyDashboard() {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate the start and end indices for slicing the properties array
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const [currentPageForUsers, setCurrentPageForUsers] = useState(1);
+  const [currentPageForProperties, setCurrentPageForProperties] = useState(1);
+  const [currentPageForInquiries, setCurrentPageForInquiries] = useState(1);
 
-  const usersToDisplay = filteredUsers.slice(startIndex, endIndex);
+  const itemsPerPage = 10;
 
-  const propertiesToDisplay = filteredProperties.slice(startIndex, endIndex);
-  const inquiriesToDisplay = filteredInquiries.slice(startIndex, endIndex);
+  // Users pagination
+  const startIndexUsers = (currentPageForUsers - 1) * itemsPerPage;
+  const endIndexUsers = startIndexUsers + itemsPerPage;
+  const usersToDisplay = filteredUsers.slice(startIndexUsers, endIndexUsers);
+
+  // Properties pagination
+  const startIndexProperties = (currentPageForProperties - 1) * itemsPerPage;
+  const endIndexProperties = startIndexProperties + itemsPerPage;
+  const propertiesToDisplay = filteredProperties.slice(startIndexProperties, endIndexProperties);
+
+  // Inquiries pagination
+  const startIndexInquiries = (currentPageForInquiries - 1) * itemsPerPage;
+  const endIndexInquiries = startIndexInquiries + itemsPerPage;
+  const inquiriesToDisplay = filteredInquiries.slice(startIndexInquiries, endIndexInquiries);
 
   const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
   const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
   const totalPagesForInquiries = Math.ceil(inquiries.length / itemsPerPage);
-
-  const [currentPageForInquiries, setCurrentPageForInquiries] = useState(1);
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -213,11 +222,11 @@ export default function PropertyDashboard() {
 
 
   // Handle page change for properties
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPagesForProperties) {
-      setCurrentPage(page);
-    }
-  };
+  function handlePageChangeForProperties(page: number) {
+    if (page < 1 || page > totalPagesForProperties) 
+      return;
+    setCurrentPageForProperties(page);
+  }
 
   function handlePageChangeForInquiries(page: number) {
     if (page < 1 || page > totalPagesForInquiries) 
@@ -1086,18 +1095,18 @@ export default function PropertyDashboard() {
                       {/* Pagination Controls */}
                       <div className="pagination-controls">
                         <button
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
+                          onClick={() => handlePageChangeForProperties(currentPageForProperties - 1)}
+                          disabled={currentPageForProperties === 1}
                           className="pagination-btn"
                         >
                           « Previous
                         </button>
 
-                        <span>Page {currentPage} of {totalPagesForProperties}</span>
+                        <span>Page {currentPageForProperties} of {totalPagesForProperties}</span>
 
                         <button
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPagesForProperties}
+                          onClick={() => handlePageChangeForProperties(currentPageForProperties + 1)}
+                          disabled={currentPageForProperties === totalPagesForProperties}
                           className="pagination-btn"
                         >
                           Next »
