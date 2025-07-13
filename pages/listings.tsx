@@ -141,7 +141,7 @@ export default function ListingsPage() {
         <h3 className="text-2xl font-semibold">Relax, Finding Properties Just Got Easier</h3>
         <p className="text-lg mt-2">Discover the best properties for sale or rent</p>
         <form className="mt-5 flex justify-center pb-[10%]">
-          <div className="flex mb-6 space-x-1 w-[500px]">
+          <div className="flex mb-6 space-x-1 w-full max-w-[500px] mx-auto">
             <input
               type="text"
               placeholder="Search properties..."
