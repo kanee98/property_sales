@@ -600,14 +600,14 @@ export default function PropertyDashboard() {
                   </a>           */}
                 </div>
                 <ul className="box-info">
-                  <li>
-                    <i className='bx bxs-calendar-check' ></i>
+                  <li style={{marginRight:"1rem"}}>
+                    <i className='bx bxs-calendar-check'></i>
                     <span className="text">
                       <h3>Active Listings</h3>
                       <p>{activeListings}</p>
                     </span>
                   </li>
-                  <li>
+                  <li style={{marginRight:"1rem"}}>
                     <i className='bx bxs-dollar-circle' ></i>
                     <span className="text">
                       <h3>Pending Approvals</h3>
@@ -720,13 +720,11 @@ export default function PropertyDashboard() {
                                 </td>
                                 <td style={{
                                     whiteSpace: "normal",     // Allow text to wrap
-                                    wordBreak: "break-word",  // Break long words
                                     maxWidth: "200px",        // Optional: limit width to control wrap
                                     padding: "12px 16px"
                                   }}>{property.title}</td>
                                 <td style={{
                                     whiteSpace: "normal",
-                                    wordBreak: "break-word",
                                     maxWidth: "300px",
                                     padding: "12px 16px"
                                   }}>{property.description}</td>
@@ -832,6 +830,7 @@ export default function PropertyDashboard() {
                                   src={selectedImages[currentImageIndex]}
                                   alt={`Property image ${currentImageIndex + 1}`}
                                   className="w-96 h-60 object-cover rounded border mx-auto"
+                                  style={{width:"100%"}}
                                 />
 
                                 <div className="pagination-controls">
