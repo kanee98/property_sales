@@ -136,6 +136,7 @@ body {
   border: none;
   color: red;
   cursor: pointer;
+  z-index: 1;
 }
 
 .slider-container {
@@ -192,11 +193,13 @@ body {
 .prev {
   position: absolute;
   left: 0;
+  z-index: 1;
 }
 
 .next {
   position: absolute;
   right: 0;
+  z-index: 1;
 }
   
   @media (max-width: 768px) {
