@@ -24,7 +24,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #d9edff;
+  background: #ffffff;
 }
 
 /* Login Box */
@@ -103,6 +103,7 @@ body {
 .illustration-wrapper img {
   display: block;
   width: 100%;
+  height: auto;
 }
 
 /* Responsive Design */
