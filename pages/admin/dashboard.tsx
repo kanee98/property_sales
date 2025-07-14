@@ -163,10 +163,10 @@ export default function PropertyDashboard() {
           </ul>
           <ul className="side-menu bottom">
             <li>
-              <a href="/login" onClick={handleLogout} className="logout">
+              <Link href="/login" onClick={handleLogout} className="logout">
                 <i className='bx bx-power-off bx-sm bx-burst-hover' ></i>
                 <span className="text">Logout</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </section>

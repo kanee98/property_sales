@@ -1,5 +1,4 @@
 import { IncomingForm, File } from "formidable";
-import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 
