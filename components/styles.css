@@ -249,7 +249,12 @@ body {
     /* Adjust header layout */
     header {
       text-align: center;
-      padding: 10px;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
     }
 
     .landing-message h3 {

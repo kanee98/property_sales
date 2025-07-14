@@ -110,9 +110,9 @@ export default function ListingsPage() {
     <>
     <section className="landing">
       <div className="landing-bg"></div>     
-      <header className="relative z-10 flex justify-between items-center px-10 py-5">
+      <header className="header">
         {/* Logo + Name container */}
-        <div className="flex items-center space-x-3">
+        <div className="brand">
           <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
           <h1 className="text-3xl font-bold">PROPWISE</h1>
         </div>

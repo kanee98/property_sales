@@ -18,6 +18,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Propwise.lk",
   description: "Designed and Created by fusionlabz.lk",
+  icons: {
+    icon: [
+      { rel: "icon", url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { rel: "icon", url: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "shortcut icon", url: "/favicon.ico" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  manifest: "/site.webmanifest",
+  appleWebApp: {
+    title: "PROPWISE",
+  },
 };
 
 export default function RootLayout({
