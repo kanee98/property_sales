@@ -139,7 +139,7 @@ export default function ListingsPage() {
               className="border p-2 rounded w-full"
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <select onChange={(e) => setSelectedCategory(e.target.value)}>
+            <select onChange={(e) => setSelectedCategory(e.target.value)} style={{width:"45%"}}>
               <option value="" style={{ color: "black" }}>All Types</option>
               <option value="Corporate" style={{ color: "black" }}>Corporate</option>
               <option value="Retail" style={{ color: "black" }}>Retail</option>
@@ -194,7 +194,7 @@ export default function ListingsPage() {
         <h4 className="font-semibold">By category:</h4>
         <div className="space-y-2">
           {["For Sale", "For Rent", "Wanted"].map((type) => (
-            <div className="filter-checkbox-group" style={{width:"1rem"}} key={type}>
+            <div className="filter-checkbox-group" style={{width:"1rem", flexWrap:"nowrap"}} key={type}>
               <input
                 type="checkbox"
                 className="icheck"
