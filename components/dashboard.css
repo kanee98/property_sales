@@ -540,6 +540,8 @@ input, textarea {
 	display: flex;
 	align-items: center;
 	height: 36px;
+	position: relative;
+	top: 0.5rem;
 }
 #content nav form .form-input input {
 	flex-grow: 1;
