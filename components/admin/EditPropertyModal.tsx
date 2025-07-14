@@ -9,7 +9,7 @@ interface EditPropertyModalProps {
   setIsEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
 }
-const { showMessage } = useMessage();
+
 const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
   isOpen,
   editingProperty,
@@ -17,6 +17,7 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
   setIsEditModalOpen,
   setProperties,
 }) => {
+  const { showMessage } = useMessage();
   if (!isOpen || !editingProperty) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {

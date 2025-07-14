@@ -12,7 +12,7 @@ interface AddPropertyFormProps {
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
   fetchProperties: () => Promise<void>;
 }
-const { showMessage } = useMessage();
+
 const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
   isOpen,
   onClose,
@@ -23,6 +23,7 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
   setProperties,
   fetchProperties,
 }) => {
+  const { showMessage } = useMessage();
   if (!isOpen) return null;
 
   const handleAddProperty = async () => {
