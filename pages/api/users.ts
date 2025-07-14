@@ -82,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       return res.status(201).json(newUser);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Create error:", error);
 
       // Handle Prisma duplicate email error

@@ -7,6 +7,7 @@ import "antd/dist/reset.css";
 import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import "../components/login.css";
 import Logo from "../src/img/Propwise Logo.jpg";
+import type { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
 export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
@@ -47,8 +48,8 @@ export default function AdminLogin() {
     setLoading(false);
   }  
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+  const onFinishFailed = (errorInfo: ValidateErrorEntity) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
