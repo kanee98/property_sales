@@ -9,10 +9,13 @@ import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { NewInquiry} from "../types";
+import { useMessage } from "../components/MessageBox";
 
 export default function InquiriesPage() {
   const [darkMode, setDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState("inquiries");
+
+  const { showMessage } = useMessage();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("darkMode") === "true";
@@ -82,7 +85,7 @@ export default function InquiriesPage() {
       });
 
       if (res.ok) {
-        alert("Inquiry submitted successfully");
+        showMessage("Inquiry submitted successfully");
         setNewInquiry({
           companyName: "",
           contactPerson: "",
@@ -100,11 +103,11 @@ export default function InquiriesPage() {
         setImageFile(null);
       } else {
         const err = await res.json();
-        alert("Failed to create inquiry: " + err.message);
+        showMessage("Failed to create inquiry: " + err.message);
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong while adding the inquiry.");
+      showMessage("Something went wrong while adding the inquiry.");
     }
   };
 
