@@ -125,6 +125,8 @@ export default function PropertyDashboard() {
     setCurrentPageForUsers(page);
   }
   
+  const { showMessage } = useMessage();
+
   return (  
     <>
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
@@ -653,7 +655,7 @@ export default function PropertyDashboard() {
                                 disabled={!selectedFile || isUploading}  // disable if no file selected or uploading
                                 onClick={async () => {
                                   if (!selectedFile || !selectedPropertyId) {
-                                    alert("Please choose a file.");
+                                    showMessage("Please choose a file.");
                                     return;
                                   }
 
@@ -671,7 +673,7 @@ export default function PropertyDashboard() {
 
                                     if (!res.ok) {
                                       const error = await res.json();
-                                      alert("Upload failed: " + error.message);
+                                      showMessage("Upload failed: " + error.message);
                                       return;
                                     }
 
@@ -684,7 +686,7 @@ export default function PropertyDashboard() {
                                         (inq) => inq.id === selectedPropertyId
                                       );
                                       if (!existingInquiry) {
-                                        alert("Inquiry not found.");
+                                        showMessage("Inquiry not found.");
                                         return;
                                       }
 
@@ -709,12 +711,12 @@ export default function PropertyDashboard() {
                                         )
                                       );
 
-                                      alert("Image uploaded successfully!");
+                                      showMessage("Image uploaded successfully!");
                                       setSelectedFile(null);  // reset file selection after upload
                                     }
                                   } catch (err) {
                                     console.error("Upload error:", err);
-                                    alert("Something went wrong.");
+                                    showMessage("Something went wrong.");
                                   } finally {
                                     setIsUploading(false);
                                   }
@@ -863,11 +865,11 @@ export default function PropertyDashboard() {
                                       setImageFile(null);
                                     } else {
                                       const err = await res.json();
-                                      alert("Failed to create inquiry: " + err.message);
+                                      showMessage("Failed to create inquiry: " + err.message);
                                     }
                                   } catch (err) {
                                     console.error(err);
-                                    alert("Something went wrong while adding the inquiry.");
+                                    showMessage("Something went wrong while adding the inquiry.");
                                   }
                                 }}
                                 className="button-save"
@@ -906,11 +908,11 @@ export default function PropertyDashboard() {
                                     setIsEditModalOpen(false);
                                   } else {
                                     const err = await res.json();
-                                    alert("Update failed: " + err.message);
+                                    showMessage("Update failed: " + err.message);
                                   }
                                 } catch (err) {
                                   console.error(err);
-                                  alert("Something went wrong");
+                                  showMessage("Something went wrong");
                                 }
                               }}
                             >
@@ -1137,11 +1139,11 @@ export default function PropertyDashboard() {
                                     await fetchUsers();
                                   } else {
                                     const err = await res.json();
-                                    alert("Update failed: " + (err.error || "Unknown error"));
+                                    showMessage("Update failed: " + (err.error || "Unknown error"));
                                   }
                                 } catch (err) {
                                   console.error(err);
-                                  alert("Something went wrong");
+                                  showMessage("Something went wrong");
                                 }
                               }}
                             >
@@ -1318,11 +1320,11 @@ export default function PropertyDashboard() {
                                       });
                                     } else {
                                       const err = await res.json();
-                                      alert("Failed to create user: " + (err.error || "Unknown error"));
+                                      showMessage("Failed to create user: " + (err.error || "Unknown error"));
                                     }
                                   } catch (err) {
                                     console.error(err);
-                                    alert("Something went wrong while adding the user.");
+                                    showMessage("Something went wrong while adding the user.");
                                   }
                                 }}
                                 className="button-save"

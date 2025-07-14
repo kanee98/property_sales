@@ -90,22 +90,6 @@ export default function SidebarScript() {
       }
     });    
 
-    // MENU TOGGLE FUNCTION
-    function toggleMenu(menuId: string) {
-      const menu = document.getElementById(menuId);
-      const allMenus = document.querySelectorAll<HTMLElement>(".menu");
-
-      allMenus.forEach((m) => {
-        if (m !== menu) {
-          m.style.display = "none";
-        }
-      });
-
-      if (menu) {
-        menu.style.display = menu.style.display === "none" || menu.style.display === "" ? "block" : "none";
-      }
-    }
-
     // INITIALIZE MENUS AS HIDDEN
     document.addEventListener("DOMContentLoaded", function () {
       const allMenus = document.querySelectorAll<HTMLElement>(".menu");
