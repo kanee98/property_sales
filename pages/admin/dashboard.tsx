@@ -10,268 +10,105 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../api/users";
 import Logo from "../../src/img/Propwise Logo No BG.png";
+import type { Property, Inquiry, Note } from "../../types";
+import { useDashboardData } from "../../hooks/userDashboardData";
+import PropertyTable from "../../components/admin/PropertyTable";
+import ImageModal from "../../components/admin/ImageModal";
+import AddPropertyForm from "../../components/admin/AddPropertyForm";
+import EditPropertyModal from "../../components/admin/EditPropertyModal";
+import InquiryTable from "../../components/admin/InquiryTable";
 
-interface Property {
-  id: number;
-  title: string;
-  description: string;
-  price: number | null;
-  images: string;
-  latitude: number;
-  longitude: number;
-  category: string;
-  district: string;
-  type: string;
-  manager: string;
-  contact: number;
-  status: number;
-}
-
-export interface Inquiry {
-  id: number;
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-  requirements: string;
-  budget?: number;
-  attachments?: any; // You can make this `string[]` if it's always an array of files
-  createdAt: string; // or Date depending on how you handle it
-  status: number;
-}
-
-type Note = {
-  text: string;
-  completed: boolean;
-};
-
-export default function PropertyDashboard() {
-  const router = useRouter();
-  const [activeListings, setActiveListings] = useState(0);
-  const [activeInquiries, setActiveInquiries] = useState(0);
-  const [activeUsers, setActiveUsers] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [newNote, setNewNote] = useState("");
-
-  // Load notes from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem("userNotes");
-    if (stored) {
-      setNotes(JSON.parse(stored));
-    }
-  }, []);
-
-  // Save notes to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("userNotes", JSON.stringify(notes));
-  }, [notes]);
-
-  const addNote = () => {
-    if (newNote.trim()) {
-      setNotes([{ text: newNote, completed: false }, ...notes]);
-      setNewNote("");
-    }
-  };
-
-  const toggleNote = (index: number) => {
-    const updated = [...notes];
-    updated[index].completed = !updated[index].completed;
-    setNotes(updated);
-  };
-
-  const deleteNote = (index: number) => {
-    const updated = [...notes];
-    updated.splice(index, 1);
-    setNotes(updated);
-  };
-
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = async () => {
-    try {
-      const response = await fetch("/api/properties");
-      if (!response.ok) {
-        throw new Error("Failed to fetch properties");
-      }
-
-      const data: Property[] = await response.json();
-      setProperties(data);
-
-      const activeProps = data.filter((p) => p.status === 1);
-      setActiveListings(activeProps.length);
-
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-    }
-  };
-
-  const fetchInquiries = async () => {
-    try {
-      const response = await fetch("/api/inquiries");
-      if (!response.ok) {
-        throw new Error("Failed to fetch inquiries");
-      }
-      const data = await response.json();
-      const activeInqs = data.filter((inq: any) => inq.status === 1);
-      setInquiries(activeInqs);
-      setActiveInquiries(activeInqs.length);
-    } catch (error) {
-      console.error("Error fetching inquiries:", error);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("/api/users");
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const data: User[] = await response.json();
-
-      // Filter only active users (status === 1)
-      const activeUsers = data.filter((user) => user.status === 1);
-
-      setUsers(activeUsers);
-      setActiveUsers(activeUsers.length);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    axios.get("/api/properties")
-      .then((response) => {
-        const activeProps = response.data.filter((p: any) => p.status === 1);
-        setActiveListings(activeProps.length);
-      })
-      .catch((error) => console.error("Error fetching properties:", error));
-  }, []);
-
-  useEffect(() => {
-    axios.get("/api/inquiries")
-      .then((response) => {
-        const allInquiries = response.data;
-        const activeInqs = allInquiries.filter((inq: any) => inq.status === 1);
-
-        setActiveInquiries(activeInqs.length);
-        setInquiries(activeInqs);              
-      })
-      .catch((error) => console.error("Error fetching inquiries:", error));
-  }, []);
-
-  useEffect(() => {
-    fetchUsers(); 
-  }, []);
-
-  async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/admin/login");
-  }
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("darkMode") === "true";
-    setDarkMode(storedTheme);
-  }, []);
+export default function PropertyDashboard() { 
   
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
-    }
-  }, [darkMode]);
-  
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Filter properties based on search term
-  const filteredProperties = properties.filter(property =>
-    property.status === 1 && (
-      property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.category.toLowerCase().includes(searchTerm.toLowerCase())
-      // add other search criteria if needed
-    )
-  );  
-
-  // Filter inquires based on search term
-  const filteredInquiries = inquiries.filter(inquiry =>
-    inquiry.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    inquiry.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    inquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    inquiry.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    inquiry.requirements.toLowerCase().includes(searchTerm.toLowerCase())
-  );  
-
-  // Filter users based on search term
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const [currentPageForUsers, setCurrentPageForUsers] = useState(1);
-  const [currentPageForProperties, setCurrentPageForProperties] = useState(1);
-  const [currentPageForInquiries, setCurrentPageForInquiries] = useState(1);
-
-  const itemsPerPage = 6;
-
-  // Users pagination
-  const startIndexUsers = (currentPageForUsers - 1) * itemsPerPage;
-  const endIndexUsers = startIndexUsers + itemsPerPage;
-  const usersToDisplay = filteredUsers.slice(startIndexUsers, endIndexUsers);
-
-  // Properties pagination
-  const startIndexProperties = (currentPageForProperties - 1) * itemsPerPage;
-  const endIndexProperties = startIndexProperties + itemsPerPage;
-  const propertiesToDisplay = filteredProperties.slice(startIndexProperties, endIndexProperties);
-
-  // Inquiries pagination
-  const startIndexInquiries = (currentPageForInquiries - 1) * itemsPerPage;
-  const endIndexInquiries = startIndexInquiries + itemsPerPage;
-  const inquiriesToDisplay = filteredInquiries.slice(startIndexInquiries, endIndexInquiries);
-
-  const totalPagesForUsers = Math.ceil(filteredUsers.length / itemsPerPage);
-  const totalPagesForProperties = Math.ceil(filteredProperties.length / itemsPerPage);
-  const totalPagesForInquiries = Math.ceil(inquiries.length / itemsPerPage);
-
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
-
-  const [modalMessage, setModalMessage] = useState<string | null>(null);
-  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
-  const [isFadingOut, setIsFadingOut] = useState(false);
-
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const [editingInquiry, setEditingInquiry] = useState<Inquiry | null>(null);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
-  const [inquiryToDelete, setInquiryToDelete] = useState<number | null>(null);
-  const [userToDelete, setUserToDelete] = useState<number | null>(null);
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-
+  const {
+    activeTab,
+    setActiveTab,
+    darkMode,
+    toggleDarkMode,
+    searchTerm,
+    setSearchTerm,
+    properties,
+    setProperties,
+    inquiries,
+    setInquiries,
+    users,
+    setUsers,
+    activeListings,
+    activeInquiries,
+    notes,
+    newNote,
+    setNewNote,
+    addNote,
+    toggleNote,
+    deleteNote,
+    handleLogout,
+    currentPageForUsers,
+    setCurrentPageForUsers,
+    currentPageForProperties,
+    setCurrentPageForProperties,
+    currentPageForInquiries,
+    setCurrentPageForInquiries,
+    fetchProperties,
+    fetchInquiries,
+    fetchUsers,
+    usersToDisplay,
+    propertiesToDisplay,
+    inquiriesToDisplay,
+    totalPagesForProperties,
+    totalPagesForInquiries,
+    totalPagesForUsers,
+    isImageModalOpen,
+    setIsImageModalOpen,
+    selectedImages,
+    setSelectedImages,
+    modalMessage,
+    setModalMessage,
+    isMessageModalOpen,
+    setIsMessageModalOpen,
+    isFadingOut,
+    setIsFadingOut,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    editingProperty,
+    setEditingProperty,
+    editingInquiry,
+    setEditingInquiry,
+    editingUser,
+    setEditingUser,
+    isDeleteModalOpen,
+    setIsDeleteModalOpen,
+    propertyToDelete,
+    setPropertyToDelete,
+    inquiryToDelete,
+    setInquiryToDelete,
+    userToDelete,
+    setUserToDelete,
+    currentImageIndex,
+    setCurrentImageIndex,
+    selectedFile,
+    setSelectedFile,
+    selectedPropertyId,
+    setSelectedPropertyId,
+    isUploading,
+    setIsUploading,
+    isAddModalOpen,
+    setIsAddModalOpen,
+    isAddInqModalOpen,
+    setIsAddInqModalOpen,
+    isAddUserModalOpen,
+    setIsAddUserModalOpen,
+    newProperty,
+    setNewProperty,
+    newInquiry,
+    setNewInquiry,
+    newUser,
+    setNewUser,
+    imageFile,
+    setImageFile,
+    handleDeleteProperties,
+    handleDeleteInquiry,
+    handleDeleteUser,
+  } = useDashboardData();
 
   // Handle page change for properties
   function handlePageChangeForProperties(page: number) {
@@ -292,54 +129,6 @@ export default function PropertyDashboard() {
     setCurrentPageForUsers(page);
   }
 
-  // Handle Edit
-  const handleEditProperties = (propertyId: number) => {
-    const property = properties.find(p => p.id === propertyId);
-    if (property) {
-      setEditingProperty(property);
-      setIsEditModalOpen(true);
-    }
-  };
-  
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newProperty, setNewProperty] = useState({
-    title: "",
-    description: "",
-    price: null,
-    category: "",
-    images: [],
-    latitude: null,
-    longitude: null,
-    district: "",
-    type: "",
-    manager: "",
-    contact: "",
-    status: 1,
-  });
-
-  const [isAddInqModalOpen, setIsAddInqModalOpen] = useState(false);
-  const [newInquiry, setNewInquiry] = useState({
-    companyName: "",
-    contactPerson: "",
-    email: "",
-    phone: "",
-    requirements: null,
-    budget: null,
-    attachments: [],
-    status: 1,
-  });
-
-  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
-  const [newUser, setNewUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-    status: 1,
-  });
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
   function showMessage(message: string) {
     setModalMessage(message);
     setIsMessageModalOpen(true);
@@ -358,110 +147,11 @@ export default function PropertyDashboard() {
     }, 3000);
   }
   
-  const handleDeleteProperties = async (propertyId: number) => {
-    try {
-      const propertyToUpdate = properties.find((p) => p.id === propertyId);
-      if (!propertyToUpdate) {
-        alert("Property not found.");
-        return;
-      }
-  
-      // Destructure to exclude 'images'
-      const { images, ...propertyDataWithoutImages } = propertyToUpdate;
-  
-      // Update only the status
-      const updatedProperty = {
-        ...propertyDataWithoutImages,
-        status: 0,
-      };
-  
-      const res = await fetch("/api/properties", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProperty),
-      });
-  
-      if (res.ok) {
-        await fetchProperties();
-        showMessage("Property successfully deleted.");
-      } else {
-        const err = await res.json();
-        showMessage("Delete failed: " + err.message);
-      }
-    } catch (err) {
-      console.error(err);
-      showMessage("Something went wrong during delete.");
-    }
-  };
-
-  const handleDeleteInquiry = async (inquiryID: number) => {
-    try {
-      const inquiryToUpdate = inquiries.find((inq) => inq.id === inquiryID);
-      if (!inquiryToUpdate) {
-        alert("Inquiry not found.");
-        return;
-      }
-
-      const updatedInquiry = {
-        ...inquiryToUpdate,       
-        status: 0,              
-      };
-
-      const res = await fetch("/api/inquiries", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedInquiry), 
-      });
-
-      if (res.ok) {
-        const updated = await res.json();
-        setInquiries((prev) =>
-          prev.filter((inq) => inq.id !== inquiryID)
-        );
-        await fetchInquiries();
-        showMessage("Inquiry successfully deleted.");
-      } else {
-        const err = await res.json();
-        showMessage("Delete failed: " + err.message);
-      }
-    } catch (err) {
-      console.error(err);
-      showMessage("Something went wrong during delete.");
-    }
-  };
-
-  const handleDeleteUser = async (id: number) => {
-    try {
-      const res = await fetch(`/api/users?id=${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        setUsers((prev) =>
-          prev.map((user) =>
-            user.id === id ? { ...user, status: 0 } : user
-          )
-        );
-        setModalMessage("User marked as inactive.");
-      } else {
-        const err = await res.json();
-        setModalMessage("Failed to deactivate user: " + err.message);
-      }
-    } catch (err) {
-      console.error(err);
-      setModalMessage("Something went wrong while deactivating the user.");
-    } finally {
-      setIsMessageModalOpen(true);
-      setTimeout(() => setIsMessageModalOpen(false), 2000);
-    }
-  };
-
   return (  
     <>
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
         <section id="sidebar" className="sidebar">
           <Link href="#" className="brand">
-            {/* <i className='bx bxs-smile bx-lg'></i> */}
             <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
             <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Propwise</span>
           </Link>
@@ -495,12 +185,6 @@ export default function PropertyDashboard() {
             </li>
           </ul>
           <ul className="side-menu bottom">
-            {/* <li>
-              <Link href="#">
-                <i className='bx bxs-cog bx-sm bx-spin-hover'></i>
-                <span className="text">Settings</span>
-              </Link>
-            </li> */}
             <li>
               <a href="/login" onClick={handleLogout} className="logout">
                 <i className='bx bx-power-off bx-sm bx-burst-hover' ></i>
@@ -513,7 +197,6 @@ export default function PropertyDashboard() {
         <section id="content">
           <nav className="navbar">
             <i className='bx bx-menu bx-sm'></i>
-            {/* <Link href="#" className="nav-link">Categories</Link> */}
             <form action="">
               <div className="form-input">
                  <input 
@@ -524,9 +207,6 @@ export default function PropertyDashboard() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="search-input"
                 />
-                {/* <button className="search-btn">
-                  <i className='bx bx-search'></i>
-                </button> */}
               </div>
             </form>
             <input type="checkbox" className="checkbox" id="switch-mode" hidden />
@@ -535,12 +215,6 @@ export default function PropertyDashboard() {
               <i className="bx bxs-moon"></i>
               <div className="ball"></div>
             </label>
-            {/* <li>
-              <button className="logout nav-link" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <i className='bx bx-power-off bx-sm bx-burst-hover'></i>
-                <span className="text">Logout</span>
-              </button>
-            </li> */}
 
             {/* Notification Bell */}
             <a href="#" className="notification" id="notificationIcon">
@@ -702,469 +376,52 @@ export default function PropertyDashboard() {
                             <th>Actions</th> 
                           </tr>
                         </thead>
-                        <tbody>
-                          {propertiesToDisplay.length > 0 ? (
-                            propertiesToDisplay.map((property) => (
-                              <tr key={property.id}>
-                                <td style={{ padding: "16px" }}>
-                                  <div style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    height: "100%",
-                                    minHeight: "50px", // Adjust if needed
-                                    textAlign: "center",
-                                  }}>
-                                    {property.id}
-                                  </div>
-                                </td>
-                                <td style={{
-                                    whiteSpace: "normal",     // Allow text to wrap
-                                    maxWidth: "200px",        // Optional: limit width to control wrap
-                                    padding: "12px 16px"
-                                  }}>{property.title}</td>
-                                <td style={{
-                                    whiteSpace: "normal",
-                                    maxWidth: "300px",
-                                    padding: "12px 16px"
-                                  }}>{property.description}</td>
-                                <td>
-                                  {property.price != null
-                                    ? `Rs. ${property.price.toLocaleString()}`
-                                    : "N/A"}
-                                </td>
-                                <td>{property.category}</td>
-                                <td>{property.manager}</td>
-                                <td>{property.contact}</td>
-                                <td>{property.district}</td>
-                                <td>{property.type}</td>
-                                <td style={{ padding: "16px" }}>
-                                  <div style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      height: "100%",
-                                      minHeight: "50px", // Adjust if needed
-                                      textAlign: "center",
-                                    }}>
-                                    <button
-                                      className="view-btn"
-                                      onClick={async () => {
-                                        try {
-                                          const res = await fetch(`/api/properties`);
-                                          const properties: Property[] = await res.json(); 
-                                          const updatedProperty = properties.find(p => p.id === property.id);
-
-                                          if (!updatedProperty) {
-                                            console.error("Property not found");
-                                            return;
-                                          }
-
-                                          let images: string[] = [];
-                                          try {
-                                            images = JSON.parse(updatedProperty.images || "[]");
-                                          } catch (err) {
-                                            console.error("Error parsing images:", err);
-                                          }
-
-                                          setSelectedPropertyId(updatedProperty.id);
-                                          setSelectedImages(images);
-                                          setCurrentImageIndex(0);
-                                          setIsImageModalOpen(true);
-                                        } catch (err) {
-                                          console.error("Failed to reload properties:", err);
-                                        }
-                                      }}   
-                                    >
-                                      View
-                                    </button>
-
-                                  </div>
-                                </td>
-
-                                <td>
-                                  <button
-                                    onClick={() => {
-                                      setEditingProperty(property);
-                                      setIsEditModalOpen(true);
-                                    }}
-                                    className="edit-btn"
-                                    style={{ marginRight: "10px" }}
-                                  >
-                                    Edit
-                                  </button>
-
-                                  <button
-                                    onClick={() => {
-                                      setPropertyToDelete(property.id);
-                                      setIsDeleteModalOpen(true);
-                                    }}
-                                    className="delete-btn" 
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            ))
-                          ) : (
-                            <tr>
-                              <td colSpan={6} className="py-4 text-center">
-                                No properties found
-                              </td>
-                            </tr>
-                          )}
-                        </tbody>
+                        <PropertyTable
+                          properties={propertiesToDisplay}
+                          setEditingProperty={setEditingProperty}
+                          setIsEditModalOpen={setIsEditModalOpen}
+                          setPropertyToDelete={setPropertyToDelete}
+                          setIsDeleteModalOpen={setIsDeleteModalOpen}
+                          setSelectedPropertyId={setSelectedPropertyId}
+                          setSelectedImages={setSelectedImages}
+                          setCurrentImageIndex={setCurrentImageIndex}
+                          setIsImageModalOpen={setIsImageModalOpen}
+                        />
                       </table>
 
-                      {isImageModalOpen && (
-                        <div className="modal-container" onClick={() => setIsImageModalOpen(false)}>
-                          <div className="modal-content-image" onClick={(e) => e.stopPropagation()}>
-                            <h2 className="text-xl font-semibold mb-4">Property Images</h2>
+                      <ImageModal
+                        isOpen={isImageModalOpen}
+                        onClose={() => setIsImageModalOpen(false)}
+                        selectedImages={selectedImages}
+                        currentImageIndex={currentImageIndex}
+                        setCurrentImageIndex={setCurrentImageIndex}
+                        selectedPropertyId={selectedPropertyId}
+                        setSelectedImages={setSelectedImages}
+                        properties={properties}
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
+                        isUploading={isUploading}
+                        setIsUploading={setIsUploading}
+                      />
 
-                            <button
-                              onClick={() => setIsImageModalOpen(false)}
-                              className="modal-close-btn"
-                              aria-label="Close"
-                            >
-                              &times;
-                            </button>
+                      <AddPropertyForm
+                        isOpen={isAddModalOpen}
+                        onClose={() => setIsAddModalOpen(false)}
+                        newProperty={newProperty}
+                        setNewProperty={setNewProperty}
+                        imageFile={imageFile}
+                        setImageFile={setImageFile}
+                        setProperties={setProperties}
+                        fetchProperties={fetchProperties}
+                      />
 
-                            {selectedImages.length > 0 ? (
-                              <div className="text-center">
-                                <img
-                                  src={selectedImages[currentImageIndex]}
-                                  alt={`Property image ${currentImageIndex + 1}`}
-                                  className="w-96 h-60 object-cover rounded border mx-auto"
-                                  style={{width:"100%"}}
-                                />
-
-                                <div className="pagination-controls">
-                                  <button
-                                    disabled={currentImageIndex === 0}
-                                    onClick={() => setCurrentImageIndex((prev) => prev - 1)}
-                                    className="pagination-btn"
-                                  >
-                                    Previous
-                                  </button>
-                                  <button
-                                    disabled={currentImageIndex === selectedImages.length - 1}
-                                    onClick={() => setCurrentImageIndex((prev) => prev + 1)}
-                                    className="pagination-btn"
-                                  >
-                                    Next
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      const updatedImages = [...selectedImages];
-                                      updatedImages.splice(currentImageIndex, 1);
-                                    
-                                      setSelectedImages(updatedImages);
-                                      setCurrentImageIndex((prev) =>
-                                        prev >= updatedImages.length ? updatedImages.length - 1 : prev
-                                      );
-                                    
-                                      // Immediately update DB
-                                      fetch("/api/properties", {
-                                        method: "PUT",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify({
-                                          ...properties.find((p) => p.id === selectedPropertyId),
-                                          images: updatedImages,
-                                        }),
-                                      });
-                                    }}                                    
-                                    className="delete-btn"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              <p className="text-center">No images available</p>
-                            )}
-
-                            {/* Add New Image Section */}
-                            <div className="mt-6 text-center space-y-2">
-                              <p className="text-sm text-gray-700">Add Image from Computer</p>
-
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    setSelectedFile(file);
-                                  }
-                                }}
-                                className="border border-gray-300 rounded px-4 py-2"
-                              />
-
-                              <div className="mt-2 text-sm text-gray-500">Supported formats: JPG, PNG, WebP</div>
-                              <button
-                                className="button-save"
-                                style={{marginTop:"10px",}}
-                                disabled={!selectedFile || isUploading}
-                                onClick={async () => {
-                                  if (!selectedFile || !selectedPropertyId) {
-                                    alert("Please choose a file.");
-                                    return;
-                                  }
-
-                                  setIsUploading(true);
-
-                                  try {
-                                    const formData = new FormData();
-                                    formData.append("file", selectedFile);
-                                    formData.append("propertyId", selectedPropertyId.toString());
-
-                                    const res = await fetch("/api/upload-image", {
-                                      method: "POST",
-                                      body: formData,
-                                    });
-                                    
-                                    if (!res.ok) {
-                                      const error = await res.json();
-                                      alert("Upload failed: " + error.message);
-                                      return;
-                                    }
-                                    
-                                    const { newImagePath } = await res.json(); 
-                                    
-                                    if (newImagePath) {
-                                      // Now update DB
-                                      const updatedProperty = {
-                                        ...properties.find(p => p.id === selectedPropertyId),
-                                        images: [...selectedImages, newImagePath]
-                                      };
-                                    
-                                      await fetch("/api/properties", {
-                                        method: "PUT",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify(updatedProperty),
-                                      });
-                                    
-                                      setSelectedImages((prev) => [...prev, newImagePath]);
-                                      alert("Image uploaded successfully!");
-                                      setSelectedFile(null); 
-                                    }                                    
-                                  } catch (err) {
-                                    console.error("Upload error:", err);
-                                    alert("Something went wrong.");
-                                  } finally {
-                                    setIsUploading(false);
-                                  }
-                                }}
-                              >
-                                {isUploading ? "Uploading..." : "Add Image"}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {isAddModalOpen && (
-                        <div className="modal-container" onClick={() => setIsAddModalOpen(false)}>
-                          <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
-                            <h2 className="text-xl font-semibold mb-4" style={{ marginBottom: "3%" }}>Add New Property</h2>
-
-                            <button
-                              className="modal-close-btn"
-                              onClick={() => setIsAddModalOpen(false)}
-                              aria-label="Close"
-                            >
-                              &times;
-                            </button>
-
-                            {/* Form Fields */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="form-row-add">
-                                <input type="text" placeholder="Title" value={newProperty.title}
-                                  onChange={(e) => setNewProperty({ ...newProperty, title: e.target.value })} className="border p-2 rounded" />
-                                </div>
-                                <div className="form-row-add">
-                                <select 
-                                  id="category" 
-                                  value={newProperty.category}
-                                  onChange={(e) => setNewProperty({ ...newProperty, category: e.target.value })} className="border p-2 rounded" 
-                                  required
-                                >
-                                  <option value="" disabled>
-                                  Select Category
-                                  </option>
-                                  <option value="Corporate">Corporate</option>
-                                  <option value="Retail">Retail</option>
-                                  <option value="Residential">Residential</option>
-                                </select>
-                                </div>
-                                <div className="form-row-add">
-                                <input type="number" placeholder="Price" value={newProperty.price ?? ""}
-                                  onChange={(e) =>setNewProperty({ ...newProperty, price: e.target.value === "" ? null : Number(e.target.value),})} className="border p-2 rounded" />
-                                </div>
-                                <div className="form-row-add">
-                                <input type="text" placeholder="Manager" value={newProperty.manager}
-                                  onChange={(e) => setNewProperty({ ...newProperty, manager: e.target.value })} className="border p-2 rounded" />
-                                </div>
-                                <div className="form-row-add">
-                                <input type="text" placeholder="Contact" value={newProperty.contact}
-                                  onChange={(e) => setNewProperty({ ...newProperty, contact: e.target.value })} className="border p-2 rounded" />
-                                </div>
-                                <div className="form-row-add">
-                                  <select 
-                                    id="district"
-                                    value={newProperty.district}
-                                    onChange={(e) => setNewProperty({ ...newProperty, district: e.target.value })} className="border p-2 rounded" 
-                                    >
-                                    <option value="" disabled>
-                                    Select District
-                                    </option>
-                                    <option value="Ampara">Ampara</option>
-                                    <option value="Anuradhapura">Anuradhapura</option>
-                                    <option value="Badulla">Badulla</option>
-                                    <option value="Batticaloa">Batticaloa</option>
-                                    <option value="Colombo">Colombo</option>
-                                    <option value="Galle">Galle</option>
-                                    <option value="Gampaha">Gampaha</option>
-                                    <option value="Hambantota">Hambantota</option>
-                                    <option value="Jaffna">Jaffna</option>
-                                    <option value="Kalutara">Kalutara</option>
-                                    <option value="Kandy">Kandy</option>
-                                    <option value="Kegalle">Kegalle</option>
-                                    <option value="Kilinochchi">Kilinochchi</option>
-                                    <option value="Kurunegala">Kurunegala</option>
-                                    <option value="Mannar">Mannar</option>
-                                    <option value="Matale">Matale</option>
-                                    <option value="Matara">Matara</option>
-                                    <option value="Moneragala">Moneragala</option>
-                                    <option value="Mullaitivu">Mullaitivu</option>
-                                    <option value="Nuwara Eliya">Nuwara Eliya</option>
-                                    <option value="Polonnaruwa">Polonnaruwa</option>
-                                    <option value="Puttalam">Puttalam</option>
-                                    <option value="Ratnapura">Ratnapura</option>
-                                    <option value="Trincomalee">Trincomalee</option>
-                                    <option value="Vavuniya">Vavuniya</option>
-                                  </select>
-                                </div>
-                                <div className="form-row-add">
-                                <select 
-                                  id="type" 
-                                  value={newProperty.type}
-                                  onChange={(e) => setNewProperty({ ...newProperty, type: e.target.value })} className="border p-2 rounded" 
-                                  >
-                                  <option value="" disabled>
-                                  Select Type
-                                  </option>
-                                  <option value="For Sale">For Sale</option>
-                                  <option value="For Rent">For Rent</option>
-                                  <option value="Wanted">Wanted</option>
-                                </select>
-                                </div>
-                                <div className="form-row-add">
-                                <input type="number" placeholder="Latitude" value={newProperty.latitude ?? ""}
-                                  onChange={(e) => setNewProperty({ ...newProperty, latitude: Number(e.target.value) })} className="border p-2 rounded" />
-                                </div>
-                                <div className="form-row-add">
-                                <input type="number" placeholder="Longitude" value={newProperty.longitude ?? ""}
-                                  onChange={(e) => setNewProperty({ ...newProperty, longitude: Number(e.target.value) })} className="border p-2 rounded" />
-                              </div>
-                            </div>
-
-                            <textarea placeholder="Description"
-                              value={newProperty.description}
-                              onChange={(e) => setNewProperty({ ...newProperty, description: e.target.value })}
-                              className="border p-2 rounded mt-4 w-full"
-                            />
-
-                            <div className="mt-4" style={{marginTop:"10px",}}>
-                              <label className="block mb-1 font-semibold">Upload Image</label>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    setImageFile(file);
-                                  }
-                                }}
-                                className="border border-gray-300 rounded px-4 py-2" style={{marginTop:"10px", color: "var(--dark)"}}
-                              />
-                            </div>
-
-                            <div className="button-container">
-                              <button
-                                onClick={async () => {
-                                  try {
-                                    let uploadedImagePath = "";
-                                
-                                    // 1. If image is selected, upload it first
-                                    if (imageFile) {
-                                      const formData = new FormData();
-                                      formData.append("file", imageFile);
-                                      formData.append("propertyId", "new"); // optional, for future use
-                                
-                                      const uploadRes = await fetch("/api/upload-image", {
-                                        method: "POST",
-                                        body: formData,
-                                      });
-                                
-                                      if (!uploadRes.ok) {
-                                        throw new Error("Image upload failed");
-                                      }
-                                
-                                      const uploadData = await uploadRes.json();
-                                      uploadedImagePath = uploadData.newImagePath;
-                                    }
-                                
-                                    // 2. Now submit the property creation
-                                    const res = await fetch("/api/properties", {
-                                      method: "POST",
-                                      headers: { "Content-Type": "application/json" },
-                                      body: JSON.stringify({
-                                        ...newProperty,
-                                        images: uploadedImagePath ? [uploadedImagePath] : [],
-                                      }),
-                                    });
-                                
-                                    if (res.ok) {
-                                      const created = await res.json();
-                                      setProperties((prev) => [...prev, created]);
-                                      setIsAddModalOpen(false);
-                                
-                                      await fetchProperties();
-
-                                      // Reset form
-                                      setNewProperty({
-                                        title: "",
-                                        description: "",
-                                        price: null,
-                                        category: "",
-                                        latitude: null,
-                                        longitude: null,
-                                        district: "",
-                                        type: "",
-                                        manager: "",
-                                        contact: "",
-                                        status: 1,
-                                        images: [],
-                                      });
-                                      setImageFile(null);
-                                    } else {
-                                      const err = await res.json();
-                                      alert("Failed to create property: " + err.message);
-                                    }
-                                  } catch (err) {
-                                    console.error(err);
-                                    alert("Something went wrong while adding the property.");
-                                  }
-                                }}                                
-                                className="button-save"
-                              >
-                                Add Property
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
+                      <EditPropertyModal
+                        isOpen={isEditModalOpen}
+                        editingProperty={editingProperty}
+                        setEditingProperty={setEditingProperty}
+                        setIsEditModalOpen={setIsEditModalOpen}
+                        setProperties={setProperties}
+                      />
                       {isDeleteModalOpen && (
                         <div className="modal-overlay">
                           <div className="modal-content-delete">
@@ -1228,228 +485,6 @@ export default function PropertyDashboard() {
                       </div>
                     </div>
                   </div>
-                  {isEditModalOpen && editingProperty && (
-                    <div className="modal-container">
-                      <div className="modal-content">
-                      <h2 className="text-2xl font-semibold mb-4" style={{ marginBottom: "3%" }}>
-                        Edit Property
-                      </h2>
-                      <form
-                        onSubmit={async (e) => {
-                          e.preventDefault();
-
-                          try {
-                            // Create a copy of editingProperty without 'images' field
-                            const { images, ...propertyDataWithoutImages } = editingProperty;
-
-                            // Now send propertyDataWithoutImages instead of editingProperty
-                            const res = await fetch("/api/properties", {
-                              method: "PUT",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify(propertyDataWithoutImages),
-                            });
-
-                            if (res.ok) {
-                              const updated = await res.json();
-                              setProperties((prev) =>
-                                prev.map((p) => (p.id === updated.id ? updated : p))
-                              );
-                              setIsEditModalOpen(false);
-                            } else {
-                              const err = await res.json();
-                              alert("Update failed: " + err.message);
-                            }
-                          } catch (err) {
-                            console.error(err);
-                            alert("Something went wrong");
-                          }
-                        }}
-                      >
-
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="form-row">
-                              <label htmlFor="title" style={{ fontWeight: "600" }}>
-                                Title
-                              </label>
-                              <input
-                                id="title"
-                                type="text"
-                                placeholder="Title"
-                                value={editingProperty.title}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, title: e.target.value })}
-                                required
-                                style={{ padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid #ccc" }}
-                              />
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="category" style={{ fontWeight: "600" }}>
-                                Category
-                              </label>
-                              <select
-                                id="category"
-                                value={editingProperty.category}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, category: e.target.value })}
-                                required
-                                className="border p-2 rounded"
-                              >
-                                <option value="Corporate">Corporate</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Residential">Residential</option>
-                              </select>
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="price" style={{ fontWeight: "600" }}>
-                                Price (Rs.)
-                              </label>
-                              <input
-                                id="price"
-                                type="number"
-                                placeholder="Price"
-                                value={editingProperty.price ?? ""}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, price: Number(e.target.value) })}
-                                className="border p-2 rounded"
-                              />
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="district" style={{ fontWeight: "600" }}>
-                                District
-                              </label>
-                              <select
-                                id="district"
-                                value={editingProperty.district}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, district: e.target.value })}
-                                className="border border-gray-300 p-2 rounded focus:border-blue-600 focus:ring-2 focus:ring-blue-400"
-                              >
-                                <option value="Ampara">Ampara</option>
-                                <option value="Anuradhapura">Anuradhapura</option>
-                                <option value="Badulla">Badulla</option>
-                                <option value="Batticaloa">Batticaloa</option>
-                                <option value="Colombo">Colombo</option>
-                                <option value="Galle">Galle</option>
-                                <option value="Gampaha">Gampaha</option>
-                                <option value="Hambantota">Hambantota</option>
-                                <option value="Jaffna">Jaffna</option>
-                                <option value="Kalutara">Kalutara</option>
-                                <option value="Kandy">Kandy</option>
-                                <option value="Kegalle">Kegalle</option>
-                                <option value="Kilinochchi">Kilinochchi</option>
-                                <option value="Kurunegala">Kurunegala</option>
-                                <option value="Mannar">Mannar</option>
-                                <option value="Matale">Matale</option>
-                                <option value="Matara">Matara</option>
-                                <option value="Moneragala">Moneragala</option>
-                                <option value="Mullaitivu">Mullaitivu</option>
-                                <option value="Nuwara Eliya">Nuwara Eliya</option>
-                                <option value="Polonnaruwa">Polonnaruwa</option>
-                                <option value="Puttalam">Puttalam</option>
-                                <option value="Ratnapura">Ratnapura</option>
-                                <option value="Trincomalee">Trincomalee</option>
-                                <option value="Vavuniya">Vavuniya</option>
-                              </select>
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="manager" style={{ fontWeight: "600" }}>
-                                Manager
-                              </label>
-                              <input
-                                id="manager"
-                                type="text"
-                                placeholder="Manager"
-                                value={editingProperty.manager}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, manager: e.target.value })}
-                                className="border p-2 rounded"
-                              />
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="type" style={{ fontWeight: "600" }}>
-                                Type
-                              </label>
-                              <select
-                                id="type"
-                                value={editingProperty.type}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, type: e.target.value })}
-                                className="border p-2 rounded"
-                              >
-                                {/* <option value="" disabled>
-                                  Select Type (e.g., For Sale)
-                                </option> */}
-                                <option value="For Sale">For Sale</option>
-                                <option value="For Rent">For Rent</option>
-                                <option value="Wanted">Wanted</option>
-                              </select>
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="latitude" style={{ fontWeight: "600" }}>
-                                Latitude
-                              </label>
-                              <input
-                                id="latitude"
-                                type="number"
-                                placeholder="Latitude"
-                                value={editingProperty.latitude}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, latitude: Number(e.target.value) })}
-                                className="border p-2 rounded"
-                              />
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="longitude" style={{ fontWeight: "600" }}>
-                                Longitude
-                              </label>
-                              <input
-                                id="longitude"
-                                type="number"
-                                placeholder="Longitude"
-                                value={editingProperty.longitude}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, longitude: Number(e.target.value) })}
-                                className="border p-2 rounded"
-                              />
-                            </div>
-                            <div className="form-row">
-                              <label htmlFor="contact" style={{ fontWeight: "600" }}>
-                                Contact Number
-                              </label>
-                              <input
-                                id="contact"
-                                type="text"
-                                placeholder="Contact Number"
-                                value={editingProperty.contact ?? ""}
-                                onChange={(e) => setEditingProperty({ ...editingProperty, contact: e.target.value })}
-                                className="border p-2 rounded"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-row">
-                            <label htmlFor="description" style={{ fontWeight: "600" }}>
-                            Description
-                            </label>
-                            <textarea
-                              id="description"
-                              placeholder="Description"
-                              value={editingProperty.description}
-                              onChange={(e) =>
-                                setEditingProperty({ ...editingProperty, description: e.target.value })
-                              }
-                              required
-                              className="border p-2 rounded mt-4 w-full"
-                            />
-                          </div>
-
-                          <div className="button-container">
-                            <button
-                              type="button"
-                              onClick={() => setIsEditModalOpen(false)}
-                              className="button-cancel"
-                            >
-                              Cancel
-                            </button>
-                            <button type="submit" className="button-save">
-                              Save Changes
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
 {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
@@ -1490,98 +525,17 @@ export default function PropertyDashboard() {
                             <th>Actions</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          {inquiriesToDisplay.length > 0 ? (
-                            inquiriesToDisplay.map((inquiry) => (
-                              <tr key={inquiry.id}>
-                                <td style={{ padding: "16px" }}>
-                                  <div style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    height: "100%",
-                                    minHeight: "50px", // Adjust if needed
-                                    textAlign: "center",
-                                  }}>
-                                    {inquiry.id}
-                                  </div>
-                                </td>
-                                <td>{inquiry.companyName}</td>
-                                <td>{inquiry.contactPerson}</td>
-                                <td>{inquiry.email}</td>
-                                <td>{inquiry.phone}</td>
-                                <td>{inquiry.requirements}</td>
-                                <td>
-                                  {inquiry.budget != null
-                                    ? `Rs. ${inquiry.budget.toLocaleString()}`
-                                    : "N/A"}
-                                </td>
-                                <td style={{ padding: "16px" }}>
-                                  <div style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      height: "100%",
-                                      minHeight: "50px", // Adjust if needed
-                                      textAlign: "center",
-                                    }}>
-                                    <button
-                                      className="view-btn"
-                                      onClick={() => {
-                                        let images = [];
-
-                                        try {
-                                          if (typeof inquiry.attachments === "string") {
-                                            const parsed = JSON.parse(inquiry.attachments);
-                                            images = Array.isArray(parsed) ? parsed : [];
-                                          } else if (Array.isArray(inquiry.attachments)) {
-                                            images = inquiry.attachments;
-                                          }
-                                        } catch (e) {
-                                          console.error("Failed to parse attachments:", e);
-                                          images = [];
-                                        }
-
-                                        setSelectedPropertyId(inquiry.id); // Set this for upload logic
-                                        setSelectedImages(images);
-                                        setCurrentImageIndex(0); // Reset index on open
-                                        setIsImageModalOpen(true);
-                                      }}    
-                                    >
-                                      View
-                                    </button>
-
-                                  </div>
-                                </td>
-                                <td>
-                                  <button
-                                    onClick={() => {
-                                      setEditingInquiry(inquiry);
-                                      setIsEditModalOpen(true);
-                                    }}
-                                    className="edit-btn"
-                                    style={{ marginRight: "10px" }}
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setInquiryToDelete(inquiry.id);
-                                      setIsDeleteModalOpen(true);
-                                    }}
-                                    className="delete-btn"
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            ))
-                          ) : (
-                            <tr>
-                              <td colSpan={8} className="py-4 text-center">No inquiries found</td>
-                            </tr>
-                          )}
-                        </tbody>
+                        <InquiryTable
+                          inquiriesToDisplay={inquiriesToDisplay}
+                          setEditingInquiry={setEditingInquiry}
+                          setIsEditModalOpen={setIsEditModalOpen}
+                          setInquiryToDelete={setInquiryToDelete}
+                          setIsDeleteModalOpen={setIsDeleteModalOpen}
+                          setSelectedPropertyId={setSelectedPropertyId}
+                          setSelectedImages={setSelectedImages}
+                          setCurrentImageIndex={setCurrentImageIndex}
+                          setIsImageModalOpen={setIsImageModalOpen}
+                        />
                       </table>
 
                       {isDeleteModalOpen && (
@@ -1923,7 +877,7 @@ export default function PropertyDashboard() {
                                         contactPerson: "",
                                         email: "",
                                         phone: "",
-                                        requirements: null,
+                                        requirements: "",
                                         budget: null,
                                         attachments: [],
                                         status: 1,

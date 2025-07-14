@@ -8,6 +8,7 @@ import Logo from "../src/img/Propwise Logo No BG.png";
 import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { NewInquiry} from "../types";
 
 export default function InquiriesPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -38,13 +39,13 @@ export default function InquiriesPage() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [newInquiry, setNewInquiry] = useState({
+  const [newInquiry, setNewInquiry] = useState<NewInquiry>({
     companyName: "",
     contactPerson: "",
     email: "",
     phone: "",
     budget: null,
-    requirements: null,
+    requirements: "",
     attachments: [],
     status: 1,
   });
@@ -88,7 +89,7 @@ export default function InquiriesPage() {
           email: "",
           phone: "",
           budget: null,
-          requirements: null,
+          requirements: "",
           attachments: [],
           status: 1,
         });
