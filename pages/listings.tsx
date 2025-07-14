@@ -296,7 +296,7 @@ export default function ListingsPage() {
                     }
                   }}
                 >
-                  <img
+                  <Image
                     src={
                       (() => {
                         try {
@@ -308,7 +308,15 @@ export default function ListingsPage() {
                       })()
                     }
                     alt={property.title}
-                    className="w-full h-48 object-cover rounded-md"
+                    width={400}  
+                    height={192} 
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "0.375rem", 
+                      width: "100%",
+                      height: "auto",
+                    }}
+                    sizes="100vw"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-sm font-semibold rounded-md">
                     Click here to view more
