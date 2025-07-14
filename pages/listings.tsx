@@ -354,10 +354,21 @@ export default function ListingsPage() {
                   ‹
                 </button>
 
-                <img
+                <Image
                   src={selectedImages[currentImageIndex] || "/img/default.jpg"}
                   alt={`Slide ${currentImageIndex + 1}`}
-                  className="slider-image"
+                  width={600} 
+                  height={400}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "60vh",
+                    objectFit: "cover",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #ccc",
+                    margin: "0 auto",
+                    display: "block",
+                  }}
                 />
 
                 <button
