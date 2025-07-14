@@ -145,10 +145,10 @@ export default function InquiriesPage() {
               </Link>
             </li> */}
             <li>
-              <a href="/" onClick={redirectToListings} className="listings">
+              <Link href="/" onClick={redirectToListings} className="listings">
                 <i className="bx bx-arrow-back bx-sm bx-burst-hover"></i>
                 <span className="text">Back to Listings</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </section>
@@ -426,20 +426,40 @@ export default function InquiriesPage() {
                     <h2 className="text-2xl font-semibold mb-6" style={{ marginBottom: "1rem"}}>Meet Our Leadership</h2>
                     <div className="leaders-grid">
                       <div className="leader">
-                        <img
+                        <Image
                           src="/img/kandy1.jpg"
                           alt="CEO"
-                          className="leader-photo"
+                          width={150} 
+                          height={150}
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            objectFit: "cover",
+                            borderRadius: "50%",
+                            border: "2px solid #ccc",
+                            display: "block",
+                            margin: "0 auto",
+                          }}
                         />
                         <h3 className="leader-name">Jane Doe</h3>
                         <p className="leader-title">Chief Executive Officer (CEO)</p>
                       </div>
 
                       <div className="leader">
-                        <img
+                        <Image
                           src="/img/property1.jpg"
                           alt="COO"
-                          className="leader-photo"
+                          width={150}
+                          height={150}
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            objectFit: "cover",
+                            borderRadius: "50%", 
+                            border: "2px solid #ccc",
+                            display: "block",
+                            margin: "0 auto",
+                          }}
                         />
                         <h3 className="leader-name">John Smith</h3>
                         <p className="leader-title">Chief Operating Officer (COO)</p>

@@ -9,6 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const properties = await prisma.property.findMany();
       return res.status(200).json(properties);
     } catch (error) {
+      console.error("Error fetching properties", error);
       return res.status(500).json({ error: "Error fetching properties" });
     }
   }
@@ -35,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       return res.status(201).json(newProperty);
     } catch (error) {
+      console.error("Error creating property", error);
       return res.status(500).json({ error: "Error creating property" });
     }
   }
@@ -62,6 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       return res.status(200).json(updatedProperty);
     } catch (error) {
+      console.error("Error updating property", error);
       return res.status(500).json({ error: "Error updating property" });
     }
   }
@@ -75,6 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       return res.status(200).json({ message: "Property deleted" });
     } catch (error) {
+      console.error("Error deleting property", error);
       return res.status(500).json({ error: "Error deleting property" });
     }
   }
