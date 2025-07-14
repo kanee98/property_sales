@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from 'next/image';
-import "../components/styles.css";
 import Logo from "../src/img/Propwise Logo No BG.png";
 
 interface Property {
