@@ -570,10 +570,22 @@ export default function PropertyDashboard() {
 
                             {selectedImages.length > 0 ? (
                               <div className="text-center">
-                                <img
+                                <Image
                                   src={selectedImages[currentImageIndex]}
                                   alt={`Attachment ${currentImageIndex + 1}`}
-                                  className="w-96 h-60 object-cover rounded border mx-auto"
+                                  width={0}
+                                  height={0}
+                                  sizes="100vw"
+                                  style={{
+                                    width: "100%",
+                                    height: "auto",
+                                    maxHeight: "60vh",
+                                    objectFit: "contain",
+                                    borderRadius: "0.5rem",
+                                    border: "1px solid #ccc",
+                                    margin: "0 auto",
+                                    display: "block"
+                                  }}
                                 />
 
                                 <div className="pagination-controls">

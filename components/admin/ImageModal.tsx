@@ -1,6 +1,7 @@
 import React from "react";
 import { Property } from "../../types/index";
 import { useMessage } from "../../components/MessageBox";
+import Image from "next/image";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -46,11 +47,22 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
         {selectedImages.length > 0 ? (
           <div className="text-center">
-            <img
+            <Image
               src={selectedImages[currentImageIndex]}
               alt={`Property image ${currentImageIndex + 1}`}
-              className="w-96 h-60 object-cover rounded border mx-auto"
-              style={{ width: "100%" }}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: "60vh",
+                objectFit: "cover",
+                borderRadius: "0.5rem",
+                border: "1px solid #ccc",
+                margin: "0 auto",
+                display: "block",
+              }}
             />
 
             <div className="pagination-controls">
