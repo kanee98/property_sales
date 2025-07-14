@@ -271,6 +271,25 @@ body {
   background: linear-gradient(to right, #2563eb, #1e40af);
 }
 
+.message-box {
+  position: fixed;
+  bottom: 1.5rem; /* 6 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fffb02; /* Tailwind's blue-600 */
+  color: rgb(12, 12, 12);
+  font-family: var(--poppins);
+  padding: 0.75rem 1.5rem; /* py-3 px-6 */
+  border-radius: 0.5rem; /* rounded */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* shadow-lg */
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 50;
+}
+
+.message-box.fade-out {
+  opacity: 0;
+}
 
   select {
 	border: 1px solid #ccc;

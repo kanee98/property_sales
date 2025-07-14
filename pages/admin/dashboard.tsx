@@ -1,22 +1,18 @@
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
-import { useRouter } from "next/router";
 import Link from 'next/link';
 import Image from 'next/image';
 import 'boxicons/css/boxicons.min.css';
 import '../../components/dashboard.css';
 import SidebarScript from "../../components/SidebarScript"; 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { User } from "../api/users";
 import Logo from "../../src/img/Propwise Logo No BG.png";
-import type { Property, Inquiry, Note } from "../../types";
 import { useDashboardData } from "../../hooks/userDashboardData";
 import PropertyTable from "../../components/admin/PropertyTable";
 import ImageModal from "../../components/admin/ImageModal";
 import AddPropertyForm from "../../components/admin/AddPropertyForm";
 import EditPropertyModal from "../../components/admin/EditPropertyModal";
 import InquiryTable from "../../components/admin/InquiryTable";
+import { useMessage } from "../../components/MessageBox";
 
 export default function PropertyDashboard() { 
   
@@ -127,24 +123,6 @@ export default function PropertyDashboard() {
     if (page < 1 || page > totalPagesForUsers) 
       return;
     setCurrentPageForUsers(page);
-  }
-
-  function showMessage(message: string) {
-    setModalMessage(message);
-    setIsMessageModalOpen(true);
-    setIsFadingOut(false); // start fully visible
-  
-    // After 2.5 seconds, start fade-out
-    setTimeout(() => {
-      setIsFadingOut(true);
-    }, 2500);
-  
-    // After 3 seconds total, close modal completely
-    setTimeout(() => {
-      setIsMessageModalOpen(false);
-      setModalMessage(null);
-      setIsFadingOut(false);
-    }, 3000);
   }
   
   return (  

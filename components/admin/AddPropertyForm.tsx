@@ -1,5 +1,6 @@
 import React from "react";
 import { NewProperty, Property } from "../../types/index";
+import { useMessage } from "../../components/MessageBox";
 
 interface AddPropertyFormProps {
   isOpen: boolean;
@@ -77,13 +78,15 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
         setImageFile(null);
       } else {
         const err = await res.json();
-        alert("Failed to create property: " + err.message);
+        showMessage("Failed to create property: " + err.message);
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong while adding the property.");
+      showMessage("Something went wrong while adding the property.");
     }
   };
+
+  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={onClose}>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Property } from "../../types/index";
+import { useMessage } from "../../components/MessageBox";
 
 interface EditPropertyModalProps {
   isOpen: boolean;
@@ -36,15 +37,18 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
           prev.map((p) => (p.id === updated.id ? updated : p))
         );
         setIsEditModalOpen(false);
+        showMessage("Response Saved Successfully!");
       } else {
         const err = await res.json();
-        alert("Update failed: " + err.message);
+        showMessage("Update failed: " + err.message);
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      showMessage("Something went wrong");
     }
   };
+
+  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={() => setIsEditModalOpen(false)}>

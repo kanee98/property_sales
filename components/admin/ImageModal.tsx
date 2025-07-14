@@ -1,5 +1,6 @@
 import React from "react";
 import { Property } from "../../types/index";
+import { useMessage } from "../../components/MessageBox";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -31,6 +32,8 @@ const ImageModal: React.FC<ImageModalProps> = ({
   setIsUploading,
 }) => {
   if (!isOpen) return null;
+
+  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={onClose}>
@@ -118,7 +121,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
             disabled={!selectedFile || isUploading}
             onClick={async () => {
               if (!selectedFile || !selectedPropertyId) {
-                alert("Please choose a file.");
+                showMessage("Please choose a file.");
                 return;
               }
 
@@ -136,7 +139,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
                 if (!res.ok) {
                   const error = await res.json();
-                  alert("Upload failed: " + error.message);
+                  showMessage("Upload failed: " + error.message);
                   return;
                 }
 
@@ -155,12 +158,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
                   });
 
                   setSelectedImages((prev) => [...prev, newImagePath]);
-                  alert("Image uploaded successfully!");
+                  showMessage("Image uploaded successfully!");
                   setSelectedFile(null);
                 }
               } catch (err) {
                 console.error("Upload error:", err);
-                alert("Something went wrong.");
+                showMessage("Something went wrong.");
               } finally {
                 setIsUploading(false);
               }
