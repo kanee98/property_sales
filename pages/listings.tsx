@@ -18,6 +18,7 @@ interface Property {
   type: string;
   manager: string;
   contact: number;
+  status: number;
 }
 
 const itemsPerPage = 6;
@@ -49,12 +50,12 @@ export default function ListingsPage() {
   useEffect(() => {
     fetch("/api/properties")
       .then((res) => res.json())
-      .then((data) => {
-        const activeProperties = data.filter((p: any) => p.status === 1); 
+      .then((data: Property[]) => {
+        const activeProperties = data.filter((p) => p.status === 1);
         setProperties(activeProperties);
         calculateStats(activeProperties);
       });
-  }, []);  
+  }, []);
 
   useEffect(() => {
     setCurrentPage(1); 
@@ -273,6 +274,7 @@ export default function ListingsPage() {
               try {
                 const images = JSON.parse(property.images);
                 if (Array.isArray(images) && images.length > 0) {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   imageSrc = images[0];
                 }
               } catch (err) {
