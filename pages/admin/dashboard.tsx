@@ -15,7 +15,7 @@ interface Property {
   id: number;
   title: string;
   description: string;
-  price: number;
+  price: number | null;
   images: string;
   latitude: number;
   longitude: number;
@@ -752,10 +752,15 @@ export default function PropertyDashboard() {
                                       onClick={async () => {
                                         try {
                                           const res = await fetch(`/api/properties`);
-                                          const properties = await res.json();
+                                          const properties: Property[] = await res.json(); 
                                           const updatedProperty = properties.find(p => p.id === property.id);
 
-                                          let images = [];
+                                          if (!updatedProperty) {
+                                            console.error("Property not found");
+                                            return;
+                                          }
+
+                                          let images: string[] = [];
                                           try {
                                             images = JSON.parse(updatedProperty.images || "[]");
                                           } catch (err) {
@@ -993,7 +998,7 @@ export default function PropertyDashboard() {
                                 </div>
                                 <div className="form-row-add">
                                 <input type="number" placeholder="Price" value={newProperty.price ?? ""}
-                                  onChange={(e) => setNewProperty({ ...newProperty, price: Number(e.target.value) })} className="border p-2 rounded" />
+                                  onChange={(e) =>setNewProperty({ ...newProperty, price: e.target.value === "" ? null : Number(e.target.value),})} className="border p-2 rounded" />
                                 </div>
                                 <div className="form-row-add">
                                 <input type="text" placeholder="Manager" value={newProperty.manager}
