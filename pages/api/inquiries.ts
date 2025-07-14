@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           phone,
           requirements,
           budget: budget ?? null,
-          attachments: attachments ? JSON.stringify(attachments) : null,
+          attachments: attachments ? JSON.stringify(attachments) : undefined,
           status,
         },
       });
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           phone,
           requirements,
           budget: budget ?? null,
-          attachments: attachments ? JSON.stringify(attachments) : null,
+          attachments: attachments ? JSON.stringify(attachments) : undefined,
           status,
         },
       });
