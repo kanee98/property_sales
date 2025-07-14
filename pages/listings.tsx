@@ -118,31 +118,28 @@ export default function ListingsPage() {
         </div>
 
         {/* Navigation */}
-        <nav className="space-x-4">
-          <button type="button" className="border p-2 rounded w-20" onClick={redirectToInquiries}>
+        <nav className="nav-links">
+          <button type="button" onClick={redirectToInquiries}>
             Inquiries
           </button>
-          <button type="button" className="border p-2 rounded w-15" onClick={redirectToLogin}>
+          <button type="button" onClick={redirectToLogin}>
             Login
           </button>
         </nav>
       </header>
     
       <div className="landing-message">
-        <h3 className="text-2xl font-semibold">Relax, Finding Properties Just Got Easier</h3>
+        <h3 className="text-2xl font-semibold">Relax, Finding Properties Just Got Easier</h3><br></br>
         <p className="text-lg mt-2">Discover the best properties for sale or rent</p>
-        <form className="mt-5 flex justify-center pb-[10%]">
-          <div className="flex mb-6 space-x-1 w-full max-w-[500px] mx-auto">
+        <form className="search-form">
+          <div className="search-form-container">
             <input
               type="text"
               placeholder="Search properties..."
               className="border p-2 rounded w-full"
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <select
-              className="border p-2 rounded"
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
+            <select onChange={(e) => setSelectedCategory(e.target.value)}>
               <option value="" style={{ color: "black" }}>All Types</option>
               <option value="Corporate" style={{ color: "black" }}>Corporate</option>
               <option value="Retail" style={{ color: "black" }}>Retail</option>
@@ -151,7 +148,7 @@ export default function ListingsPage() {
           </div>
         </form>
       </div>
-      
+
       <div className="stats">
         <div className="stat left-corner">
           <h2 className="text-3xl font-bold">{stats.totalProperties}</h2>
@@ -165,11 +162,11 @@ export default function ListingsPage() {
           <h2 className="text-3xl font-bold">{stats.retail}</h2>
           <p>Retail</p>
         </div>
-        <div className="stat">
+        <div className="stat right-corner">
           <h2 className="text-3xl font-bold">{stats.residential}</h2>
           <p>Residential</p>
         </div>
-        <div className="stat">
+        <div className="stat left-corner">
           <h2 className="text-3xl font-bold">{stats.for_sale}</h2>
           <p>For Sale</p>
         </div><div className="stat">
@@ -187,17 +184,17 @@ export default function ListingsPage() {
       </div>
     </section>
 
-    <div className="container mx-auto p-4 flex">
+    <div className="property-page-wrapper">
       {/* Filters Section */}
-      <div className="w-1/4 p-4 border-r">
-        <h2 className="text-xl font-bold"><i className="fa fa-filter"></i> Filters</h2>
-        <hr className="mb-4"/>
+      <div className="property-filters">
+        <h2><i className="fa fa-filter"></i> Filters</h2>
+        <hr />
 
         {/* Filter by Category */}
         <h4 className="font-semibold">By category:</h4>
         <div className="space-y-2">
           {["For Sale", "For Rent", "Wanted"].map((type) => (
-            <div className="flex items-center space-x-2" key={type}>
+            <div className="filter-checkbox-group" style={{width:"1rem"}} key={type}>
               <input
                 type="checkbox"
                 className="icheck"
@@ -240,7 +237,7 @@ export default function ListingsPage() {
 
         {/* Filter by Price */}
         <h4 className="mt-4 font-semibold">By price:</h4>
-        <div className="flex space-x-2 items-center">
+        <div className="filter-checkbox-group">
           <input
             type="number"
             min={0}
@@ -265,9 +262,9 @@ export default function ListingsPage() {
       </div>
       
       {/* Property Cards Section */}
-      <div className="w-3/4 grid grid-cols-2 gap-6 p-4">
+      <div className="property-listings">
         {propertiesToDisplay.map((property) => (
-          <div key={property.id} className="border p-4 rounded-lg shadow-lg">
+          <div key={property.id} className="property-card">
             {(() => {
               let imageSrc = "";
               try {
@@ -282,7 +279,7 @@ export default function ListingsPage() {
 
               return (
                 <div
-                  className="relative cursor-pointer group"
+                  className="property-image-wrapper"
                   onClick={() => {
                     try {
                       const imgs = JSON.parse(property.images);
@@ -319,7 +316,7 @@ export default function ListingsPage() {
                     }}
                     sizes="100vw"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-sm font-semibold rounded-md">
+                  <div className="property-hover-overlay">
                     Click here to view more
                   </div>
                 </div>

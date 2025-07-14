@@ -38,10 +38,17 @@ body {
 .landing-message {
     text-align: center;
     height: auto;
-    margin: 10% 0;
-    font-size: 1em;
+    padding: 1rem;
   }
   
+  .landing-message h3{
+    font-size: xx-large;
+  }
+
+  .landing-message p{
+    font-size: large;
+  }
+
   .landing-message h3, .landing-message p {
     color: white;
   }
@@ -70,13 +77,10 @@ body {
   /* Stats Section */
   .stats {
     display: flex;
-    width: 80%;
-    position: absolute;
     justify-content: center;
-    margin: 0 auto;
-    bottom: -75px;
-    left: 10%;
-    height: 150px;
+    align-items: center;
+    margin: 0 15%;
+    padding-bottom: 2rem;
     border-radius: 10px;
     flex-wrap: wrap; /* Allow the items to wrap on smaller screens */
     gap: 1rem;
@@ -87,10 +91,15 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    color: black;
+    background-color: rgba(255, 255, 255, 0.2); /* semi-transparent white */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* for Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* subtle border */
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    color: rgb(255, 255, 255);
     min-width: 150px;
-    width: 25%;
+    width: 20%;
     border: 1px solid lightgray;
     padding: 10px;
   }
@@ -203,17 +212,241 @@ body {
   z-index: 1;
   margin-right: -1rem;
 }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      color: white;
+      z-index: 10;
+      position: relative;
+      margin-bottom: 5rem;
+    }
+
+    /* Logo Section */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-image {
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    /* Pagination */
+    .pagination-item button {
+      transition: all 0.2s ease;
+    }
+
+    .pagination-item.active button {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .pagination-item.disabled button {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Search Form Styles */
+    .search-form {
+      margin-top: 5%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-form-container {
+      display: flex;
+      margin-bottom: 1.5rem; /* Tailwind's mb-6 */
+      gap: 0.25rem;           /* Tailwind's space-x-1 */
+      width: 100%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-form input[type="text"],
+    .search-form select {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+    }
+
+    .search-form input[type="text"] {
+      width: 100%;
+    }
+
+    .search-form select option {
+      color: black;
+    }
+
+    .property-page-wrapper {
+      display: flex;
+      padding: 1rem;
+      max-width: 90%;
+      margin: 0 auto;
+      gap: 1rem;
+    }
+
+    nav.nav-links {
+      display: flex;
+      gap: 1rem; /* equivalent to Tailwind's space-x-4 */
+    }
+
+nav.nav-links button {
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.3); /* semi-transparent white */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* for Safari */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* subtle border */
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 5rem; /* equivalent to w-20 (80px) */
+  transition: background-color 0.2s, color 0.2s;
+  color: #fff;
+}
+
+nav.nav-links button:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+
+.property-filters {
+  width: 25%;
+  padding: 1rem;
+  border-right: 1px solid #ccc;
+}
+
+.property-filters h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.property-filters hr {
+  margin-bottom: 1rem;
+}
+
+.property-filters h4 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+.property-filters label,
+.property-filters select,
+.property-filters input {
+  margin-top: 0.5rem;
+}
+.property-filters .filter-checkbox-group label {
+  margin: 0;
+  white-space: nowrap;
+}
+.property-filters .filter-checkbox-group input[type="checkbox"] {
+  margin: 0;
+  flex-shrink: 0;
+}
+.property-filters select,
+.property-filters input[type="number"] {
+  width: 100%;
+  display: inline;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.property-filters .filter-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  white-space: nowrap;
+}
+
+.property-listings {
+  width: 75%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.property-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.property-card h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.property-card p {
+  margin-top: 0.25rem;
+}
+
+.property-card .price {
+  font-weight: bold;
+  color: green;
+}
+
+.property-card iframe {
+  margin-top: 0.5rem;
+  border-radius: 6px;
+}
+
+.property-image-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.property-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.property-image-wrapper:hover .property-hover-overlay {
+  opacity: 1;
+}
+
   
   @media (max-width: 768px) {
     .stats {
-      width: 90%;
+      width: 100%;
       bottom: -60px; /* Adjust bottom position for smaller screens */
-      left: 5%; /* Adjust left position */
     }
   
     .stat {
       width: 45%; /* 2 items per row on medium-sized screens */
       min-width: 100px; /* Reduce the minimum width */
+    }
+
+    nav.nav-links {
+      flex-direction: column; 
+      gap: 0.75rem;
+    }
+
+    nav.nav-links button {
+      width: 100%; 
     }
   }
   
@@ -246,15 +479,16 @@ body {
   }
 
   @media (max-width: 768px) {
-    /* Adjust header layout */
-    header {
-      text-align: center;
-      position: relative;
-      z-index: 10;
+    /* Header Bar */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1.25rem 2.5rem;
+      color: white;
+      z-index: 10;
+      position: relative;
+      margin-bottom: 5rem;
     }
 
     .landing-message h3 {
@@ -275,8 +509,7 @@ body {
     .property-info p {
       grid-template-columns: 100px auto;
     }
-    
-    /* Responsive search bar */
+
     .landing-message form {
       flex-direction: column;
       align-items: center;
