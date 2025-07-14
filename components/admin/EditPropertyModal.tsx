@@ -23,6 +23,7 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
     e.preventDefault();
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { images, ...propertyDataWithoutImages } = editingProperty;
 
       const res = await fetch("/api/properties", {

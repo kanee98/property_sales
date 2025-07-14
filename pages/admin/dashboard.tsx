@@ -11,6 +11,7 @@ import PropertyTable from "../../components/admin/PropertyTable";
 import ImageModal from "../../components/admin/ImageModal";
 import AddPropertyForm from "../../components/admin/AddPropertyForm";
 import EditPropertyModal from "../../components/admin/EditPropertyModal";
+import EditInquiryModal from "../../components/admin/EditInquiryModal";
 import InquiryTable from "../../components/admin/InquiryTable";
 import { useMessage } from "../../components/MessageBox";
 
@@ -890,127 +891,13 @@ export default function PropertyDashboard() {
                         </div>
                       )}
 
-                      {isEditModalOpen && editingInquiry && (
-                        <div className="modal-container">
-                          <div className="modal-content">
-                            <h2 className="text-2xl font-semibold mb-4" style={{ marginBottom: "3%" }}>
-                              Edit Inquiry
-                            </h2>
-                            <form
-                              onSubmit={async (e) => {
-                                e.preventDefault();
-
-                                try {
-                                  const { attachments, ...inquiryDataWithoutAttachments } = editingInquiry;
-
-                                  const res = await fetch("/api/inquiries", {
-                                    method: "PUT",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify(inquiryDataWithoutAttachments),
-                                  });
-
-                                  if (res.ok) {
-                                    const updated = await res.json();
-                                    setInquiries((prev) =>
-                                      prev.map((inq) => (inq.id === updated.id ? updated : inq))
-                                    );
-                                    setIsEditModalOpen(false);
-                                  } else {
-                                    const err = await res.json();
-                                    showMessage("Update failed: " + err.message);
-                                  }
-                                } catch (err) {
-                                  console.error(err);
-                                  showMessage("Something went wrong");
-                                }
-                              }}
-                            >
-                              <div className="grid grid-cols-2 gap-4">
-                                <div className="form-row">
-                                  <label htmlFor="companyName" style={{ fontWeight: "600" }}>Company Name</label>
-                                  <input
-                                    id="companyName"
-                                    type="text"
-                                    value={editingInquiry.companyName}
-                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, companyName: e.target.value })}
-                                    required
-                                    className="border p-2 rounded"
-                                  />
-                                </div>
-
-                                <div className="form-row">
-                                  <label htmlFor="contactPerson" style={{ fontWeight: "600" }}>Contact Person</label>
-                                  <input
-                                    id="contactPerson"
-                                    type="text"
-                                    value={editingInquiry.contactPerson}
-                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, contactPerson: e.target.value })}
-                                    className="border p-2 rounded"
-                                  />
-                                </div>
-
-                                <div className="form-row">
-                                  <label htmlFor="email" style={{ fontWeight: "600" }}>Email</label>
-                                  <input
-                                    id="email"
-                                    type="email"
-                                    value={editingInquiry.email}
-                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, email: e.target.value })}
-                                    className="border p-2 rounded"
-                                  />
-                                </div>
-
-                                <div className="form-row">
-                                  <label htmlFor="phone" style={{ fontWeight: "600" }}>Phone</label>
-                                  <input
-                                    id="phone"
-                                    type="text"
-                                    value={editingInquiry.phone}
-                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, phone: e.target.value })}
-                                    className="border p-2 rounded"
-                                  />
-                                </div>
-
-                                <div className="form-row">
-                                  <label htmlFor="budget" style={{ fontWeight: "600" }}>Budget</label>
-                                  <input
-                                    id="budget"
-                                    type="number"
-                                    value={editingInquiry.budget ?? ""}
-                                    onChange={(e) => setEditingInquiry({ ...editingInquiry, budget: Number(e.target.value) })}
-                                    className="border p-2 rounded"
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="form-row">
-                                <label htmlFor="requirements" style={{ fontWeight: "600" }}>Requirements</label>
-                                <textarea
-                                  id="requirements"
-                                  value={editingInquiry.requirements ?? ""}
-                                  onChange={(e) =>
-                                    setEditingInquiry({ ...editingInquiry, requirements: e.target.value })
-                                  }
-                                  className="border p-2 rounded mt-4 w-full"
-                                />
-                              </div>
-
-                              <div className="button-container">
-                                <button
-                                  type="button"
-                                  onClick={() => setIsEditModalOpen(false)}
-                                  className="button-cancel"
-                                >
-                                  Cancel
-                                </button>
-                                <button type="submit" className="button-save">
-                                  Save Changes
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      )}
+                      <EditInquiryModal
+                        isOpen={isEditModalOpen}
+                        editingInquiry={editingInquiry}
+                        setEditingInquiry={setEditingInquiry}
+                        setIsEditModalOpen={setIsEditModalOpen}
+                        setInquiries={setInquiries}
+                      />
 
                       {/* Pagination Controls for Inquiries */}
                       <div className="pagination-controls">
