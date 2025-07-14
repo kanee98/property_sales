@@ -16,7 +16,7 @@ interface Property {
   title: string;
   description: string;
   price: number;
-  image: string;
+  images: string;
   latitude: number;
   longitude: number;
   category: string;
