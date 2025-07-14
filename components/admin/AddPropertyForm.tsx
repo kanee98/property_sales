@@ -12,7 +12,7 @@ interface AddPropertyFormProps {
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
   fetchProperties: () => Promise<void>;
 }
-
+const { showMessage } = useMessage();
 const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
   isOpen,
   onClose,
@@ -85,8 +85,6 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
       showMessage("Something went wrong while adding the property.");
     }
   };
-
-  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={onClose}>

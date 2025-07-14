@@ -9,7 +9,7 @@ interface EditPropertyModalProps {
   setIsEditModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
 }
-
+const { showMessage } = useMessage();
 const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
   isOpen,
   editingProperty,
@@ -48,8 +48,6 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
       showMessage("Something went wrong");
     }
   };
-
-  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={() => setIsEditModalOpen(false)}>

@@ -17,7 +17,7 @@ interface ImageModalProps {
   isUploading: boolean;
   setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
+const { showMessage } = useMessage();
 const ImageModal: React.FC<ImageModalProps> = ({
   isOpen,
   onClose,
@@ -33,8 +33,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
   setIsUploading,
 }) => {
   if (!isOpen) return null;
-
-  const { showMessage } = useMessage();
 
   return (
     <div className="modal-container" onClick={onClose}>
