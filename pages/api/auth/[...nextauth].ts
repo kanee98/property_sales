@@ -18,7 +18,7 @@ export default NextAuth({
           throw new Error("Missing credentials");
         }
 
-        const admin = await prisma.admin.findUnique({
+        const admin = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 

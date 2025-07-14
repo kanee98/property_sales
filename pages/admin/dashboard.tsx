@@ -986,7 +986,7 @@ export default function PropertyDashboard() {
                                   <option value="" disabled>
                                   Select Category
                                   </option>
-                                  <option value="Corporate ">Corporate </option>
+                                  <option value="Corporate">Corporate</option>
                                   <option value="Retail">Retail</option>
                                   <option value="Residential">Residential</option>
                                 </select>
@@ -1287,7 +1287,7 @@ export default function PropertyDashboard() {
                                 required
                                 className="border p-2 rounded"
                               >
-                                <option value="Corporate ">Corporate </option>
+                                <option value="Corporate">Corporate</option>
                                 <option value="Retail">Retail</option>
                                 <option value="Residential">Residential</option>
                               </select>

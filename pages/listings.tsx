@@ -14,7 +14,7 @@ interface Property {
   latitude: number;
   longitude: number;
   district: string;
-  category: string; // Corporate or Retail
+  category: string; 
   type: string;
   manager: string;
   contact: number;
@@ -25,8 +25,17 @@ const itemsPerPage = 6;
 export default function ListingsPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState<number | null>(100000000);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+
   const [stats, setStats] = useState({
     totalProperties: 0,
     corporate: 0,
@@ -47,44 +56,33 @@ export default function ListingsPage() {
       });
   }, []);  
 
-  const calculateStats = (data: Property[]) => {
-    const totalProperties = data.length;
-    const corporate = data.filter(property => property.category === "Corporate").length;
-    const retail = data.filter(property => property.category === "Retail").length;
-    const residential = data.filter(property => property.category === "Residential").length;
-    const for_sale = data.filter(property => property.type === "For Sale").length;
-    const for_rent = data.filter(property => property.type === "For Rent").length;
-    const wanted = data.filter(property => property.type === "Wanted").length;
+  useEffect(() => {
+    setCurrentPage(1); 
+  }, [searchQuery, selectedCategory, selectedTypes, selectedDistrict, minPrice, maxPrice]);
 
+  const calculateStats = (data: Property[]) => {
     setStats({
-      totalProperties,
-      corporate,
-      retail,
-      residential,
-      for_sale,
-      for_rent,
-      wanted
+      totalProperties: data.length,
+      corporate: data.filter(p => p.category === "Corporate").length,
+      retail: data.filter(p => p.category === "Retail").length,
+      residential: data.filter(p => p.category === "Residential").length,
+      for_sale: data.filter(p => p.type === "For Sale").length,
+      for_rent: data.filter(p => p.type === "For Rent").length,
+      wanted: data.filter(p => p.type === "Wanted").length,
     });
   };
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState<number | null>(100000000);
-  
   const filteredProperties = properties.filter((property) => {
     const matchesTitle = property.title.toLowerCase().includes(searchQuery.toLowerCase());
-  
-    const matchesCategory = selectedType === "" || property.category === selectedType;
-  
+    const matchesCategory = selectedCategory === "" || property.category === selectedCategory;
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(property.type);
-  
     const matchesDistrict = selectedDistrict === "" || property.district === selectedDistrict;
-  
-    const matchesPrice = (!property.price || (property.price >= minPrice && (maxPrice === null || property.price <= maxPrice)));
-  
+    const matchesPrice =
+      (property.price === 0 && minPrice === 0) ||
+      (property.price >= minPrice && (maxPrice === null || property.price <= maxPrice));
+
     return matchesTitle && matchesCategory && matchesType && matchesDistrict && matchesPrice;
-  });  
+  });
 
   const redirectToLogin = () => {
     window.location.href = "/login";
@@ -93,8 +91,6 @@ export default function ListingsPage() {
   const redirectToInquiries = () => {
     window.location.href = "/inquiries";
   };
-
-  const [currentPage, setCurrentPage] = useState(1); // Track the current page
 
   // Calculate the start and end indices for slicing the properties array
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -109,11 +105,6 @@ export default function ListingsPage() {
       setCurrentPage(page);
     }
   };
-
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   return (
     <>
@@ -150,7 +141,7 @@ export default function ListingsPage() {
             />
             <select
               className="border p-2 rounded"
-              onChange={(e) => setSelectedType(e.target.value)}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
               <option value="" style={{ color: "black" }}>All Types</option>
               <option value="Corporate" style={{ color: "black" }}>Corporate</option>
