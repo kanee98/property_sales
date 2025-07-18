@@ -249,6 +249,14 @@
     font-size: small;
     margin-bottom: 0.8rem;
   }
+
+  .inquiry-form .form-grid {
+    display: block;
+  }
+
+  .contact-info-container p {
+    display: grid;
+  }
 }
 
   /* Mobile Responsive Styles for Why Choose Us */
