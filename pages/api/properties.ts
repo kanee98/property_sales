@@ -9,8 +9,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const properties = await prisma.property.findMany();
       return res.status(200).json(properties);
     } catch (error) {
-      console.error("Error fetching properties", error);
-      return res.status(500).json({ error: "Error fetching properties" });
+      const err = error as Error;
+
+      console.error("Error fetching properties", err);
+      return res.status(500).json({ err: "Error fetching properties", message: err.message,
+      stack: err.stack, });
     }
   }
 
