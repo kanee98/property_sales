@@ -325,7 +325,7 @@ export default function ListingsPage() {
 
             <h2 className="text-lg font-semibold mt-2">{property.title}</h2>
             <p>{property.description}</p>
-            <p className="font-bold text-green-600">${property.price}</p>
+            <p className="font-bold text-green-600">Rs.{property.price}</p>
 
             {/* Google Maps */}
             <iframe
