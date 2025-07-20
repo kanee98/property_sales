@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+
+# Host
+Host: https://propwise.lk
+
+# Sitemaps
+Sitemap: https://propwise.lk/sitemap.xml
