@@ -422,7 +422,7 @@ export default function InquiriesPage() {
                     <p>
                       At PropWise.lk, we believe real estate should be easy, transparent, and client-focused. That’s why our expert team 
                       combines advanced technology with personalized support to provide access to accurate listings, verified properties, 
-                      and tailored advice that meets your unique needs — whether you're a first-time buyer, seasoned investor, landlord, or simply exploring your options.
+                      and tailored advice that meets your unique needs — whether you&apos;re a first-time buyer, seasoned investor, landlord, or simply exploring your options.
                     </p>
                     <p>
                       We take pride in our values:
@@ -433,7 +433,7 @@ export default function InquiriesPage() {
                       </ul>
                     </p>
                     <p>
-                      Join thousands of satisfied clients who have turned to PropWise.lk to buy, sell, rent, or manage properties with ease. We're not just another property website — we’re your strategic real estate partner in Sri Lanka.
+                      Join thousands of satisfied clients who have turned to PropWise.lk to buy, sell, rent, or manage properties with ease. We&apos;re not just another property website — we’re your strategic real estate partner in Sri Lanka.
                     </p>
                   </section>
 
