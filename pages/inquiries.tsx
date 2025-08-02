@@ -262,19 +262,19 @@ export default function InquiriesPage() {
                     <h3>Contact Us</h3>
                     <p>
                       <i className="bx bx-phone"></i>
-                      <strong>Phone:</strong> +94 77 123 4567
+                      <strong>Phone:</strong> +94 77 362 8282 / +94 77 736 6597
                     </p>
                     <p>
                       <i className="bx bx-envelope"></i>
-                      <strong>Email:</strong> info@property.com
+                      <strong>Email:</strong> padmapriya@propwise.lk
                     </p>
                     <p>
                       <i className="bx bx-map"></i>
-                      <strong>Address:</strong> 123 Property Street, Colombo
+                      <strong>Address:</strong> 374/4/1 Narendrasinghe lane, Habarakada watta, Homagama
                     </p>
                     <p>
                       <i className="bx bx-time"></i>
-                      <strong>Office Hours:</strong> Mon - Fri, 9am - 5pm
+                      <strong>Office Hours:</strong> Mon - Sat, 9am - 5pm
                     </p>
                   </div>
                 </div>
@@ -410,18 +410,30 @@ export default function InquiriesPage() {
                   <section className="about-us-content space-y-6 text-gray-700 leading-relaxed">
                     <h2 className="text-2xl font-semibold" style={{ marginBottom: "1rem", marginTop: "1rem" }}>Our Story</h2>
                     <p>
-                      Welcome to our company! We are dedicated to providing top-notch property services that empower 
-                      you to find your dream home or sell your property with confidence. Our expert team works tirelessly 
-                      to bring you the best listings and personalized support.
+                      Welcome to PropWise.lk — Sri Lanka’s trusted partner in property sales, rentals, and real estate management. 
+                      With over 15 years of industry expertise, we are committed to delivering exceptional property solutions that 
+                      empower individuals, families, and investors to make confident decisions in today’s competitive real estate market.
                     </p>
                     <p>
-                      Founded with the mission to simplify real estate, we leverage cutting-edge technology and deep market 
-                      knowledge to create seamless experiences for our clients. Trust, transparency, and customer satisfaction 
-                      are at the heart of everything we do.
+                      Our journey began with a clear mission: to simplify the property experience in Sri Lanka through innovation, 
+                      integrity, and deep market insight. From residential homes and commercial spaces to land plots and property 
+                      management services, we bring you a comprehensive platform backed by decades of local knowledge and proven success.
                     </p>
                     <p>
-                      Whether you are a first-time buyer, seasoned investor, or just exploring options, we are here to guide you 
-                      every step of the way. Join us as we redefine how real estate should be — easy, reliable, and client-focused.
+                      At PropWise.lk, we believe real estate should be easy, transparent, and client-focused. That’s why our expert team 
+                      combines advanced technology with personalized support to provide access to accurate listings, verified properties, 
+                      and tailored advice that meets your unique needs — whether you're a first-time buyer, seasoned investor, landlord, or simply exploring your options.
+                    </p>
+                    <p>
+                      We take pride in our values:
+                      <ul>
+                        <li>✅ Trust — every listing is verified and reliable</li>
+                        <li>✅ Transparency — honest guidance at every step</li>
+                        <li>✅ Satisfaction — your goals are our priority</li>
+                      </ul>
+                    </p>
+                    <p>
+                      Join thousands of satisfied clients who have turned to PropWise.lk to buy, sell, rent, or manage properties with ease. We're not just another property website — we’re your strategic real estate partner in Sri Lanka.
                     </p>
                   </section>
 
@@ -444,8 +456,8 @@ export default function InquiriesPage() {
                             margin: "0 auto",
                           }}
                         />
-                        <h3 className="leader-name">Jane Doe</h3>
-                        <p className="leader-title">Chief Executive Officer (CEO)</p>
+                        <h3 className="leader-name">Padmapriya Jayasinghe</h3>
+                        <p className="leader-title">Managing Director </p>
                       </div>
 
                       <div className="leader">
@@ -464,8 +476,8 @@ export default function InquiriesPage() {
                             margin: "0 auto",
                           }}
                         />
-                        <h3 className="leader-name">John Smith</h3>
-                        <p className="leader-title">Chief Operating Officer (COO)</p>
+                        <h3 className="leader-name">Danesh Jayasinghe </h3>
+                        <p className="leader-title">CEO (Partner)</p>
                       </div>
                     </div>
                   </section>

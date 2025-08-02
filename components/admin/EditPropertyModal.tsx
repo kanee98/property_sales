@@ -122,6 +122,20 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
                 }
                 className="border p-2 rounded"
               >
+                <option value="">All Districts</option>
+
+                <optgroup label="Greater Colombo">
+                  {[
+                    "Colombo 1", "Colombo 2", "Colombo 3", "Colombo 4", "Colombo 5",
+                    "Colombo 6", "Colombo 7", "Colombo 8", "Colombo 9", "Colombo 10",
+                    "Colombo 11", "Colombo 12", "Colombo 13", "Colombo 14", "Colombo 15",
+                  ].map((colomboDistrict) => (
+                    <option key={colomboDistrict} value={colomboDistrict}>
+                      {colomboDistrict}
+                    </option>
+                  ))}
+                </optgroup>
+
                 {[
                   "Ampara",
                   "Anuradhapura",

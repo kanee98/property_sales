@@ -35,6 +35,9 @@ export default function ListingsPage() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [minArea, setMinArea] = useState(0);
+  const [maxArea, setMaxArea] = useState<number | null>(null);
+
 
   const [stats, setStats] = useState({
     totalProperties: 0,
@@ -228,20 +231,35 @@ export default function ListingsPage() {
           onChange={(e) => setSelectedDistrict(e.target.value)}
         >
           <option value="">All Districts</option>
+
+          <optgroup label="Greater Colombo">
+            {[
+              "Colombo 1", "Colombo 2", "Colombo 3", "Colombo 4", "Colombo 5", 
+              "Colombo 6", "Colombo 7", "Colombo 8", "Colombo 9", "Colombo 10",
+              "Colombo 11", "Colombo 12", "Colombo 13", "Colombo 14", "Colombo 15"
+            ].map((colombo) => (
+              <option key={colombo} value={colombo}>
+                {colombo}
+              </option>
+            ))}
+          </optgroup>
+
           {[
-            "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota", "Jaffna",
-            "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale", "Matara", "Monaragala",
-            "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
+            "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", 
+            "Hambantota", "Jaffna", "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", 
+            "Mannar", "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya", 
+            "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
           ].map((district) => (
             <option key={district} value={district}>
               {district}
             </option>
           ))}
+
         </select>
 
         {/* Filter by Price */}
         <h4 className="mt-4 font-semibold">By price:</h4>
-        <div className="filter-checkbox-group">
+        <div className="filter-number-group">
           <input
             type="number"
             min={0}
@@ -260,6 +278,31 @@ export default function ListingsPage() {
               setMaxPrice(value === "" ? null : Number(value));
             }}
             placeholder="Max Price"
+            className="border p-2 rounded w-full"
+          />
+        </div>
+
+        {/* Filter by Area Extent */}
+        <h4 className="mt-4 font-semibold">By Area (sq ft):</h4>
+        <div className="filter-number-range">
+          <input
+            type="number"
+            min={0}
+            value={minArea}
+            onChange={(e) => setMinArea(Number(e.target.value))}
+            placeholder="Min Area"
+            className="border p-2 rounded w-full"
+          />
+          <span>to</span>
+          <input
+            type="number"
+            min={0}
+            value={maxArea === null ? "" : maxArea}
+            onChange={(e) => {
+              const value = e.target.value;
+              setMaxArea(value === "" ? null : Number(value));
+            }}
+            placeholder="Max Area"
             className="border p-2 rounded w-full"
           />
         </div>

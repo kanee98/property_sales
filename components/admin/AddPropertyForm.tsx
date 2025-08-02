@@ -147,13 +147,30 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
             onChange={(e) => setNewProperty({ ...newProperty, district: e.target.value })}
             className="border p-2 rounded"
           >
-            <option value="" disabled>Select District</option>
+            <option value="" disabled>
+              Select District
+            </option>
+
+            <optgroup label="Greater Colombo">
+              {[
+                "Colombo 1", "Colombo 2", "Colombo 3", "Colombo 4", "Colombo 5",
+                "Colombo 6", "Colombo 7", "Colombo 8", "Colombo 9", "Colombo 10",
+                "Colombo 11", "Colombo 12", "Colombo 13", "Colombo 14", "Colombo 15",
+              ].map((colomboDistrict) => (
+                <option key={colomboDistrict} value={colomboDistrict}>
+                  {colomboDistrict}
+                </option>
+              ))}
+            </optgroup>
+
             {[
               "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo", "Galle", "Gampaha", "Hambantota", "Jaffna",
               "Kalutara", "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar", "Matale", "Matara", "Moneragala",
               "Mullaitivu", "Nuwara Eliya", "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya",
             ].map((district) => (
-              <option key={district} value={district}>{district}</option>
+              <option key={district} value={district}>
+                {district}
+              </option>
             ))}
           </select>
 
