@@ -43,6 +43,7 @@ export default function ListingsPage() {
     residential: 0,
     for_sale: 0,
     for_rent: 0,
+    for_lease: 0,
     wanted: 0
   });
 
@@ -68,6 +69,7 @@ export default function ListingsPage() {
       residential: data.filter(p => p.category === "Residential").length,
       for_sale: data.filter(p => p.type === "For Sale").length,
       for_rent: data.filter(p => p.type === "For Rent").length,
+      for_lease: data.filter(p => p.type === "For Lease").length,
       wanted: data.filter(p => p.type === "Wanted").length,
     });
   };
@@ -166,21 +168,23 @@ export default function ListingsPage() {
           <h2 className="text-3xl font-bold">{stats.residential}</h2>
           <p>Residential</p>
         </div>
+        
+        <div className="stat">
+          <h2 className="text-3xl font-bold">{stats.for_rent}</h2>
+          <p>For Rent</p>
+        </div>
+        <div className="stat right-corner">
+          <h2 className="text-3xl font-bold">{stats.for_lease}</h2>
+          <p>For Lease</p>
+        </div>
         <div className="stat left-corner">
           <h2 className="text-3xl font-bold">{stats.for_sale}</h2>
           <p>For Sale</p>
-        </div><div className="stat">
-          <h2 className="text-3xl font-bold">{stats.for_rent}</h2>
-          <p>For Rent</p>
         </div>
         <div className="stat">
           <h2 className="text-3xl font-bold">{stats.wanted}</h2>
           <p>Wanted</p>
-        </div>
-        <div className="stat right-corner">
-          <h2 className="text-3xl font-bold">20+</h2>
-          <p>Customers</p>
-        </div>
+        </div>      
       </div>
     </section>
 
@@ -193,7 +197,7 @@ export default function ListingsPage() {
         {/* Filter by Category */}
         <h4 className="font-semibold">By category:</h4>
         <div className="space-y-2">
-          {["For Sale", "For Rent", "Wanted"].map((type) => (
+          {["For Sale", "For Rent", "For Lease", "Wanted"].map((type) => (
             <div className="filter-checkbox-group" style={{width:"1rem", flexWrap:"nowrap"}} key={type}>
               <input
                 type="checkbox"

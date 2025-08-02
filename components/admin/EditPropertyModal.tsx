@@ -184,6 +184,7 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
               >
                 <option value="For Sale">For Sale</option>
                 <option value="For Rent">For Rent</option>
+                <option value="For Lease">For Lease</option>
                 <option value="Wanted">Wanted</option>
               </select>
             </div>
