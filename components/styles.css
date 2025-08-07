@@ -213,29 +213,6 @@ body {
   margin-right: -1rem;
 }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 2.5rem;
-      color: white;
-      z-index: 10;
-      position: relative;
-      margin-bottom: 5rem;
-    }
-
-    /* Logo Section */
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .logo-image {
-      border-radius: 8px;
-      object-fit: contain;
-    }
-
     /* Pagination */
     .pagination-item button {
       transition: all 0.2s ease;
@@ -543,18 +520,6 @@ nav.nav-links button:hover {
   }
 
   @media (max-width: 768px) {
-    /* Header Bar */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 1.5rem;
-      color: white;
-      z-index: 10;
-      position: relative;
-      margin-bottom: 5rem;
-    }
-
     .landing-message h3 {
       font-size: 1.5rem;
     }

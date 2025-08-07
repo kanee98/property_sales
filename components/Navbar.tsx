@@ -84,30 +84,32 @@ export default function Navbar({ onLoginClick, onInquiriesClick }: NavbarProps) 
       </div>
 
       {/* Mobile navigation */}
-      {isMobileMenuOpen && (
-        <nav id="mobile-menu" className="mobile-nav" aria-label="Mobile navigation">
-          <ul>
+      <nav
+        id="mobile-menu"
+        className={`mobile-nav ${isMobileMenuOpen ? "open" : ""}`}
+        aria-label="Mobile navigation"
+        >
+        <ul>
             <li>
-              <button
+            <button
                 type="button"
                 onClick={handleInquiriesClick}
                 className="btn btn-inquiries full-width"
-              >
+            >
                 Inquiries
-              </button>
+            </button>
             </li>
             <li>
-              <button
+            <button
                 type="button"
                 onClick={handleLoginClick}
                 className="btn btn-login full-width"
-              >
+            >
                 Login
-              </button>
+            </button>
             </li>
-          </ul>
-        </nav>
-      )}
+        </ul>
+      </nav>
     </header>
   );
 }

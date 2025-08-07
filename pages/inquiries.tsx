@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { NewInquiry} from "../types";
 import { useMessage } from "../components/MessageBox";
+import Footer from "../components/Footer";
 
 export default function InquiriesPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -115,7 +116,7 @@ export default function InquiriesPage() {
     <>
       <SidebarScript /><div className={darkMode ? 'dark' : ''}>
         <section id="sidebar" className="sidebar">
-          <Link href="#" className="brand">
+          <Link href="/" className="brand">
             {/* <i className='bx bxs-smile bx-lg'></i> */}
             <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
             <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Propwise</span>
@@ -486,11 +487,7 @@ export default function InquiriesPage() {
           </main>
         </section>
       </div>
-      <footer className="footer">
-        <p>
-            &copy; {new Date().getFullYear()} Propwise. All Rights Reserved. Designed and built by <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer"><b>FusionLabz</b></a>. 
-        </p>
-      </footer>
+      <Footer />
 </>
     
   );
