@@ -1,11 +1,15 @@
 "use client";
 
 import { Property } from "../types";
+import React, { useState } from "react";
 import FilterMenu from "../components/FilterMenu";
 import PropertyCard from "../components/PropertyCard";
 import ImageModal from "../components/ImageModal";
 import Pagination from "../components/Pagination";
 import Footer from "../components/Footer";
+import {
+  Settings2
+} from "lucide-react";
 
 interface ListingsSectionProps {
   propertiesToDisplay: Property[];
@@ -59,9 +63,22 @@ export default function ListingsSection({
   maxArea,
   setMaxArea,
 }: ListingsSectionProps) {
+  const [showFilter, setShowFilter] = useState(false);
+
   return (
     <>
-      <div className="property-page-wrapper flex gap-8 px-6 mt-8">
+      {/* Filter Button for Mobile */}
+      <div className="mobile-filter-btn">
+        <button onClick={() => setShowFilter(true)}>
+          <Settings2 />
+        </button>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div className={`filter-sidebar ${showFilter ? "show" : ""}`}>
+        <div className="filter-close" onClick={() => setShowFilter(false)}>
+          &times;
+        </div>
         <FilterMenu
           selectedTypes={selectedTypes}
           setSelectedTypes={setSelectedTypes}
@@ -76,10 +93,40 @@ export default function ListingsSection({
           maxArea={maxArea}
           setMaxArea={setMaxArea}
         />
+      </div>
 
-        <div className="property-listings grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
+      {/* Overlay */}
+      <div
+        className={`filter-overlay ${showFilter ? "show" : ""}`}
+        onClick={() => setShowFilter(false)}
+      ></div>
+
+      {/* Desktop Layout */}
+      <div className="property-page-wrapper">
+        <div className="desktop-sidebar">
+          <FilterMenu
+            selectedTypes={selectedTypes}
+            setSelectedTypes={setSelectedTypes}
+            selectedDistrict={selectedDistrict}
+            setSelectedDistrict={setSelectedDistrict}
+            minPrice={minPrice}
+            setMinPrice={setMinPrice}
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
+            minArea={minArea}
+            setMinArea={setMinArea}
+            maxArea={maxArea}
+            setMaxArea={setMaxArea}
+          />
+        </div>
+
+        <div className="property-listings">
           {propertiesToDisplay.map((property) => (
-            <PropertyCard key={property.id} property={property} openImageModal={openImageModal} />
+            <PropertyCard
+              key={property.id}
+              property={property}
+              openImageModal={openImageModal}
+            />
           ))}
         </div>
       </div>
@@ -94,7 +141,11 @@ export default function ListingsSection({
         />
       )}
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <Footer />
     </>

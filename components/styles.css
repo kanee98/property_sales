@@ -304,7 +304,6 @@ nav.nav-links button:hover {
 
 
 .property-filters {
-  width: 25%;
   padding: 1rem;
   border-right: 1px solid #ccc;
 }
@@ -448,7 +447,10 @@ nav.nav-links button:hover {
   cursor: not-allowed;
 }
 
-  
+.mobile-filter-btn{
+  display: none;
+} 
+
   @media (max-width: 768px) {
     .stats {
       width: 100%;
@@ -459,6 +461,10 @@ nav.nav-links button:hover {
       width: 45%; /* 2 items per row on medium-sized screens */
       min-width: 100px; /* Reduce the minimum width */
     }
+
+    .mobile-filter-btn{
+      display: block;
+    } 
 
     .property-filters .filter-checkbox-group {
       flex-wrap: wrap;
@@ -480,8 +486,8 @@ nav.nav-links button:hover {
       font-size: small;
     }
     .property-filters{
+      width: 100%;
       font-size: small;
-      width: 45%;
     }
     nav.nav-links {
       flex-direction: column; 
@@ -567,6 +573,10 @@ nav.nav-links button:hover {
       max-width: 100%;
       height: auto;
     }
+
+    .desktop-sidebar{
+      display: none;
+    }
   }
   
   .pagination {
@@ -597,3 +607,75 @@ nav.nav-links button:hover {
   .footer a:hover {
       font-weight: bold;
   }
+
+/* Sidebar hidden on desktop */
+@media (min-width: 768px) {
+  .filter-sidebar {
+    display: none;
+  }
+
+  .desktop-sidebar {
+    width: 300px;
+    margin-right: 2rem;
+  }
+}
+
+/* Mobile Sidebar */
+.filter-sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 75%;
+  max-width: 320px;
+  background-color: #fff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  z-index: 9999;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+}
+
+.filter-sidebar.show {
+  left: 0;
+}
+
+.filter-close {
+  text-align: right;
+  font-size: 24px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 9998;
+  display: none;
+}
+
+.filter-overlay.show {
+  display: block;
+}
+
+/* Filter button for mobile only */
+.mobile-filter-btn {
+  position: fixed;
+  justify-content: flex-end;
+  margin: -1rem;
+  z-index: 1000;
+}
+
+.mobile-filter-btn button {
+  background: linear-gradient(90deg, #096702, #13C700);
+  color: white;
+  padding: 10px 5px 10px 20px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  font-size: 14px;
+}
