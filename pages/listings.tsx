@@ -496,7 +496,7 @@ export default function ListingsPage() {
         {/* END PAGINATION */}
         <footer className="footer">
           <p>
-              &copy; {new Date().getFullYear()} <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer">FusionLabz</a>. All Rights Reserved.
+              &copy; {new Date().getFullYear()} Propwise. All Rights Reserved. Designed and built by <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer"><b>FusionLabz</b></a>. 
           </p>
         </footer>
     </>
