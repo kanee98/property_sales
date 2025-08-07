@@ -1098,13 +1098,6 @@ body.dark #content nav .profile-menu li a {
 	background-color: #e53935;
   }
   
-  .search-input {
-	padding: 8px;
-	margin-right: 10px;
-	border-radius: 4px;
-	border: 1px solid #ccc;
-  }
-  
   .pagination-controls {
 	display: flex;
 	justify-content: center;
