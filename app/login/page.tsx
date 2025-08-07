@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Logo from "../../src/img/Propwise Logo No BG.png";
 import "antd/dist/reset.css";
 import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import "../../components/login.css";
 import type { ValidateErrorEntity } from "rc-field-form/lib/interface";
+import Footer from "../../components/Footer";
 
 export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
@@ -51,6 +53,15 @@ export default function AdminLogin() {
 
   return (
     <>
+      <header className="header">
+        <div className="container">
+        {/* Brand */}
+          <div className="brand">
+            <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
+            <h1 className="title">PROPWISE</h1>
+          </div>
+        </div>
+      </header>
       <div className="login-page">
         <div className="login-box">
           {/* Login Form */}
@@ -119,11 +130,9 @@ export default function AdminLogin() {
         </div>
       </div>
 
-      <footer className="footer">
-        <p>
-          &copy; {new Date().getFullYear()} Propwise. All Rights Reserved. Designed and built by <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer"><b>FusionLabz</b></a>. 
-        </p>
-      </footer>
+      <div style={{ position: "fixed", bottom: 0, left: 0, width: "100%", zIndex: 1000 }}>
+        <Footer />
+      </div>
     </>
   );
 }
