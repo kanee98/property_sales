@@ -1,5 +1,5 @@
 import React from "react";
-import { Inquiry } from "../../types";
+import { Inquiry } from "../../types/index";
 
 interface InquiryTableProps {
   inquiriesToDisplay: Inquiry[];
