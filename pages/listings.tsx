@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import Logo from "../src/img/Propwise Logo No BG.png";
 import { Property } from "../types";
-import FilterMenu from "../components/FilterMenu";
-import PropertyCard from "../components/PropertyCard";
-import ImageModal from "../components/ImageModal";
-import Pagination from "../components/Pagination";
-import Footer from "../components/Footer";
+
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import ListingsSection from "../components/ListingsSection";
 
 const itemsPerPage = 6;
 
@@ -111,127 +108,41 @@ export default function ListingsPage() {
 
   return (
     <>
-      <section className="landing">
-        <div className="landing-bg"></div>
-        <header className="header flex justify-between items-center p-4">
-          <div className="brand flex items-center gap-3">
-            <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-            <h1 className="text-3xl font-bold">PROPWISE</h1>
-          </div>
+      <Navbar onLoginClick={redirectToLogin} onInquiriesClick={redirectToInquiries} />
 
-          <nav className="nav-links flex gap-4">
-            <button type="button" onClick={redirectToInquiries} className="btn">
-              Inquiries
-            </button>
-            <button type="button" onClick={redirectToLogin} className="btn">
-              Login
-            </button>
-          </nav>
-        </header>
+      <Hero
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        stats={stats}
+      />
 
-        <div className="landing-message text-center p-6">
-          <h3 className="text-2xl font-semibold">Relax, Finding Properties Just Got Easier</h3>
-          <p className="text-lg mt-2">Discover the best properties for sale or rent</p>
-          <form className="search-form mt-4 max-w-xl mx-auto flex gap-4">
-            <input
-              type="text"
-              placeholder="Search properties..."
-              className="border p-2 rounded flex-grow"
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <select
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{ width: "45%" }}
-              className="border p-2 rounded"
-            >
-              <option value="" style={{ color: "black" }}>
-                All Types
-              </option>
-              <option value="Corporate" style={{ color: "black" }}>
-                Corporate
-              </option>
-              <option value="Retail" style={{ color: "black" }}>
-                Retail
-              </option>
-              <option value="Residential" style={{ color: "black" }}>
-                Residential
-              </option>
-            </select>
-          </form>
-        </div>
-
-        <div className="stats grid grid-cols-4 gap-4 px-6">
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.totalProperties}</h2>
-            <p>Total Properties</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.corporate}</h2>
-            <p>Corporate</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.retail}</h2>
-            <p>Retail</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.residential}</h2>
-            <p>Residential</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.for_rent}</h2>
-            <p>For Rent</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.for_lease}</h2>
-            <p>For Lease</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.for_sale}</h2>
-            <p>For Sale</p>
-          </div>
-          <div className="stat text-center p-4 bg-gray-100 rounded shadow">
-            <h2 className="text-3xl font-bold">{stats.wanted}</h2>
-            <p>Wanted</p>
-          </div>
-        </div>
-      </section>
-
-      <div className="property-page-wrapper flex gap-8 px-6 mt-8">
-        <FilterMenu
-          selectedTypes={selectedTypes}
-          setSelectedTypes={setSelectedTypes}
-          selectedDistrict={selectedDistrict}
-          setSelectedDistrict={setSelectedDistrict}
-          minPrice={minPrice}
-          setMinPrice={setMinPrice}
-          maxPrice={maxPrice}
-          setMaxPrice={setMaxPrice}
-          minArea={minArea}
-          setMinArea={setMinArea}
-          maxArea={maxArea}
-          setMaxArea={setMaxArea}
-        />
-
-        <div className="property-listings grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
-          {propertiesToDisplay.map((property) => (
-            <PropertyCard key={property.id} property={property} openImageModal={openImageModal} />
-          ))}
-        </div>
-      </div>
-
-      {isImageModalOpen && selectedProperty && (
-        <ImageModal
-          images={selectedImages}
-          currentIndex={currentImageIndex}
-          setCurrentIndex={setCurrentImageIndex}
-          closeModal={() => setIsImageModalOpen(false)}
-          property={selectedProperty}
-        />
-      )}
-
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-
-      <Footer />
+      <ListingsSection
+        propertiesToDisplay={propertiesToDisplay}
+        openImageModal={openImageModal}
+        isImageModalOpen={isImageModalOpen}
+        selectedProperty={selectedProperty}
+        selectedImages={selectedImages}
+        currentImageIndex={currentImageIndex}
+        setCurrentImageIndex={setCurrentImageIndex}
+        closeModal={() => setIsImageModalOpen(false)}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        selectedTypes={selectedTypes}
+        setSelectedTypes={setSelectedTypes}
+        selectedDistrict={selectedDistrict}
+        setSelectedDistrict={setSelectedDistrict}
+        minPrice={minPrice}
+        setMinPrice={setMinPrice}
+        maxPrice={maxPrice}
+        setMaxPrice={setMaxPrice}
+        minArea={minArea}
+        setMinArea={setMinArea}
+        maxArea={maxArea}
+        setMaxArea={setMaxArea}
+      />
     </>
   );
 }

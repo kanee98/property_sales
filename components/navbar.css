@@ -1,0 +1,172 @@
+/* Glass navbar */
+.header {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  user-select: none;
+}
+
+.title {
+  font-size: 1.875rem; /* ~30px */
+  font-weight: 700;
+  color: #1f2937; /* slate-800 */
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* Desktop nav */
+.desktop-nav {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .desktop-nav {
+    display: none;
+  }
+}
+
+/* Base button style */
+.btn {
+  padding: 0.55rem 1.5rem;
+  border-radius: 9999px; /* pill shape */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline-offset: 2px;
+}
+
+/* Inquiries button */
+.btn-inquiries {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8); /* blue 600-700 */
+  color: white;
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
+}
+
+.btn-inquiries:hover,
+.btn-inquiries:focus-visible {
+  background: linear-gradient(90deg, #1d4ed8, #2563eb);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.6);
+  outline: none;
+}
+
+/* Login button */
+.btn-login {
+  background: #374151; /* gray-700 */
+  color: white;
+  box-shadow: 0 4px 8px rgba(55, 65, 81, 0.4);
+}
+
+.btn-login:hover,
+.btn-login:focus-visible {
+  background: #1f2937; /* gray-800 */
+  box-shadow: 0 6px 12px rgba(31, 41, 55, 0.6);
+  outline: none;
+}
+
+/* Hamburger button */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #1f2937;
+  z-index: 10001;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .hamburger-btn {
+    display: block;
+  }
+}
+
+.icon {
+  width: 2rem;
+  height: 2rem;
+  stroke-width: 2.5;
+}
+
+/* Mobile nav */
+.mobile-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  top: 64px;
+  left: 0;
+  z-index: 9998;
+  padding-bottom: 1rem;
+}
+
+/* Mobile nav list */
+.mobile-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 1rem 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Full width buttons on mobile */
+.full-width {
+  width: 100%;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Body padding to prevent content behind fixed header */
+@media (max-width: 767px) {
+  body {
+    padding-top: 64px;
+  }
+}

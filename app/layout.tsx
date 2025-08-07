@@ -4,6 +4,7 @@ import "../components/dashboard.css";
 import "../components/inquiries.css";
 import "../components/login.css";
 import "../components/styles.css";
+import "../components/navbar.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
