@@ -8,7 +8,7 @@ import Logo from "../src/img/Propwise Logo No BG.png";
 import "../components/inquiries.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
-import { NewInquiry} from "../types";
+import { NewInquiry} from "../types/index";
 import { useMessage } from "../components/MessageBox";
 import Footer from "../components/Footer";
 
