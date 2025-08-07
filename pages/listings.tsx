@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import Logo from "../src/img/Propwise Logo No BG.png";
+import { Italic } from "lucide-react";
 
 interface Property {
   id: number;
@@ -375,8 +376,9 @@ export default function ListingsPage() {
             })()}
 
             <h2 className="text-lg font-semibold mt-2">{property.title}</h2>
+            <p>{property.area != null ? `${property.area} sq ft` : "N/A"}</p>
             <p>{property.description}</p>
-            <p className="font-bold text-green-600">Rs.{property.price}</p>
+            <p className="font-bold text-green-600">{property.price != null ? `Rs. ${property.price}` : "N/A"}</p>
 
             {/* Google Maps */}
             <iframe
