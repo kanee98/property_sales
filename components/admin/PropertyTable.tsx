@@ -63,6 +63,11 @@ const PropertyTable: React.FC<PropertyTableProps> = ({
               {property.description}
             </td>
             <td>
+              {property.area != null
+                ? `${property.area.toLocaleString()} sq ft`
+                : "N/A"}
+            </td>
+            <td>
               {property.price != null
                 ? `Rs. ${property.price.toLocaleString()}`
                 : "N/A"}

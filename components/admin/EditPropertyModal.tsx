@@ -96,6 +96,21 @@ const EditPropertyModal: React.FC<EditPropertyModalProps> = ({
               </select>
             </div>
             <div className="form-row">
+              <label htmlFor="area" className="font-semibold">
+                Area (sq ft)
+              </label>
+              <input
+                id="area"
+                type="number"
+                placeholder="Area"
+                value={editingProperty.area ?? ""}
+                onChange={(e) =>
+                  setEditingProperty({ ...editingProperty, area: Number(e.target.value) })
+                }
+                className="border p-2 rounded"
+              />
+            </div>
+            <div className="form-row">
               <label htmlFor="price" className="font-semibold">
                 Price (Rs.)
               </label>

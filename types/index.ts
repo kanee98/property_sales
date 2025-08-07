@@ -4,6 +4,7 @@ export interface Property {
   description: string;
   price: number | null;
   images: string[];
+  area: number | null;
   latitude: number | null;
   longitude: number | null;
   category: string;

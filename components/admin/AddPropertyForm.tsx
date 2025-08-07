@@ -66,6 +66,7 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
           title: "",
           description: "",
           price: null,
+          area: null,
           category: "",
           latitude: null,
           longitude: null,
@@ -115,6 +116,16 @@ const AddPropertyForm: React.FC<AddPropertyFormProps> = ({
             <option value="Retail">Retail</option>
             <option value="Residential">Residential</option>
           </select>
+
+          <input
+            type="number"
+            placeholder="Area (sq ft)"
+            value={newProperty.area ?? ""}
+            onChange={(e) =>
+              setNewProperty({ ...newProperty, area: e.target.value === "" ? null : Number(e.target.value) })
+            }
+            className="border p-2 rounded"
+          />
 
           <input
             type="number"

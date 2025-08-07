@@ -60,6 +60,7 @@ export function useDashboardData() {
     price: null,
     category: "",
     images: [],
+    area: null,
     latitude: null,
     longitude: null,
     district: "",

@@ -9,6 +9,7 @@ interface Property {
   title: string;
   description: string;
   price: number;
+  area: number;
   images: string;
   latitude: number;
   longitude: number;
@@ -85,8 +86,11 @@ export default function ListingsPage() {
     const matchesPrice =
       (property.price === 0 && minPrice === 0) ||
       (property.price >= minPrice && (maxPrice === null || property.price <= maxPrice));
+    const matchesArea =
+      (property.area === 0 && minArea === 0) ||
+      (property.area >= minArea && (maxArea === null || property.area <= maxArea)); 
 
-    return matchesTitle && matchesCategory && matchesType && matchesDistrict && matchesPrice;
+    return matchesTitle && matchesCategory && matchesType && matchesDistrict && matchesPrice && matchesArea;
   });
 
   const redirectToLogin = () => {

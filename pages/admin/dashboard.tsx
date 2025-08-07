@@ -344,6 +344,7 @@ export default function PropertyDashboard() {
                             <th>ID</th>
                             <th>Title</th>
                             <th>Description</th>
+                            <th>Area</th>
                             <th>Price</th>
                             <th>Category</th>
                             <th>Manager</th>
