@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Property, Inquiry, User, Note, NewInquiry, NewProperty, NewUser } from "../types";
+import { Property, Inquiry, User, Note, NewInquiry, NewProperty, NewUser } from "../types/index";
 
 export function useDashboardData() {
   const router = useRouter();
