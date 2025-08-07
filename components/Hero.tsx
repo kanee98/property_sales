@@ -1,4 +1,14 @@
 "use client";
+import {
+  Building2,
+  BriefcaseBusiness,
+  Store,
+  Home,
+  HandCoins,
+  Landmark,
+  DollarSign,
+  Search,
+} from "lucide-react";
 
 interface HeroProps {
   searchQuery: string;
@@ -51,36 +61,44 @@ export default function Hero({
             </select>
           </form>
 
-          <div className="stats grid grid-cols-4 gap-4 px-6 mt-6">
+          <div className="stats grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-6 mt-6">
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <Building2 className="mx-auto mb-2 text-blue-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.totalProperties}</h2>
               <p>Total Properties</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <BriefcaseBusiness className="mx-auto mb-2 text-purple-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.corporate}</h2>
               <p>Corporate</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <Store className="mx-auto mb-2 text-green-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.retail}</h2>
               <p>Retail</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <Home className="mx-auto mb-2 text-orange-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.residential}</h2>
               <p>Residential</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <HandCoins className="mx-auto mb-2 text-yellow-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.for_rent}</h2>
               <p>For Rent</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <Landmark className="mx-auto mb-2 text-cyan-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.for_lease}</h2>
               <p>For Lease</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <DollarSign className="mx-auto mb-2 text-red-600" size={32} />
               <h2 className="text-3xl font-bold">{stats.for_sale}</h2>
               <p>For Sale</p>
             </div>
             <div className="stat text-center p-4 bg-gray-100 rounded shadow">
+              <Search className="mx-auto mb-2 text-gray-700" size={32} />
               <h2 className="text-3xl font-bold">{stats.wanted}</h2>
               <p>Wanted</p>
             </div>
