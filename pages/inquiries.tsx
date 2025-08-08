@@ -259,24 +259,31 @@ export default function InquiriesPage() {
                       </button>
                     </form>
                   </div>
-                   <div className="contact-info-container">
+                  <div className="contact-info-container">
                     <h3>Contact Us</h3>
-                    <p>
+                    <div className="contact-row">
                       <i className="bx bx-phone"></i>
-                      <strong>Phone:</strong> +94 77 362 8282 / +94 77 736 6597
-                    </p>
-                    <p>
+                      <strong>Phone:</strong>
+                      <span>+94 77 362 8282 / +94 77 736 6597</span>
+                    </div>
+
+                    <div className="contact-row">
                       <i className="bx bx-envelope"></i>
-                      <strong>Email:</strong> padmapriya@propwise.lk
-                    </p>
-                    <p>
+                      <strong>Email:</strong>
+                      <span>padmapriya@propwise.lk</span>
+                    </div>
+
+                    <div className="contact-row">
                       <i className="bx bx-map"></i>
-                      <strong>Address:</strong> 374/4/1 Narendrasinghe lane, Habarakada watta, Homagama
-                    </p>
-                    <p>
+                      <strong>Address:</strong>
+                      <span>374/4/1 Narendrasinghe lane, Habarakada watta, Homagama</span>
+                    </div>
+
+                    <div className="contact-row">
                       <i className="bx bx-time"></i>
-                      <strong>Office Hours:</strong> Mon - Sat, 9am - 5pm
-                    </p>
+                      <strong>Office Hours:</strong>
+                      <span>Mon - Sat, 9am - 5pm</span>
+                    </div>
                   </div>
                 </div>
               </>

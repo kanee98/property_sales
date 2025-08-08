@@ -318,3 +318,87 @@
 .footer a:hover {
     font-weight: bold;
 }
+
+.contact-info-container {
+  max-width: 600px;
+  padding: 20px;
+}
+
+.contact-info-container h3 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 30px minmax(100px, 150px) 1fr; /* default desktop/tablet layout */
+  align-items: start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.contact-row i {
+  font-size: 1.2rem;
+  color: #007BFF;
+  margin-top: 2px;
+}
+
+.contact-row strong {
+  text-align: left;
+  padding-right: 4px;
+  white-space: nowrap;
+}
+
+.contact-row span {
+  line-height: 1.4;
+}
+
+/* 📱 Mobile: Stack label and value under icon for a cleaner look */
+@media (max-width: 480px) {
+  .contact-row {
+    grid-template-columns: 30px auto; /* icon on left, text on right */
+    grid-template-rows: auto auto; /* allow label & value to be stacked */
+  }
+
+  .contact-row strong {
+    grid-column: 2; /* move label next to icon */
+    white-space: normal;
+    font-weight: bold;
+  }
+
+  .contact-row span {
+    grid-column: 2; /* value under label */
+    margin-left: 0;
+  }
+}
+
+/* 📱 Tablet & Mobile: Stack form & contact card */
+@media (max-width: 1024px) {
+  .inquiry-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inquiry-form-container,
+  .contact-info-container {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Also adjust the contact row to mobile-like stacked style */
+  .contact-row {
+    grid-template-columns: 30px auto;
+    grid-template-rows: auto auto;
+  }
+
+  .contact-row strong {
+    grid-column: 2;
+    white-space: normal;
+    font-weight: bold;
+  }
+
+  .contact-row span {
+    grid-column: 2;
+    margin-left: 0;
+  }
+}
