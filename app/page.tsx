@@ -1,10 +1,14 @@
-// app/page.tsx
-import Listings from '../pages/listings'; 
+import Listings from '../pages/listings';
+import Loader from "../components/loader/Loader";
+// import { usePageLoader } from "../hooks/usePageLoader";
 
 const HomePage = () => {
+  // const loading = usePageLoader(3000);
+
   return (
     <div>
-      <Listings />
+      <Loader />
+      {/* loading ? <Loader /> : <Listings />; */}
     </div>
   );
 };

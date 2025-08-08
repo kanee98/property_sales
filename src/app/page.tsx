@@ -1,10 +1,13 @@
-// app/page.tsx
-import Listings from '../../pages/listings'; // Adjust the path based on your project structure
+import Listings from '../../pages/listings';
+import Loader from "../../components/loader/Loader";
+import { usePageLoader } from "../../hooks/usePageLoader";
 
 const HomePage = () => {
+  const loading = usePageLoader(3000);
+
   return (
     <div>
-      <Listings />
+      loading ? <Loader /> : <Listings />;
     </div>
   );
 };
