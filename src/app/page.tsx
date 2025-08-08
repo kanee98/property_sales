@@ -1,15 +1,12 @@
 import Listings from '../../pages/listings';
-import Loader from "../../components/loader/Loader";
-import { usePageLoader } from "../../hooks/usePageLoader";
+import LoaderLayout from '../../components/loader/LoaderLayout';
 
 const HomePage = () => {
-  const loading = usePageLoader(3000);
-
-  return (
-    <div>
-      loading ? <Loader /> : <Listings />;
-    </div>
-  );
+  return(
+    <LoaderLayout>
+      <Listings />
+    </LoaderLayout>
+  )
 };
 
 export default HomePage;
