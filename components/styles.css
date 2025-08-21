@@ -121,16 +121,7 @@ body {
   to { opacity: 1; }
 }
 
-.modal-content {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  position: relative;
-  max-width: 800px;
-  width: 90%;
-  text-align: center;
-  animation: scaleUp 0.25s ease-in-out;
-}
+
 
 @keyframes scaleUp {
   from { transform: scale(0.95); opacity: 0; }
@@ -450,6 +441,11 @@ nav.nav-links button:hover {
 .mobile-filter-btn{
   display: none;
 } 
+
+img {
+      max-width: 100%;
+      height: auto;
+    }
 
   @media (max-width: 768px) {
     .stats {
