@@ -23,5 +23,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const fileBuffer = fs.readFileSync(filePath);
   res.setHeader("Content-Type", contentType);
+  // Avoid stale image cache after fresh uploads/replacements.
+  res.setHeader("Cache-Control", "no-store, max-age=0");
   res.send(fileBuffer);
 }

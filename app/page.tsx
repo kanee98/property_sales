@@ -74,7 +74,7 @@ export default function HomePage() {
     setIsLoading(true);
     setHasError(false);
 
-    fetch("/api/properties")
+    fetch(`/api/properties?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data: Property[]) => {
         setAllProperties(data.filter((p) => p.status === 1));
@@ -310,7 +310,14 @@ export default function HomePage() {
               return (
                 <article key={property.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <div className="relative h-56 w-full overflow-hidden">
-                    <Image src={cover} alt={property.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                    <Image
+                      src={cover}
+                      alt={property.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      unoptimized={cover.startsWith("/api/images/")}
+                    />
                     <div className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-700">
                       {safeCategory(property.category)}
                     </div>

@@ -36,6 +36,7 @@ export default function PropertyCard({ property, openImageModal }: PropertyCardP
           alt={property.title}
           width={400}
           height={192}
+          unoptimized={imageSrc.startsWith("/api/images/")}
           style={{
             objectFit: "cover",
             borderRadius: "0.375rem",

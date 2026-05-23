@@ -54,6 +54,7 @@ export default function ImageModal({
                 alt={`Slide ${currentIndex + 1}`}
                 width={800}
                 height={480}
+                unoptimized={(images[currentIndex] || "").startsWith("/api/images/")}
                 className="max-h-[60vh] object-contain rounded-lg mx-auto"
               />
 

@@ -37,7 +37,7 @@ export default function ListingsPage() {
   });
 
   useEffect(() => {
-    fetch("/api/properties")
+    fetch(`/api/properties?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data: Property[]) => {
         const activeProperties = data.filter((p) => p.status === 1);

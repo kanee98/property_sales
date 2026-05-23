@@ -4,6 +4,7 @@ import prisma from "../../lib/prisma";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
+      res.setHeader("Cache-Control", "no-store, max-age=0");
       const properties = await prisma.property.findMany();
       return res.status(200).json(properties);
     } catch (error) {

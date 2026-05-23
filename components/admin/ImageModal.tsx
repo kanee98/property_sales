@@ -52,6 +52,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
               width={0}
               height={0}
               sizes="100vw"
+              unoptimized={(selectedImages[currentImageIndex] || "").startsWith("/api/images/")}
               style={{
                 width: "100%",
                 height: "auto",
