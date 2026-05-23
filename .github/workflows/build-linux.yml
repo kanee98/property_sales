@@ -1,0 +1,48 @@
+name: Build Next.js Linux Artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Build app
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Prepare deploy package
+        run: |
+          mkdir -p deploy
+          cp -r .next/standalone deploy/
+          mkdir -p deploy/.next
+          cp -r .next/static deploy/.next/
+          cp -r public deploy/
+          cp package.json deploy/
+          cp app.cjs deploy/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: propwise-linux-build
+          path: deploy
