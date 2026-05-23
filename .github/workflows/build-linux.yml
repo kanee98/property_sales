@@ -53,6 +53,4 @@ jobs:
         with:
           name: propwise-linux-build
           include-hidden-files: true
-          path: |
-            deploy
-            propwise-linux-build.tar.gz
+          path: propwise-linux-build.tar.gz
