@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import Image from "next/image";
-import './CircuitMaster.css'
+import "./CircuitMaster.css";
+import Logo from "../../src/img/Propwise Logo No BG.png";
 
 const PropwiseLoader: React.FC = () => (
   <div id="loading-wrapper">
@@ -9,7 +10,7 @@ const PropwiseLoader: React.FC = () => (
       <div className="spinner-ring"></div>
       <div className="logo-overlay">
         <Image
-          src="/img/Propwise Logo No BG.png"
+          src={Logo}
           alt="Logo"
           width={150}
           height={150}
@@ -53,7 +54,3 @@ const PropwiseLoader: React.FC = () => (
 );
 
 export default PropwiseLoader;
-
-
-
-

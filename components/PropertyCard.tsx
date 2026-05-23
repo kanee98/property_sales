@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Image from "next/image";
 import { Property } from "../types";
+import { normalizeImageUrl } from "../lib/normalizeImageUrl";
 
 interface PropertyCardProps {
   property: Property;
@@ -14,7 +15,7 @@ export default function PropertyCard({ property, openImageModal }: PropertyCardP
   try {
     const imgs = JSON.parse(property.images);
     if (Array.isArray(imgs) && imgs.length > 0) {
-      imageSrc = imgs[0];
+      imageSrc = normalizeImageUrl(imgs[0]);
     }
   } catch {}
 
@@ -66,3 +67,6 @@ export default function PropertyCard({ property, openImageModal }: PropertyCardP
     </div>
   );
 }
+
+
+

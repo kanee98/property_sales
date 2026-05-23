@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Image from "next/image";
+import { normalizeImageUrl } from "../lib/normalizeImageUrl";
 
 interface Property {
   title: string;
@@ -46,15 +47,15 @@ export default function ImageModal({
                 disabled={images.length <= 1}
                 aria-label="Previous image"
               >
-                ‹
+                â€¹
               </button>
 
               <Image
-                src={images[currentIndex] || "/img/default.jpg"}
+                src={normalizeImageUrl(images[currentIndex] || "/img/default.jpg")}
                 alt={`Slide ${currentIndex + 1}`}
                 width={800}
                 height={480}
-                unoptimized={(images[currentIndex] || "").startsWith("/api/images/")}
+                unoptimized={normalizeImageUrl(images[currentIndex] || "").startsWith("/api/images/")}
                 className="max-h-[60vh] object-contain rounded-lg mx-auto"
               />
 
@@ -64,7 +65,7 @@ export default function ImageModal({
                 disabled={images.length <= 1}
                 aria-label="Next image"
               >
-                ›
+                â€º
               </button>
             </div>
 
@@ -95,3 +96,6 @@ export default function ImageModal({
     </div>
   );
 }
+
+
+

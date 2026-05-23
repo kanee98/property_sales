@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import Footer from "../components/Footer";
 import LoaderLayout from "../components/loader/LoaderLayout";
 import Logo from "../src/img/Propwise Logo No BG.png";
+import { normalizeImageUrl } from "../lib/normalizeImageUrl";
 
 type Property = {
   id: number;
@@ -37,7 +38,9 @@ const parseImages = (raw: string): string[] => {
   try {
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
-      return parsed.filter((url) => typeof url === "string" && url.trim().length > 0);
+      return parsed
+        .filter((url) => typeof url === "string" && url.trim().length > 0)
+        .map((url) => normalizeImageUrl(url));
     }
   } catch {
     // ignore malformed JSON
@@ -518,6 +521,9 @@ export default function HomePage() {
     </LoaderLayout>
   );
 }
+
+
+
 
 
 

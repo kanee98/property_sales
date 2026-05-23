@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { Property } from "../../types/index";
 import { useMessage } from "../../components/MessageBox";
 import Image from "next/image";
+import { normalizeImageUrl } from "../../lib/normalizeImageUrl";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -47,12 +48,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
         {selectedImages.length > 0 ? (
           <div className="text-center">
             <Image
-              src={selectedImages[currentImageIndex]}
+              src={normalizeImageUrl(selectedImages[currentImageIndex])}
               alt={`Property image ${currentImageIndex + 1}`}
               width={0}
               height={0}
               sizes="100vw"
-              unoptimized={(selectedImages[currentImageIndex] || "").startsWith("/api/images/")}
+              unoptimized={normalizeImageUrl(selectedImages[currentImageIndex] || "").startsWith("/api/images/")}
               style={{
                 width: "100%",
                 height: "auto",
@@ -190,3 +191,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
 };
 
 export default ImageModal;
+
+
+
