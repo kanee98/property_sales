@@ -48,9 +48,17 @@ jobs:
         run: |
           tar -czf propwise-linux-build.tar.gz -C deploy .
 
+      - name: Verify package contents
+        run: |
+          test -f deploy/app.cjs
+          test -f deploy/standalone/server.js
+          test -d deploy/standalone/.next/static
+          test -d deploy/public
+          tar -tzf propwise-linux-build.tar.gz | grep -E '(^|/)standalone/.next/static(/|$)' >/dev/null
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: propwise-linux-build
+          name: propwise-linux-build-${{ github.run_number }}
           include-hidden-files: true
           path: propwise-linux-build.tar.gz
