@@ -1128,7 +1128,7 @@ body.dark #content nav .profile-menu li a {
 	cursor: not-allowed;
   }
   
-  .footer {
+  .dashboard-footer {
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -1141,11 +1141,11 @@ body.dark #content nav .profile-menu li a {
 	font-family: 'Poppins', sans-serif;
   }
 
-  .footer a {
+  .dashboard-footer a {
 	color: var(--dark); /* Ensure the link color is consistent */
 	text-decoration: none;
 }
 
-.footer a:hover {
+.dashboard-footer a:hover {
 	font-weight: bold;
 }

@@ -1,46 +1,41 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import 'boxicons/css/boxicons.min.css';
-import '../components/dashboard.css';
-import SidebarScript from "../components/SidebarScript"; 
-import { useEffect, useRef, useState } from "react";
-import Logo from "../src/img/Propwise Logo No BG.png";
-import "../components/inquiries.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTags, faSyncAlt, faUserTie, faThumbsUp, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
-import { NewInquiry} from "../types/index";
+﻿import Link from "next/link";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { NewInquiry } from "../types/index";
 import { useMessage } from "../components/MessageBox";
 import Footer from "../components/Footer";
+import LoaderLayout from "../components/loader/LoaderLayout";
+import Logo from "../src/img/Propwise Logo No BG.png";
+
+const WHY_US = [
+  {
+    title: "Reliable Service",
+    text: "We keep each transaction transparent and responsive so your property process stays predictable and low-stress.",
+  },
+  {
+    title: "Competitive Pricing",
+    text: "Our team tracks market movement and validates listings so you can make confident decisions within budget.",
+  },
+  {
+    title: "Seamless Process",
+    text: "From inquiry to follow-up, we simplify communication and documentation to reduce delays and back-and-forth.",
+  },
+  {
+    title: "Expert Advisors",
+    text: "You work with experienced specialists who understand Sri Lankan residential and commercial real estate trends.",
+  },
+  {
+    title: "Customer-First Support",
+    text: "We tailor recommendations to your goals, whether you are leasing, buying, selling, or scouting opportunities.",
+  },
+  {
+    title: "Secure Handling",
+    text: "Your information and submitted files are managed with careful handling and clear operational workflows.",
+  },
+];
 
 export default function InquiriesPage() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [activeTab, setActiveTab] = useState("inquiries");
-
   const { showMessage } = useMessage();
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("darkMode") === "true";
-    setDarkMode(storedTheme);
-  }, []);
-  
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
-    }
-  }, [darkMode]);
-  
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
-
-  const redirectToListings = () => {
-    window.location.href = "/";
-  };
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [newInquiry, setNewInquiry] = useState<NewInquiry>({
@@ -54,9 +49,21 @@ export default function InquiriesPage() {
     status: 1,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newInquiry.email.trim());
+    const phoneIsValid = /^[0-9+\-\s()]{7,20}$/.test(newInquiry.phone.trim());
+
+    setEmailError(emailIsValid ? "" : "Enter a valid email address.");
+    setPhoneError(phoneIsValid ? "" : "Enter a valid phone number.");
+    if (!emailIsValid || !phoneIsValid) return;
+
+    setIsSubmitting(true);
+
     try {
       let uploadedImagePath = "";
 
@@ -98,9 +105,7 @@ export default function InquiriesPage() {
           status: 1,
         });
 
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
+        if (fileInputRef.current) fileInputRef.current.value = "";
         setImageFile(null);
       } else {
         const err = await res.json();
@@ -109,393 +114,140 @@ export default function InquiriesPage() {
     } catch (err) {
       console.error(err);
       showMessage("Something went wrong while adding the inquiry.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return (  
-    <>
-      <SidebarScript /><div className={darkMode ? 'dark' : ''}>
-        <section id="sidebar" className="sidebar">
-          <Link href="/" className="brand">
-            {/* <i className='bx bxs-smile bx-lg'></i> */}
-            <Image src={Logo} width={60} height={60} alt="Logo" className="logo-image" />
-            <span className="text" style={{ color: "gray", paddingLeft: "5%"}}>Propwise</span>
-          </Link>
-          <ul className="side-menu top">
-            <li className={activeTab === "inquiries" ? "active" : ""}>
-              <Link href="#" onClick={() => setActiveTab("inquiries")} className="nav-link">
-                <i className='bx bxs-phone-incoming bx-sm'></i>
-                <span className="text">Inquiries</span>
-              </Link>
-            </li>
-            <li className={activeTab === "whyus" ? "active" : ""}>
-              <Link href="#" onClick={() => setActiveTab("whyus")} className="nav-link">
-                <i className='bx bxs-star bx-sm'></i>
-                <span className="text">Why Choose Us</span>
-              </Link>
-            </li>
-            <li className={activeTab === "aboutus" ? "active" : ""}>
-              <Link href="#" onClick={() => setActiveTab("aboutus")} className="nav-link">
-                <i className='bx bxs-info-circle bx-sm'></i>
-                <span className="text">About Us</span>
-              </Link>
-            </li>
-          </ul>
-          <ul className="side-menu bottom">
-            {/* <li>
-              <Link href="#">
-                <i className='bx bxs-cog bx-sm bx-spin-hover'></i>
-                <span className="text">Settings</span>
-              </Link>
-            </li> */}
-            <li>
-              <Link href="/" onClick={redirectToListings} className="listings">
-                <i className="bx bx-arrow-back bx-sm bx-burst-hover"></i>
-                <span className="text">Back to Listings</span>
-              </Link>
-            </li>
-          </ul>
-        </section>
-
-        <section id="content">
-        <nav className="navbar">
-            <i className='bx bx-menu bx-sm'></i>
-            <form action="">
-              <div className="form-input">
-                
+  return (
+    <LoaderLayout>
+      <main className="min-h-screen bg-[#f3f6f2] text-slate-900">
+        <header className="sticky top-0 z-40 border-b border-[#7ea174]/30 bg-white/95 backdrop-blur">
+          <div className="mx-auto flex w-full max-w-[1500px] items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
+            <div className="flex items-center gap-3">
+              <Image src={Logo} width={56} height={56} alt="Propwise logo" />
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f2937]">Propwise</p>
+                <h1 className="text-xl font-bold">Submit Inquiry</h1>
               </div>
-            </form>
-            <input type="checkbox" className="checkbox" id="switch-mode" hidden />
-            <label className="swith-lm" htmlFor="switch-mode" onClick={toggleDarkMode}>
-              <i className="bx bx-sun"></i>
-              <i className="bx bxs-moon"></i>
-              <div className="ball"></div>
-            </label>
-            {/* <li>
-              <button className="logout nav-link" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <i className='bx bx-power-off bx-sm bx-burst-hover'></i>
-                <span className="text">Logout</span>
-              </button>
-            </li> */}
-          </nav>
-          <main>
-            {activeTab === "inquiries" && (
-              <>
-                <div className="head-title">
-                  <div className="left">
-                    <h1>Inquiries</h1>
-                    <ul className="breadcrumb">
-                      <li><Link href="#">Inquiries</Link></li>
-                      <li><i className='bx bx-chevron-right'></i></li>
-                      <li><Link href="#" className="active">New Inquiry</Link></li>
-                    </ul>
+            </div>
+            <Link href="/" className="rounded-lg border border-[#1f2937]/40 px-4 py-2 text-sm font-semibold hover:bg-[#7ea174]/10">
+              Back to Listings
+            </Link>
+          </div>
+        </header>
+
+        <section className="mx-auto w-full max-w-[1500px] px-4 py-10 pb-16 sm:px-6 lg:px-10 lg:pb-20">
+          <div className="mb-8 rounded-3xl bg-gradient-to-r from-[#0b0f19] via-[#111827] to-[#1f2937] p-7 text-white shadow-xl sm:p-10">
+            <p className="text-xs uppercase tracking-[0.22em] text-[#a9c9a0]">Property Advisory Desk</p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">Tell Us What You Need</h2>
+            <p className="mt-3 max-w-3xl text-sm text-slate-200 sm:text-base">Share your requirement once and our consultants will shortlist matching properties with location, budget, and timeline in mind.</p>
+          </div>
+
+          <div className="grid items-start gap-6 xl:grid-cols-12 xl:gap-8">
+            <div className="rounded-3xl border border-[#7ea174]/30 bg-white p-6 shadow-[0_18px_48px_rgba(17,24,39,0.08)] sm:p-8 xl:col-span-8">
+              <div className="mb-6 border-b border-slate-200 pb-5">
+                <h3 className="text-2xl font-semibold text-[#111827]">Inquiry Form</h3>
+                <p className="mt-1 text-sm text-slate-600">Fields marked below help us match properties faster.</p>
+              </div>
+
+              <form onSubmit={handleFormSubmit} encType="multipart/form-data" className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-slate-700">Company Name</label>
+                    <input type="text" placeholder="ABC Holdings" value={newInquiry.companyName} onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-slate-700">Contact Person</label>
+                    <input type="text" placeholder="John Perera" value={newInquiry.contactPerson} onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-slate-700">Email Address</label>
+                    <input type="email" placeholder="you@company.com" value={newInquiry.email} onChange={(e) => { setNewInquiry({ ...newInquiry, email: e.target.value }); setEmailError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:ring-2 ${emailError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`} />
+                    {emailError ? <p className="mt-1 text-xs text-rose-600">{emailError}</p> : null}
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-slate-700">Phone Number</label>
+                    <input type="text" placeholder="+94 77 123 4567" value={newInquiry.phone} onChange={(e) => { setNewInquiry({ ...newInquiry, phone: e.target.value }); setPhoneError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:ring-2 ${phoneError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`} />
+                    {phoneError ? <p className="mt-1 text-xs text-rose-600">{phoneError}</p> : null}
+                  </div>
+                  <div className="space-y-1.5 sm:col-span-2">
+                    <label className="text-sm font-medium text-slate-700">Budget (LKR)</label>
+                    <input type="number" placeholder="25,000,000" value={newInquiry.budget ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, budget: e.target.value ? Number(e.target.value) : null })} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
                   </div>
                 </div>
 
-                <div className="inquiry-wrapper">
-                  <div className="inquiry-form-container">
-                    <h2 className="inquiry-title">Submit New Inquiry</h2>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-slate-700">Requirements</label>
+                  <textarea placeholder="Mention preferred location, property type, approximate area, and expected move-in timeline." value={newInquiry.requirements ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })} rows={6} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                </div>
 
-                    <form onSubmit={handleFormSubmit} encType="multipart/form-data" className="inquiry-form">
-                      <div className="form-grid">
-                        <input
-                          type="text"
-                          placeholder="Company Name"
-                          value={newInquiry.companyName}
-                          onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })}
-                          required
-                        />
-                        <input
-                          type="text"
-                          placeholder="Contact Person"
-                          value={newInquiry.contactPerson}
-                          onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })}
-                          required
-                        />
-                        <input
-                          type="email"
-                          placeholder="Email"
-                          value={newInquiry.email}
-                          onChange={(e) => setNewInquiry({ ...newInquiry, email: e.target.value })}
-                          required
-                        />
-                        <input
-                          type="text"
-                          placeholder="Phone"
-                          value={newInquiry.phone}
-                          onChange={(e) => setNewInquiry({ ...newInquiry, phone: e.target.value })}
-                          required
-                        />
-                        <input
-                          type="number"
-                          placeholder="Budget (Rs.)"
-                          value={newInquiry.budget ?? ""}
-                          onChange={(e) => setNewInquiry({ ...newInquiry, budget: Number(e.target.value) })}
-                        />
-                      </div>
+                <div className="rounded-xl border border-slate-300 bg-slate-50 p-4">
+                  <label className="mb-2 block text-sm font-medium text-slate-700">Supporting Image (Optional)</label>
+                  <input type="file" accept="image/*" ref={fileInputRef} onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#1f2937] file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-white hover:file:bg-[#2c3b4d]" />
+                </div>
 
-                      <textarea
-                        placeholder="Requirements"
-                        value={newInquiry.requirements ?? ""}
-                        onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })}
-                        rows={3}
-                      />
+                <button type="submit" disabled={isSubmitting} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#1f2937] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#7ea174] hover:text-[#111827] disabled:cursor-not-allowed disabled:opacity-60">
+                  {isSubmitting ? "Submitting..." : "Submit Inquiry"}
+                </button>
+              </form>
+            </div>
 
-                      <div className="file-upload">
-                        <label>Upload Image (optional)</label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) setImageFile(file);
-                          }}
-                        />
-                      </div>
-
-                      <button type="submit" className="submit-btn">
-                        Submit
-                      </button>
-                    </form>
+            <aside className="space-y-5 xl:sticky xl:top-24 xl:col-span-4">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_12px_30px_rgba(2,6,23,0.06)]">
+                <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                  <h3 className="text-lg font-semibold tracking-tight text-slate-900">Contact Us</h3>
+                </div>
+                <div className="space-y-4 px-5 py-5 text-sm">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Phone</p>
+                    <p className="mt-1 font-medium text-slate-900">+94 77 362 8282 / +94 77 736 6597</p>
                   </div>
-                  <div className="contact-info-container">
-                    <h3>Contact Us</h3>
-                    <div className="contact-row">
-                      <i className="bx bx-phone"></i>
-                      <strong>Phone:</strong>
-                      <span>+94 77 362 8282 / +94 77 736 6597</span>
-                    </div>
-
-                    <div className="contact-row">
-                      <i className="bx bx-envelope"></i>
-                      <strong>Email:</strong>
-                      <span>padmapriya@propwise.lk</span>
-                    </div>
-
-                    <div className="contact-row">
-                      <i className="bx bx-map"></i>
-                      <strong>Address:</strong>
-                      <span>374/4/1 Narendrasinghe lane, Habarakada watta, Homagama</span>
-                    </div>
-
-                    <div className="contact-row">
-                      <i className="bx bx-time"></i>
-                      <strong>Office Hours:</strong>
-                      <span>Mon - Sat, 9am - 5pm</span>
-                    </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Email</p>
+                    <p className="mt-1 font-medium text-slate-900">padmapriya@propwise.lk</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Office Hours</p>
+                    <p className="mt-1 font-medium text-slate-900">Mon - Sat, 9am - 5pm</p>
                   </div>
                 </div>
-              </>
-            )}
+              </div>
 
-              {activeTab === "whyus" && (
-                <div className="p-6">
-                  <div className="head-title">
-                    <div className="left">
-                      <h1>Why Choose Us?</h1>
-                      <ul className="breadcrumb">
-                        <li>
-                          <Link href="#">Why Choose Us</Link>
-                        </li>
-                        <li><i className='bx bx-chevron-right'></i></li>
-                        <li>
-                          <Link href="#" className="active">Why Us</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <section className="whyChooseUs">              
-                    <div className="reasons">
-                      <ul className="box-info" style={{marginTop:"0"}}>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faCheckCircle} size="2x" color="#28a745" />
-                            <div className="reason-text">
-                              <h3>Reliable Service</h3>
-                              <p>
-                                We pride ourselves on offering reliable and transparent service. 
-                                Every transaction is handled with utmost professionalism, ensuring your trust is well placed.
-                                Our dedicated support team is always ready to assist you throughout your property journey.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faTags} size="2x" color="#ff6600" />
-                            <div className="reason-text">
-                              <h3>Competitive Pricing</h3>
-                              <p>
-                                Find the best deals tailored to your budget. 
-                                We provide transparent pricing with no hidden fees, so you can make informed decisions. 
-                                Our market experts constantly update listings to ensure you get great value.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </ul>
-
-                      <ul className="box-info" style={{marginTop:"0"}}>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faSyncAlt} size="2x" color="#007bff" />
-                            <div className="reason-text">
-                              <h3>Seamless Process</h3>
-                              <p>
-                                Experience a smooth, hassle-free process from start to finish. 
-                                Our platform simplifies inquiries, negotiations, and paperwork. 
-                                We ensure timely updates and efficient communication at every step.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faUserTie} size="2x" color="#6f42c1"/>
-                            <div className="reason-text">
-                              <h3>Expert Agents</h3>
-                              <p>
-                                Work with experienced and professional agents who understand your needs. 
-                                They provide tailored advice and local market insights to help you make smart choices. 
-                                Our agents are committed to delivering personalized, attentive service.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </ul>
-
-                      <ul className="box-info" style={{marginTop:"0"}}>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faThumbsUp} size="2x" color="#17a2b8" />
-                            <div className="reason-text">
-                              <h3>Customer Satisfaction</h3>
-                              <p>
-                                Your satisfaction is our priority. 
-                                We strive to exceed your expectations with quality service and attention to detail. 
-                                Our client testimonials and repeat customers speak volumes about our commitment.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="table-data" style={{marginTop:"0"}}>
-                          <div className="reason">
-                            <FontAwesomeIcon icon={faShieldAlt} size="2x" color="#dc3545" />
-                            <div className="reason-text">
-                              <h3>Secure Transactions</h3>
-                              <p>
-                                We prioritize your safety with robust security measures protecting your data and payments. 
-                                Every transaction on our platform follows industry best practices. 
-                                Trust us to keep your information and assets secure at all times.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </ul>
-                    </div>
-                  </section>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_12px_30px_rgba(2,6,23,0.06)]">
+                <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                  <h3 className="text-lg font-semibold tracking-tight text-slate-900">Why Propwise</h3>
                 </div>
-              )}
-
-              {activeTab === "aboutus" && (
-                <div className="aboutus-container p-6 max-w-4xl mx-auto">
-                  <div className="head-title mb-6">
-                    <div className="left">
-                      <h1 className="text-3xl font-bold mb-2">About Us</h1>
-                      <ul className="breadcrumb flex items-center text-gray-600 space-x-2">
-                        <li>
-                          <Link href="#" className="hover:underline">About Us</Link>
-                        </li>
-                        <li><i className='bx bx-chevron-right'></i></li>
-                        <li>
-                          <Link href="#" className="active text-blue-600 font-semibold">Who We Are</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <section className="about-us-content space-y-6 text-gray-700 leading-relaxed">
-                    <h2 className="text-2xl font-semibold" style={{ marginBottom: "1rem", marginTop: "1rem" }}>Our Story</h2>
-                    <p>
-                      Welcome to PropWise.lk — Sri Lanka’s trusted partner in property sales, rentals, and real estate management. 
-                      With over 15 years of industry expertise, we are committed to delivering exceptional property solutions that 
-                      empower individuals, families, and investors to make confident decisions in today’s competitive real estate market.
-                    </p>
-                    <p>
-                      Our journey began with a clear mission: to simplify the property experience in Sri Lanka through innovation, 
-                      integrity, and deep market insight. From residential homes and commercial spaces to land plots and property 
-                      management services, we bring you a comprehensive platform backed by decades of local knowledge and proven success.
-                    </p>
-                    <p>
-                      At PropWise.lk, we believe real estate should be easy, transparent, and client-focused. That’s why our expert team 
-                      combines advanced technology with personalized support to provide access to accurate listings, verified properties, 
-                      and tailored advice that meets your unique needs — whether you&apos;re a first-time buyer, seasoned investor, landlord, or simply exploring your options.
-                    </p>
-                    <p>
-                      We take pride in our values:
-                      <ul>
-                        <li>✅ Trust — every listing is verified and reliable</li>
-                        <li>✅ Transparency — honest guidance at every step</li>
-                        <li>✅ Satisfaction — your goals are our priority</li>
-                      </ul>
-                    </p>
-                    <p>
-                      Join thousands of satisfied clients who have turned to PropWise.lk to buy, sell, rent, or manage properties with ease. We&apos;re not just another property website — we’re your strategic real estate partner in Sri Lanka.
-                    </p>
-                  </section>
-
-                  <section className="leadership mt-10">
-                    <h2 className="text-2xl font-semibold mb-6" style={{ marginBottom: "1rem"}}>Meet Our Leadership</h2>
-                    <div className="leaders-grid">
-                      <div className="leader">
-                        <Image
-                          src="/img/kandy1.jpg"
-                          alt="CEO"
-                          width={150} 
-                          height={150}
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "cover",
-                            borderRadius: "50%",
-                            border: "2px solid #ccc",
-                            display: "block",
-                            margin: "0 auto",
-                          }}
-                        />
-                        <h3 className="leader-name">Padmapriya Jayasinghe</h3>
-                        <p className="leader-title">Managing Director </p>
+                <ul className="space-y-4 px-5 py-5 text-sm">
+                  {WHY_US.slice(0, 3).map((item) => (
+                    <li key={item.title} className="flex items-start gap-3">
+                      <span className="mt-1.5 size-2 rounded-full bg-[#7ea174]" />
+                      <div>
+                        <p className="font-semibold text-slate-900">{item.title}</p>
+                        <p className="mt-1 leading-6 text-slate-600">{item.text}</p>
                       </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                      <div className="leader">
-                        <Image
-                          src="/img/property1.jpg"
-                          alt="COO"
-                          width={150}
-                          height={150}
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "cover",
-                            borderRadius: "50%", 
-                            border: "2px solid #ccc",
-                            display: "block",
-                            margin: "0 auto",
-                          }}
-                        />
-                        <h3 className="leader-name">Danesh Jayasinghe </h3>
-                        <p className="leader-title">CEO (Partner)</p>
-                      </div>
-                    </div>
-                  </section>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_12px_30px_rgba(2,6,23,0.06)]">
+                <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                  <h3 className="text-lg font-semibold tracking-tight text-slate-900">What Happens Next</h3>
                 </div>
-              )}
-          </main>
+                <ol className="space-y-3 px-5 py-5 text-sm text-slate-700">
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">1</span><span className="pt-0.5">We review your requirement and budget.</span></li>
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">2</span><span className="pt-0.5">Our team shortlists matching properties.</span></li>
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">3</span><span className="pt-0.5">You receive options and follow-up support quickly.</span></li>
+                </ol>
+              </div>
+            </aside>
+          </div>
         </section>
-      </div>
-      <Footer />
-</>
-    
+        <Footer />
+      </main>
+    </LoaderLayout>
   );
 }
+
+

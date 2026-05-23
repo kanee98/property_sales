@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import './dashboard.css';
+import './messagebox.css';
 
 type MessageContextType = {
   showMessage: (message: string) => void;

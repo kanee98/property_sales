@@ -1294,7 +1294,7 @@ export default function PropertyDashboard() {
           </main>
         </section>
       </div>
-      <footer className="footer">
+      <footer className="dashboard-footer">
         <p>
             &copy; {new Date().getFullYear()} Propwise. All Rights Reserved. Designed and built by <a href="https://fusionlabz.lk" target="_blank" rel="noopener noreferrer"><b>FusionLabz</b></a>. 
         </p>
@@ -1312,3 +1312,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   return { props: {} };
 };
+

@@ -1,0 +1,21 @@
+.message-box {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #eaf4e6;
+  color: #0f172a;
+  border: 1px solid #7ea174;
+  font-family: "Segoe UI", Arial, sans-serif;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 60;
+  font-size: 0.9rem;
+}
+
+.message-box.fade-out {
+  opacity: 0;
+}

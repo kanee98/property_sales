@@ -1,14 +1,12 @@
-import React from "react";
+﻿import React from "react";
 import Image from "next/image";
 import './CircuitMaster.css'
 
 const PropwiseLoader: React.FC = () => (
   <div id="loading-wrapper">
+    <div className="loader-grid" />
     <div id="loading-content">
-      {/* Rotating ring only */}
       <div className="spinner-ring"></div>
-
-      {/* Static logo centered */}
       <div className="logo-overlay">
         <Image
           src="/img/Propwise Logo No BG.png"
@@ -34,7 +32,7 @@ const PropwiseLoader: React.FC = () => (
         fontSize="100"
         fontFamily="Arial, sans-serif"
         fill="none"
-        stroke="#0062D6"
+        stroke="#a9c9a0"
         strokeWidth="2"
         className="propwise-text"
       >
@@ -42,7 +40,15 @@ const PropwiseLoader: React.FC = () => (
       </text>
     </svg>
 
-    <span id="loading-text">Loading...</span>
+    <div className="loader-progress" aria-hidden="true">
+      <span className="loader-progress-bar" />
+    </div>
+    <span id="loading-text">Preparing your listings</span>
+    <div className="loader-dots" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </div>
   </div>
 );
 
