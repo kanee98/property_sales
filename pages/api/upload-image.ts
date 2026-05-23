@@ -1,4 +1,4 @@
-import { IncomingForm, File } from "formidable";
+﻿import { IncomingForm, File } from "formidable";
 import path from "path";
 import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -9,12 +9,27 @@ export const config = {
   },
 };
 
+function resolveUploadsDir() {
+  const explicit = process.env.UPLOADS_DIR;
+  if (explicit) {
+    return path.join(explicit, "property-images");
+  }
+
+  const candidates = [
+    path.join(process.cwd(), "uploads", "property-images"),
+    path.join(process.cwd(), "..", "uploads", "property-images"),
+  ];
+
+  const existing = candidates.find((dir) => fs.existsSync(dir));
+  return existing ?? candidates[0];
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const uploadDir = path.join(process.cwd(), "uploads/property-images");
+  const uploadDir = resolveUploadsDir();
   if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
   const form = new IncomingForm({
@@ -36,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const fileName = path.basename(uploadedFile.filepath);
-    // This URL points to our API route, not public
     const imageUrl = `/api/images/${fileName}`;
 
     return res.status(200).json({ message: "Upload successful", newImagePath: imageUrl });
