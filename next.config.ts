@@ -1,5 +1,17 @@
+import path from "path";
+import type { NextConfig } from "next";
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
+  // Keep file tracing rooted at this project to avoid Windows junction scans
+  outputFileTracingRoot: path.resolve(__dirname),
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Avoid bundling Prisma internals on Windows build step
+      config.externals.push("@prisma/client", "prisma");
+    }
+    return config;
+  },
   images: {
     remotePatterns: [
       {
