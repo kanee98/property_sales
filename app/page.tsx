@@ -65,6 +65,9 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -135,6 +138,19 @@ export default function HomePage() {
     setType("All Types");
     setSortBy("Newest");
     setMaxBudget(0);
+  };
+
+  const openDetails = (property: Property) => {
+    const images = parseImages(property.images);
+    setSelectedProperty(property);
+    setSelectedImages(images.length > 0 ? images : ["/img/default.jpg"]);
+    setSelectedImageIndex(0);
+  };
+
+  const closeDetails = () => {
+    setSelectedProperty(null);
+    setSelectedImages([]);
+    setSelectedImageIndex(0);
   };
 
   return (
@@ -321,6 +337,13 @@ export default function HomePage() {
                     <div className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-700">
                       {safeCategory(property.category)}
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => openDetails(property)}
+                      className="absolute bottom-3 right-3 rounded-lg bg-black/70 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-black/85"
+                    >
+                      View Details
+                    </button>
                   </div>
                   <div className="space-y-3 p-5">
                     <div className="flex items-start justify-between gap-3">
@@ -336,6 +359,13 @@ export default function HomePage() {
                       <p><span className="font-semibold text-slate-800">Contact:</span> {property.contact}</p>
                     </div>
                     <div className="flex gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => openDetails(property)}
+                        className="flex-1 rounded-lg border border-slate-300 px-4 py-2 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                      >
+                        Details
+                      </button>
                       <a
                         href={`https://maps.google.com/maps?q=${property.latitude},${property.longitude}`}
                         target="_blank"
@@ -396,6 +426,94 @@ export default function HomePage() {
       </section>
 
       <Footer />
+
+      {selectedProperty ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={closeDetails}>
+          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#1f6b45]">{safeCategory(selectedProperty.category)}</p>
+                <h3 className="mt-1 text-2xl font-bold text-slate-900">{selectedProperty.title}</h3>
+                <p className="mt-1 text-sm text-slate-500">{selectedProperty.district} • {selectedProperty.type}</p>
+              </div>
+              <button type="button" onClick={closeDetails} className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+                Close
+              </button>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div>
+                <div className="relative h-72 w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 sm:h-80">
+                  <Image
+                    src={selectedImages[selectedImageIndex]}
+                    alt={selectedProperty.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    unoptimized={selectedImages[selectedImageIndex]?.startsWith("/api/images/")}
+                  />
+                </div>
+                {selectedImages.length > 1 ? (
+                  <>
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                        onClick={() => setSelectedImageIndex((idx) => (idx - 1 + selectedImages.length) % selectedImages.length)}
+                      >
+                        Previous
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                        onClick={() => setSelectedImageIndex((idx) => (idx + 1) % selectedImages.length)}
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <div className="mt-3 grid grid-cols-5 gap-2">
+                      {selectedImages.map((img, idx) => (
+                        <button
+                          key={`${img}-${idx}`}
+                          type="button"
+                          onClick={() => setSelectedImageIndex(idx)}
+                          className={`relative h-16 overflow-hidden rounded-md border ${idx === selectedImageIndex ? "border-[#1f6b45]" : "border-slate-300"}`}
+                        >
+                          <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" unoptimized={img.startsWith("/api/images/")} />
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-3xl font-black text-slate-900">{formatCurrency(selectedProperty.price)}</p>
+                <p className="text-sm leading-7 text-slate-700">{selectedProperty.description || "No description provided."}</p>
+                <div className="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                  <p><span className="font-semibold text-slate-900">Area:</span> {selectedProperty.area ?? "N/A"} sq ft</p>
+                  <p><span className="font-semibold text-slate-900">Manager:</span> {selectedProperty.manager}</p>
+                  <p><span className="font-semibold text-slate-900">Contact:</span> {selectedProperty.contact}</p>
+                  <p><span className="font-semibold text-slate-900">Coordinates:</span> {selectedProperty.latitude}, {selectedProperty.longitude}</p>
+                </div>
+                <div className="flex flex-wrap gap-3 pt-1">
+                  <a
+                    href={`https://maps.google.com/maps?q=${selectedProperty.latitude},${selectedProperty.longitude}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                  >
+                    Open in Maps
+                  </a>
+                  <Link href="/inquiries" className="rounded-lg bg-[#1f6b45] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#2f8a5b]">
+                    Send Inquiry
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
       </main>
     </LoaderLayout>
   );
