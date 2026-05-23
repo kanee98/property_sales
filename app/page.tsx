@@ -63,7 +63,6 @@ export default function HomePage() {
   const [type, setType] = useState("All Types");
   const [sortBy, setSortBy] = useState("Newest");
   const [maxBudget, setMaxBudget] = useState(0);
-  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(9);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -174,13 +173,6 @@ export default function HomePage() {
             <Link href="/inquiries" className="transition hover:text-[#1f6b45]">Inquiries</Link>
             <Link href="/login" className="rounded-lg bg-[#1f6b45] px-4 py-2 text-white transition hover:bg-[#2f8a5b] hover:text-black">Admin</Link>
           </nav>
-          <button
-            onClick={() => setMobileFilterOpen((s) => !s)}
-            className="rounded-lg border border-[#1f6b45]/40 px-3 py-2 text-sm font-semibold md:hidden"
-            type="button"
-          >
-            {mobileFilterOpen ? "Close" : "Filters"}
-          </button>
         </div>
       </header>
 
@@ -279,26 +271,6 @@ export default function HomePage() {
             >
               Clear Filters
             </button>
-          </div>
-        </div>
-
-        <div className={`mt-8 ${mobileFilterOpen ? "block" : "hidden"} rounded-xl border border-slate-200 bg-white p-4 md:hidden`}>
-          <p className="mb-2 text-sm font-semibold text-slate-700">Quick Filters</p>
-          <div className="flex flex-wrap gap-2">
-            {["Corporate", "Retail", "Residential", "For Sale", "For Rent", "For Lease"].map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => {
-                  if (tag.startsWith("For ")) setType(tag);
-                  else setCategory(tag);
-                  setMobileFilterOpen(false);
-                }}
-                className="rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-700"
-              >
-                {tag}
-              </button>
-            ))}
           </div>
         </div>
 
