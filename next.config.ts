@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Keep file tracing rooted at this project to avoid Windows junction scans
   outputFileTracingRoot: process.cwd(),
   webpack: (config, { isServer }) => {
