@@ -1,10 +1,9 @@
-import path from "path";
 import type { NextConfig } from "next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   // Keep file tracing rooted at this project to avoid Windows junction scans
-  outputFileTracingRoot: path.resolve(__dirname),
+  outputFileTracingRoot: process.cwd(),
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Avoid bundling Prisma internals on Windows build step
@@ -31,4 +30,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
