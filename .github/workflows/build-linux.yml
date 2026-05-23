@@ -37,13 +37,21 @@ jobs:
         run: |
           mkdir -p deploy
           cp -r .next/standalone deploy/
-          cp -r .next/static deploy/next-static
+          mkdir -p deploy/standalone/.next
+          cp -r .next/static deploy/standalone/.next/static
           cp -r public deploy/
           cp package.json deploy/
           cp app.cjs deploy/
+          if [ -f .env.production ]; then cp .env.production deploy/.env.production; fi
+
+      - name: Create tarball
+        run: |
+          tar -czf propwise-linux-build.tar.gz -C deploy .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: propwise-linux-build
-          path: deploy
+          path: |
+            deploy
+            propwise-linux-build.tar.gz
