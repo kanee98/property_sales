@@ -3,14 +3,21 @@ import type { NextConfig } from "next";
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   output: "standalone",
-  // Keep file tracing rooted at this project to avoid Windows junction scans
   outputFileTracingRoot: process.cwd(),
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      // Avoid bundling Prisma internals on Windows build step
-      config.externals.push("@prisma/client", "prisma");
-    }
-    return config;
+  poweredByHeader: false,
+  reactStrictMode: true,
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
   },
   images: {
     remotePatterns: [
