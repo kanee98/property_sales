@@ -139,25 +139,25 @@ export default function HomePage() {
 
   return (
     <LoaderLayout>
-      <main className="min-h-screen bg-[#f3f6f2] text-slate-900">
-      <header className="sticky top-0 z-40 border-b border-[#7ea174]/30 bg-white/95 backdrop-blur">
+      <main className="min-h-screen bg-[#f4f6f2] text-slate-900">
+      <header className="sticky top-0 z-40 border-b border-[#2f8a5b]/30 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Image src={Logo} width={52} height={52} alt="Propwise logo" />
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f2937]">Propwise</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f6b45]">Propwise</p>
               <p className="text-lg font-bold text-slate-900">Commercial & Residential</p>
             </div>
           </div>
           <nav className="hidden items-center gap-8 text-sm font-medium text-slate-700 md:flex">
-            <a href="#listings" className="transition hover:text-[#1f2937]">Listings</a>
-            <a href="#about" className="transition hover:text-[#1f2937]">About</a>
-            <Link href="/inquiries" className="transition hover:text-[#1f2937]">Inquiries</Link>
-            <Link href="/login" className="rounded-lg bg-[#1f2937] px-4 py-2 text-white transition hover:bg-[#7ea174] hover:text-black">Admin</Link>
+            <a href="#listings" className="transition hover:text-[#1f6b45]">Listings</a>
+            <a href="#about" className="transition hover:text-[#1f6b45]">About</a>
+            <Link href="/inquiries" className="transition hover:text-[#1f6b45]">Inquiries</Link>
+            <Link href="/login" className="rounded-lg bg-[#1f6b45] px-4 py-2 text-white transition hover:bg-[#2f8a5b] hover:text-black">Admin</Link>
           </nav>
           <button
             onClick={() => setMobileFilterOpen((s) => !s)}
-            className="rounded-lg border border-[#1f2937]/40 px-3 py-2 text-sm font-semibold md:hidden"
+            className="rounded-lg border border-[#1f6b45]/40 px-3 py-2 text-sm font-semibold md:hidden"
             type="button"
           >
             {mobileFilterOpen ? "Close" : "Filters"}
@@ -165,10 +165,10 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0b0f19] via-[#111827] to-[#1f2937] text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0c1310] via-[#13241d] to-[#1f6b45] text-white">
         <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
           <div className={`transition-all duration-700 ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}>
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-[#7ea174]">Real Estate Advisory</p>
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-[#2f8a5b]">Real Estate Advisory</p>
             <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
               Find premium Sri Lankan properties with confidence
             </h1>
@@ -176,59 +176,59 @@ export default function HomePage() {
               Discover offices, retail, residential and investment opportunities across Sri Lanka with verified details and direct property manager contacts.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <a href="#listings" className="rounded-lg bg-[#7ea174] px-6 py-3 text-sm font-bold text-black transition hover:bg-[#6a8f62]">Explore Listings</a>
+              <a href="#listings" className="rounded-lg bg-[#2f8a5b] px-6 py-3 text-sm font-bold text-black transition hover:bg-[#277a53]">Explore Listings</a>
               <Link href="/inquiries" className="rounded-lg border border-white/30 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">Submit Inquiry</Link>
             </div>
           </div>
           <div className={`grid grid-cols-2 gap-4 transition-all delay-100 duration-700 ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-6 transition duration-300 hover:-translate-y-1">
               <p className="text-4xl font-black">{stats.total}</p>
-              <p className="mt-2 text-sm uppercase tracking-widest text-[#7ea174]">Active Listings</p>
+              <p className="mt-2 text-sm uppercase tracking-widest text-[#2f8a5b]">Active Listings</p>
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-6 transition duration-300 hover:-translate-y-1">
               <p className="text-4xl font-black">{stats.districts}</p>
-              <p className="mt-2 text-sm uppercase tracking-widest text-[#7ea174]">Districts</p>
+              <p className="mt-2 text-sm uppercase tracking-widest text-[#2f8a5b]">Districts</p>
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-6 transition duration-300 hover:-translate-y-1">
               <p className="text-4xl font-black">{stats.forSale}</p>
-              <p className="mt-2 text-sm uppercase tracking-widest text-[#7ea174]">For Sale</p>
+              <p className="mt-2 text-sm uppercase tracking-widest text-[#2f8a5b]">For Sale</p>
             </div>
             <div className="rounded-2xl border border-white/20 bg-white/10 p-6 transition duration-300 hover:-translate-y-1">
               <p className="text-4xl font-black">{stats.forRent}</p>
-              <p className="mt-2 text-sm uppercase tracking-widest text-[#7ea174]">For Rent</p>
+              <p className="mt-2 text-sm uppercase tracking-widest text-[#2f8a5b]">For Rent</p>
             </div>
           </div>
         </div>
       </section>
 
       <section id="listings" className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[#7ea174]/30 bg-white p-5 shadow-sm sm:p-6">
+        <div className="rounded-2xl border border-[#2f8a5b]/30 bg-white p-5 shadow-sm sm:p-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title, district or keyword"
-              className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:border-[#7ea174] focus:ring-2 lg:col-span-2"
+              className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:border-[#2f8a5b] focus:ring-2 lg:col-span-2"
             />
-            <select value={district} onChange={(e) => setDistrict(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:border-[#7ea174] focus:ring-2">
+            <select value={district} onChange={(e) => setDistrict(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:border-[#2f8a5b] focus:ring-2">
               {availableDistricts.map((d) => (
                 <option key={d} value={d}>{d}</option>
               ))}
             </select>
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:border-[#7ea174] focus:ring-2">
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:border-[#2f8a5b] focus:ring-2">
               <option>All Categories</option>
               <option>Corporate</option>
               <option>Retail</option>
               <option>Residential</option>
             </select>
-            <select value={type} onChange={(e) => setType(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:border-[#7ea174] focus:ring-2">
+            <select value={type} onChange={(e) => setType(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:border-[#2f8a5b] focus:ring-2">
               <option>All Types</option>
               <option>For Sale</option>
               <option>For Rent</option>
               <option>For Lease</option>
               <option>Wanted</option>
             </select>
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:border-[#7ea174] focus:ring-2">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:border-[#2f8a5b] focus:ring-2">
               <option>Newest</option>
               <option>Price: Low to High</option>
               <option>Price: High to Low</option>
@@ -318,7 +318,7 @@ export default function HomePage() {
                   <div className="space-y-3 p-5">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="line-clamp-2 text-lg font-bold text-slate-900">{property.title}</h3>
-                      <span className="rounded-lg bg-[#7ea174]/15 px-2 py-1 text-xs font-bold text-[#1f2937]">{property.type}</span>
+                      <span className="rounded-lg bg-[#2f8a5b]/15 px-2 py-1 text-xs font-bold text-[#1f6b45]">{property.type}</span>
                     </div>
                     <p className="line-clamp-2 text-sm text-slate-600">{property.description}</p>
                     <p className="text-xl font-black text-slate-900">{formatCurrency(property.price)}</p>
@@ -339,7 +339,7 @@ export default function HomePage() {
                       </a>
                       <Link
                         href="/inquiries"
-                        className="flex-1 rounded-lg bg-[#1f2937] px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#7ea174] hover:text-black"
+                        className="flex-1 rounded-lg bg-[#1f6b45] px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#2f8a5b] hover:text-black"
                       >
                         Inquire
                       </Link>
@@ -363,7 +363,7 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => setVisibleCount((count) => count + 9)}
-              className="rounded-lg bg-[#1f2937] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#7ea174] hover:text-black"
+              className="rounded-lg bg-[#1f6b45] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2f8a5b] hover:text-black"
             >
               Load More Properties
             </button>
@@ -374,7 +374,7 @@ export default function HomePage() {
       <section id="about" className="border-t border-slate-200 bg-white">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f2937]">Why Propwise</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f6b45]">Why Propwise</p>
             <h2 className="mt-3 text-3xl font-bold text-slate-900">Industrial-grade real estate experience</h2>
           </div>
           <div className="rounded-xl border border-slate-200 p-5">
@@ -393,5 +393,9 @@ export default function HomePage() {
     </LoaderLayout>
   );
 }
+
+
+
+
 
 

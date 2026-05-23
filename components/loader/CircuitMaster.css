@@ -11,7 +11,7 @@
   user-select: none;
   z-index: 9999;
   overflow: hidden;
-  background: radial-gradient(circle at 20% 20%, #1f2937 0%, #111827 35%, #0b0f19 100%);
+  background: radial-gradient(circle at 20% 20%, #1f6b45 0%, #13241d 35%, #0c1310 100%);
 }
 
 .loader-grid {
@@ -51,8 +51,8 @@
 }
 
 .spinner-ring::before {
-  border-top-color: #7ea174;
-  border-left-color: #7ea174;
+  border-top-color: #2f8a5b;
+  border-left-color: #2f8a5b;
   left: 15px;
   right: 15px;
   top: 15px;
@@ -61,8 +61,8 @@
 }
 
 .spinner-ring::after {
-  border-top-color: #a9c9a0;
-  border-right-color: #a9c9a0;
+  border-top-color: #d8c08a;
+  border-right-color: #d8c08a;
   left: 5px;
   right: 5px;
   top: 5px;
@@ -211,3 +211,7 @@
     transform: scale(1.1);
   }
 }
+
+
+
+

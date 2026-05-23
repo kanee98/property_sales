@@ -32,7 +32,7 @@ const PropwiseLoader: React.FC = () => (
         fontSize="100"
         fontFamily="Arial, sans-serif"
         fill="none"
-        stroke="#a9c9a0"
+        stroke="#d8c08a"
         strokeWidth="2"
         className="propwise-text"
       >
@@ -53,3 +53,7 @@ const PropwiseLoader: React.FC = () => (
 );
 
 export default PropwiseLoader;
+
+
+
+

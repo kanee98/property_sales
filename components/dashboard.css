@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
 	margin: 0;
@@ -19,16 +19,16 @@ li {
 	--lato: 'Lato', sans-serif;
 
 	--light: #eee;
-	--blue: #3C91E6;
-	--light-blue: #CFE8FF;
-	--grey: #ddd;
+	--blue: #2f8a5b;
+	--light-blue: #e8f3ec;
+	--grey: #eef2ee;
 	--dark-grey: #AAAAAA;
-	--dark: #342E37;
+	--dark: #14251d;
 	--red: #DB504A;
-	--yellow: #FFCE26;
-	--light-yellow: #FFF2C6;
-	--orange: #FD7238;
-	--light-orange: #FFE0D3;
+	--yellow: #d8c08a;
+	--light-yellow: #f8f2e6;
+	--orange: #1f6b45;
+	--light-orange: #edf3ee;
 }
 
 html {
@@ -468,17 +468,17 @@ input, textarea {
 	justify-content: center;
 }
 
-#sidebar .side-menu.bottom li:nth-last-of-type(-n+2) { /* Son iki <li>'yi seç */
-  position: absolute; /* Ebeveynine göre konumlandır */
+#sidebar .side-menu.bottom li:nth-last-of-type(-n+2) { /* Son iki <li>'yi seÃ§ */
+  position: absolute; /* Ebeveynine gÃ¶re konumlandÄ±r */
   bottom: 0; /* En alt */
   left: 0;
   right: 0;
   text-align: center;
 }
 
-/* Birbirinin üzerine binmesini engellemek için */
+/* Birbirinin Ã¼zerine binmesini engellemek iÃ§in */
 #sidebar .side-menu.bottom li:nth-last-of-type(2) {
-  bottom: 40px; /* İkinci son öğeyi yukarı kaydır */
+  bottom: 40px; /* Ä°kinci son Ã¶ÄŸeyi yukarÄ± kaydÄ±r */
 }
 /* SIDEBAR */
 
@@ -1149,3 +1149,8 @@ body.dark #content nav .profile-menu li a {
 .dashboard-footer a:hover {
 	font-weight: bold;
 }
+
+
+
+
+

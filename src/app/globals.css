@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
@@ -45,7 +45,19 @@
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Brand Theme Tokens */
+  --brand-bg: #f4f6f2;
+  --brand-950: #0c1310;
+  
+  --brand-850: #234033;
+  --brand-750: #2c3b4d;
+  --brand-800: #1f6b45;
+  --brand-700: #2f8a5b;
+  --brand-600: #277a53;
+  --brand-accent: #d8c08a;
+  --brand-accent-soft: #ecdcb7;
+  --brand-text-on-dark: #d9e9d4;
 }
 
 .dark {
@@ -130,3 +142,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+

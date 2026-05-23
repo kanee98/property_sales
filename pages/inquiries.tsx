@@ -121,33 +121,33 @@ export default function InquiriesPage() {
 
   return (
     <LoaderLayout>
-      <main className="min-h-screen bg-[#f3f6f2] text-slate-900">
-        <header className="sticky top-0 z-40 border-b border-[#7ea174]/30 bg-white/95 backdrop-blur">
+      <main className="min-h-screen bg-[#f4f6f2] text-slate-900">
+        <header className="sticky top-0 z-40 border-b border-[#2f8a5b]/30 bg-white/95 backdrop-blur">
           <div className="mx-auto flex w-full max-w-[1500px] items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
             <div className="flex items-center gap-3">
               <Image src={Logo} width={56} height={56} alt="Propwise logo" />
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f2937]">Propwise</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f6b45]">Propwise</p>
                 <h1 className="text-xl font-bold">Submit Inquiry</h1>
               </div>
             </div>
-            <Link href="/" className="rounded-lg border border-[#1f2937]/40 px-4 py-2 text-sm font-semibold hover:bg-[#7ea174]/10">
+            <Link href="/" className="rounded-lg border border-[#1f6b45]/40 px-4 py-2 text-sm font-semibold hover:bg-[#2f8a5b]/10">
               Back to Listings
             </Link>
           </div>
         </header>
 
         <section className="mx-auto w-full max-w-[1500px] px-4 py-10 pb-16 sm:px-6 lg:px-10 lg:pb-20">
-          <div className="mb-8 rounded-3xl bg-gradient-to-r from-[#0b0f19] via-[#111827] to-[#1f2937] p-7 text-white shadow-xl sm:p-10">
-            <p className="text-xs uppercase tracking-[0.22em] text-[#a9c9a0]">Property Advisory Desk</p>
+          <div className="mb-8 rounded-3xl bg-gradient-to-r from-[#0c1310] via-[#13241d] to-[#1f6b45] p-7 text-white shadow-xl sm:p-10">
+            <p className="text-xs uppercase tracking-[0.22em] text-[#d8c08a]">Property Advisory Desk</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">Tell Us What You Need</h2>
             <p className="mt-3 max-w-3xl text-sm text-slate-200 sm:text-base">Share your requirement once and our consultants will shortlist matching properties with location, budget, and timeline in mind.</p>
           </div>
 
           <div className="grid items-start gap-6 xl:grid-cols-12 xl:gap-8">
-            <div className="rounded-3xl border border-[#7ea174]/30 bg-white p-6 shadow-[0_18px_48px_rgba(17,24,39,0.08)] sm:p-8 xl:col-span-8">
+            <div className="rounded-3xl border border-[#2f8a5b]/30 bg-white p-6 shadow-[0_18px_48px_rgba(17,24,39,0.08)] sm:p-8 xl:col-span-8">
               <div className="mb-6 border-b border-slate-200 pb-5">
-                <h3 className="text-2xl font-semibold text-[#111827]">Inquiry Form</h3>
+                <h3 className="text-2xl font-semibold text-[#13241d]">Inquiry Form</h3>
                 <p className="mt-1 text-sm text-slate-600">Fields marked below help us match properties faster.</p>
               </div>
 
@@ -155,39 +155,39 @@ export default function InquiriesPage() {
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Company Name</label>
-                    <input type="text" placeholder="ABC Holdings" value={newInquiry.companyName} onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                    <input type="text" placeholder="ABC Holdings" value={newInquiry.companyName} onChange={(e) => setNewInquiry({ ...newInquiry, companyName: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:border-[#2f8a5b] focus:ring-2" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Contact Person</label>
-                    <input type="text" placeholder="John Perera" value={newInquiry.contactPerson} onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                    <input type="text" placeholder="John Perera" value={newInquiry.contactPerson} onChange={(e) => setNewInquiry({ ...newInquiry, contactPerson: e.target.value })} required className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:border-[#2f8a5b] focus:ring-2" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Email Address</label>
-                    <input type="email" placeholder="you@company.com" value={newInquiry.email} onChange={(e) => { setNewInquiry({ ...newInquiry, email: e.target.value }); setEmailError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:ring-2 ${emailError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`} />
+                    <input type="email" placeholder="you@company.com" value={newInquiry.email} onChange={(e) => { setNewInquiry({ ...newInquiry, email: e.target.value }); setEmailError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:ring-2 ${emailError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#2f8a5b]"}`} />
                     {emailError ? <p className="mt-1 text-xs text-rose-600">{emailError}</p> : null}
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Phone Number</label>
-                    <input type="text" placeholder="+94 77 123 4567" value={newInquiry.phone} onChange={(e) => { setNewInquiry({ ...newInquiry, phone: e.target.value }); setPhoneError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:ring-2 ${phoneError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`} />
+                    <input type="text" placeholder="+94 77 123 4567" value={newInquiry.phone} onChange={(e) => { setNewInquiry({ ...newInquiry, phone: e.target.value }); setPhoneError(""); }} required className={`w-full rounded-xl border bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:ring-2 ${phoneError ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#2f8a5b]"}`} />
                     {phoneError ? <p className="mt-1 text-xs text-rose-600">{phoneError}</p> : null}
                   </div>
                   <div className="space-y-1.5 sm:col-span-2">
                     <label className="text-sm font-medium text-slate-700">Budget (LKR)</label>
-                    <input type="number" placeholder="25,000,000" value={newInquiry.budget ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, budget: e.target.value ? Number(e.target.value) : null })} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                    <input type="number" placeholder="25,000,000" value={newInquiry.budget ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, budget: e.target.value ? Number(e.target.value) : null })} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:border-[#2f8a5b] focus:ring-2" />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-slate-700">Requirements</label>
-                  <textarea placeholder="Mention preferred location, property type, approximate area, and expected move-in timeline." value={newInquiry.requirements ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })} rows={6} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#7ea174] transition placeholder:text-slate-400 focus:border-[#7ea174] focus:ring-2" />
+                  <textarea placeholder="Mention preferred location, property type, approximate area, and expected move-in timeline." value={newInquiry.requirements ?? ""} onChange={(e) => setNewInquiry({ ...newInquiry, requirements: e.target.value })} rows={6} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-[15px] outline-none ring-[#2f8a5b] transition placeholder:text-slate-400 focus:border-[#2f8a5b] focus:ring-2" />
                 </div>
 
                 <div className="rounded-xl border border-slate-300 bg-slate-50 p-4">
                   <label className="mb-2 block text-sm font-medium text-slate-700">Supporting Image (Optional)</label>
-                  <input type="file" accept="image/*" ref={fileInputRef} onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#1f2937] file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-white hover:file:bg-[#2c3b4d]" />
+                  <input type="file" accept="image/*" ref={fileInputRef} onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-[#1f6b45] file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-white hover:file:bg-[#2c3b4d]" />
                 </div>
 
-                <button type="submit" disabled={isSubmitting} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#1f2937] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#7ea174] hover:text-[#111827] disabled:cursor-not-allowed disabled:opacity-60">
+                <button type="submit" disabled={isSubmitting} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#1f6b45] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#2f8a5b] hover:text-[#13241d] disabled:cursor-not-allowed disabled:opacity-60">
                   {isSubmitting ? "Submitting..." : "Submit Inquiry"}
                 </button>
               </form>
@@ -221,7 +221,7 @@ export default function InquiriesPage() {
                 <ul className="space-y-4 px-5 py-5 text-sm">
                   {WHY_US.slice(0, 3).map((item) => (
                     <li key={item.title} className="flex items-start gap-3">
-                      <span className="mt-1.5 size-2 rounded-full bg-[#7ea174]" />
+                      <span className="mt-1.5 size-2 rounded-full bg-[#2f8a5b]" />
                       <div>
                         <p className="font-semibold text-slate-900">{item.title}</p>
                         <p className="mt-1 leading-6 text-slate-600">{item.text}</p>
@@ -236,9 +236,9 @@ export default function InquiriesPage() {
                   <h3 className="text-lg font-semibold tracking-tight text-slate-900">What Happens Next</h3>
                 </div>
                 <ol className="space-y-3 px-5 py-5 text-sm text-slate-700">
-                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">1</span><span className="pt-0.5">We review your requirement and budget.</span></li>
-                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">2</span><span className="pt-0.5">Our team shortlists matching properties.</span></li>
-                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#7ea174]/20 text-xs font-semibold text-slate-900">3</span><span className="pt-0.5">You receive options and follow-up support quickly.</span></li>
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#2f8a5b]/20 text-xs font-semibold text-slate-900">1</span><span className="pt-0.5">We review your requirement and budget.</span></li>
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#2f8a5b]/20 text-xs font-semibold text-slate-900">2</span><span className="pt-0.5">Our team shortlists matching properties.</span></li>
+                  <li className="flex items-start gap-3"><span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#2f8a5b]/20 text-xs font-semibold text-slate-900">3</span><span className="pt-0.5">You receive options and follow-up support quickly.</span></li>
                 </ol>
               </div>
             </aside>
@@ -249,5 +249,10 @@ export default function InquiriesPage() {
     </LoaderLayout>
   );
 }
+
+
+
+
+
 
 

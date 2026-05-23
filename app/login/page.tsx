@@ -59,14 +59,14 @@ export default function AdminLogin() {
 
   return (
     <LoaderLayout>
-      <main className="min-h-screen bg-gradient-to-br from-[#0b0f19] via-[#111827] to-[#1f2937] text-slate-900">
+      <main className="min-h-screen bg-gradient-to-br from-[#0c1310] via-[#13241d] to-[#234033] text-slate-900">
       <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid w-full overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl animate-in fade-in-0 zoom-in-95 duration-500 lg:grid-cols-2">
-          <section className="hidden bg-gradient-to-b from-[#0b0f19] to-[#1f2937] p-10 text-white lg:flex lg:flex-col lg:justify-between">
+          <section className="hidden bg-gradient-to-b from-[#0c1310] via-[#13241d] to-[#1f6b45] p-10 text-white lg:flex lg:flex-col lg:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7ea174]">Propwise Admin</p>
-              <h1 className="mt-4 text-4xl font-bold leading-tight">Welcome back to your Real Estate control center</h1>
-              <p className="mt-5 text-sm text-slate-300">Manage listings, review leads, and keep your inventory current from one secure dashboard.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#d8c08a]">Propwise Admin</p>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight">Welcome back to your real estate control center</h1>
+              <p className="mt-5 text-sm text-slate-200">Manage listings, review leads, and keep your inventory current from one secure dashboard.</p>
             </div>
             <ul className="space-y-3 text-sm text-slate-200">
               <li>Secure sign-in workflow</li>
@@ -78,7 +78,7 @@ export default function AdminLogin() {
           <section className="p-7 sm:p-10">
             <div className="mb-8 flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f2937]">Propwise</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f6b45]">Propwise</p>
                 <h2 className="text-3xl font-bold text-slate-900">Admin Login</h2>
               </div>
               <Image src={Logo} width={48} height={48} alt="Propwise logo" />
@@ -99,7 +99,7 @@ export default function AdminLogin() {
                     setFieldErrors((prev) => ({ ...prev, email: undefined }));
                   }}
                   required
-                  className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:ring-2 ${fieldErrors.email ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`}
+                  className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:ring-2 ${fieldErrors.email ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#2f8a5b]"}`}
                   placeholder="admin@propwise.lk"
                 />
                 {fieldErrors.email ? <p className="mt-1 text-xs text-rose-600">{fieldErrors.email}</p> : null}
@@ -116,7 +116,7 @@ export default function AdminLogin() {
                     setFieldErrors((prev) => ({ ...prev, password: undefined }));
                   }}
                   required
-                  className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ring-[#7ea174] transition focus:ring-2 ${fieldErrors.password ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#7ea174]"}`}
+                  className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ring-[#2f8a5b] transition focus:ring-2 ${fieldErrors.password ? "border-rose-300 focus:border-rose-400" : "border-slate-300 focus:border-[#2f8a5b]"}`}
                   placeholder="Enter your password"
                 />
                 {fieldErrors.password ? <p className="mt-1 text-xs text-rose-600">{fieldErrors.password}</p> : null}
@@ -134,12 +134,12 @@ export default function AdminLogin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-lg bg-[#1f2937] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#7ea174] hover:text-black disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-lg bg-[#1f6b45] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#2f8a5b] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? "Signing in..." : "Login"}
               </button>
 
-              <Link href="/" className="block w-full rounded-lg border border-[#1f2937]/40 px-5 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-[#7ea174]/10">
+              <Link href="/" className="block w-full rounded-lg border border-[#1f6b45]/40 px-5 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-[#d8c08a]/20">
                 Back to Listings
               </Link>
             </form>
@@ -151,5 +151,8 @@ export default function AdminLogin() {
     </LoaderLayout>
   );
 }
+
+
+
 
 
