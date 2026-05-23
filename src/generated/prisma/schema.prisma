@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "rhel-openssl-1.1.x", "windows"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+  status    Int
+}
+
+model Property {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Float?
+  category    String // "Corporate" or "Retail"
+  images      Json
+  area        Int?
+  latitude    Float
+  longitude   Float
+  district    String
+  type        String
+  createdAt   DateTime @default(now())
+  manager     String // Contact details of property manager
+  contact     String
+  status      Int
+}
+
+model Inquiry {
+  id            Int      @id @default(autoincrement())
+  companyName   String
+  contactPerson String
+  email         String
+  phone         String
+  requirements  String
+  budget        Float?
+  attachments   Json? // Optional file uploads
+  createdAt     DateTime @default(now())
+  status        Int
+}

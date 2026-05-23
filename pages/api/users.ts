@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "../../src/generated/prisma";
 import { hash } from "bcryptjs";
-
-const prisma = new PrismaClient();
+import prisma from "../../lib/prisma";
 
 export type User = {
   id: number;
