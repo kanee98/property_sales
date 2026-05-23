@@ -9,7 +9,6 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node prisma/seed.ts",
-    "postinstall": "prisma generate",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
